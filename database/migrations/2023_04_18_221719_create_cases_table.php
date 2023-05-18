@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cases', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('title');
-            $table->string('room');
-            $table->unsignedBigInteger('court_id'); // تعريف حقل مفتاح خارجي
-            $table->text('claim'); // ادعاء
-            $table->text('fact'); // وقائع
-            $table->boolean('isArchived'); // الأرشفة
-            $table->string('state');//الحالة
-
+            $table->string('Status', 50);   //حالة القضية
+            $table->integer('Value_Status'); // رقم الحالة من اجل المقارنة
+            $table->integer('case_number');
+            $table->date('case_Date');
+            $table->string('case_room');
+            // $table->bigInteger('court_id');
+            // $table->foreign('court_id')->references('id')->on('court')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
-            $table->foreign('court_id')->references('id')->on('courts'); // تعريف المفتاح الخارجي
 
         });
     }

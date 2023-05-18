@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('defendent_lawyers', function (Blueprint $table) {
+        Schema::create('enemy_lawyer_of_cases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('case_id'); // تعريف حقل مفتاح خارجي
-            $table->string('name');
-            $table->string('phone',13);
-
-
+            $table->unsignedBigInteger('enemy_lawyer_id')->nullable();
+            $table->foreign('enemy_lawyer_id')->references('id')->on('enemy_lawyer');
+            $table->unsignedBigInteger('case_id')->nullable();
+            $table->foreign('case_id')->references('id')->on('cases');
             $table->timestamps();
-            $table->foreign('case_id')->references('id')->on('cases'); // تعريف المفتاح الخارجي
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('defendent_lawyers');
+        Schema::dropIfExists('enemy_lawyer_of_cases');
     }
 };

@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('defendent_clients', function (Blueprint $table) {
+        Schema::create('enemy_client', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('case_id'); // تعريف حقل مفتاح خارجي
             $table->string('name');
-            $table->string('phone', 13);
-
+            $table->integer('phone_number');
             $table->timestamps();
-            $table->foreign('case_id')->references('id')->on('cases'); // تعريف المفتاح الخارجي
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('defendent_clients');
+        Schema::dropIfExists('enemy_client');
     }
 };
