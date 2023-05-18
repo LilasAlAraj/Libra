@@ -10,7 +10,7 @@
     content="law firms management system, law, cases management system, cases, tasks, lawyers, lawyer, court">
   <meta name="author" content="Lilas">
   <meta name="generator" content="vs code">
-  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <meta name="csrf-token" content="{{csrf_token()}}" />
 
   <title>Libra</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -62,7 +62,7 @@
         <div class="position-sticky pt-3  sidebar-sticky ">
           <ul class=" nav nav-pills flex-column mb-auto ">
             <li class="mb-1 nav-item" id="dashboardNav">
-          
+
             </li>
             <li class="mb-1 nav-item ">
               <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
@@ -86,7 +86,7 @@
                     </a>
                   </li>
                   <li id="viewPrivateCaseNav">
-                      
+
                   </li>
                   <li id="retreiveCaseNav">
 
@@ -157,12 +157,9 @@
                 <div class="form-group col-4">
                   <label for="court"><b>المحكمة</b></label>
                   <select id="court" name="court">
-                    <span class="placeholder col-3 placeholder-lg bg-primary">sss</span>
+
                     <option disabled selected>اختر المحكمة</option>
-                    <option>Choose1...</option>
-                    <option>محكمة الجنح</option>
-                    <option>محكمة الصلح</option>
-                    <option>...</option>
+
                   </select>
                 </div>
                 <div class="col-4">

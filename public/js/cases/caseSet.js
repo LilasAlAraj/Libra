@@ -10,7 +10,7 @@ function addBaseNumber() {
     newBaseNumberField.classList.add("row")
     newBaseNumberField.id = 'base_number' + baseNumberCounter;
     newBaseNumberField.innerHTML = `
-        
+
         <div class="col-6">
 
         <label for="base-number-${baseNumberCounter}"><b>رقم الأساس</b></label>
@@ -22,8 +22,8 @@ function addBaseNumber() {
         <select id="yearSelect-${baseNumberCounter}" name="year[]">
         </select>
       </div>
-      
-   
+
+
       `
     basenumbersContainer.appendChild(newBaseNumberField);
     fillYears(baseNumberCounter);
@@ -47,13 +47,13 @@ function addClientPlaintiffField() {
     const newPlaintiffField = document.createElement('div');
     newPlaintiffField.id = 'clientPlaintiff' + clientPlaintiffCounter;
     newPlaintiffField.innerHTML = `
-  
+
 
           <label for="client_name-${clientPlaintiffCounter}"><b>اسم المدعي</b></label>
           <input type="text" class="client_name"id="client_name-${clientPlaintiffCounter}" placeholder="أدخل اسم المدعي " name="client_names[]"
           oninput="showSuggestions(${clientPlaintiffCounter},'client')"  onblur="hideSuggestions(${clientPlaintiffCounter},'client')" required>
           <ul class="suggestions" id="suggestions-client-${clientPlaintiffCounter}"></ul>
-   
+
       `
     plaintiffsContainer.appendChild(newPlaintiffField);
     clientPlaintiffCounter++;
@@ -204,7 +204,7 @@ function showSuggestions(inputId, state) {
 
 }
 
-// إخفاء قائمة الاقتراحات عند الخروج من الحقل  
+// إخفاء قائمة الاقتراحات عند الخروج من الحقل
 function hideSuggestions(inputId, state) {
     const suggestionsList = document.getElementById(`suggestions-${state}-${inputId}`);
     suggestionsList.style.display = 'none';
@@ -216,7 +216,7 @@ function fillYears(id) {
     var yearSelect = document.getElementById("yearSelect-" + id);
     // الحصول على التاريخ الحالي
     var currentYear = new Date().getFullYear();
-    for (i = 1980; i <= currentYear + 1; i++) {
+    for (i = 1980; i <= currentYear; i++) {
         var option = document.createElement("option");
         option.text = i;
         option.value = i;
@@ -286,9 +286,9 @@ function collectData() {
     court = document.getElementById('court').value;
     room = document.getElementById('case_room').value;
 
-    data["case_title"] = case_title;
+    data["title"] = case_title;
     data["court"] = court;
-    data["room"] = room;
+    data["case_room"] = room;
     data["PlaintaiffClients"] = PlaintaiffClients;
     data["PlaintaiffLawyers"] = PlaintaiffLawyers;
     data["DefendentLawyers"] = DefendentLawyers;
@@ -299,5 +299,30 @@ function collectData() {
     console.log(data)
     return data;
 
+
+}
+
+
+
+function getCourts() {
+    $.ajax({
+        url: "http://127.0.0.1:8000/courts",
+        type: "Get",
+        success: function (response) {
+            courts = document.getElementById('court');
+            for (var i = 0; i < response.length; i++) {
+                option = document.createElement('option');
+                option.value = response[i].id;
+                option.innerHTML = response[i].name + '/' + response[i].place;
+                courts.append(option)
+            }
+        },
+
+        error: function (response) {
+            // If the login is unsuccessful, display the error message
+            // $('#error').html(response.responseJSON.errors.phone[0]);
+            $('#error').html(response.responseJSON);
+        }
+    });
 
 }

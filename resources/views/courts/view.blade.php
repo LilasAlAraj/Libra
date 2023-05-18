@@ -8,7 +8,6 @@
         content="ليبرا هو بيتك القانوني.. وأكثر! يقوم بإدارة مكتبك وعملائك.. ويقوم بتنظيم الملفات والمهام.">
     <meta name="keywords"
         content="law firms management system, law, cases management system, cases, tasks, lawyers, lawyer, court">
-
     <meta name="author" content="Lilas">
     <meta name="generator" content="Lilas">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -60,7 +59,6 @@
     <div class="container-fluid">
         <div class="row">
 
-
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 col-sm-12 d-md-block  sidebar collapse">
                 <div class="position-sticky pt-3  sidebar-sticky ">
                     <ul class=" nav nav-pills flex-column mb-auto ">
@@ -89,7 +87,7 @@
                                         </a>
                                     </li>
                                     <li id="viewPrivateCaseNav">
-                                        
+
                                     </li>
                                     <li id="retreiveCaseNav">
 
@@ -142,77 +140,30 @@
                 <div id="big-frame">
                     <div class="container  d-flex justify-content-between">
 
-                        <h1>استرجاع القضايا</h1>
-
+                        <h1>عرض المحاكم</h1>
+                        <div id="addNewCourtBtn" style="display: flex; align-items: center;">
+                        </div>
                     </div>
                     <hr>
                     <div class="container">
 
-
-                        <form id="retreive-form" class="search-options" action="get">
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="toSearch"><b>أدخل ما تريد البحث عنه</b></label>
-                                    <input type="text" id="toSearch" name="toSearch"
-                                        placeholder="أدخل ما تريد البحث عنه" required>
-                                </div>
-
-
-                            </div>
-                            <div class="container" style="padding: 0;">
-                                <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                    onclick="retreive()">
-                                    <span data-feather="search" class="align-text-bottom"></span>
-                                    ابحث
-
-                                </button>
-                                <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
-                                    <span data-feather="x-circle" class="align-text-bottom"></span>
-                                    امسح
-                                </button>
-
-
-                                <span id="error" class="error">
-                                </span>
-                            </div>
-
-
-                        </form>
-                        <hr>
-
                         <table class="table table-bordered  table-striped ">
                             <thead>
                                 <tr>
-                                    <th>رقم الأساس/العام</th>
-                                    <th>موضوع الدعوى</th>
-                                    <th>المحكمة/الغرفة</th>
-                                    <th>اسم المدعي</th>
-                                    <th>محامي المدعي</th>
-                                    <th>اسم المدعي عليه</th>
-                                    <th>محامي المدعي عليه</th>
-                                    <th>حالة القضية</th>
-                                    <th>العمليات</th>
+                                    <th>اسم المحكمة</th>
+                                    <th>موقع المحكمة</th>
+
                                 </tr>
 
                             </thead>
-                            <tbody id="table-body"></tbody>
+                            <tbody id="table-body">
+
+
+
+
+                            </tbody>
                         </table>
-                        <div class="container" style="text-align: right;display: flex; justify-content:space-between">
-                            <nav aria-label="Page navigation example" class="row">
-                                <ul id="pagination" class="pagination"></ul>
-                            </nav>
 
-
-                            <button style='height: 100%;' id='reverse-btn' type="button" data-display='asc'
-                                class="operations-btn btn" onclick="reverseData()">
-                                <span data-feather="refresh-cw" class="align-text-bottom"></span>
-
-                                عرض تنازلي
-
-                            </button>
-
-                        </div>
                     </div>
 
 
@@ -224,15 +175,83 @@
 
 
 
+    <!--add new court Modal -->
+    <div class="modal fade" id="addCourtModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="addCourtModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="addCourtModalLabel" style=" color:white;">
+                        إضافة محكمة جديدة
+                    </h1>
+                </div>
+                <form id='addCourt_form' method="post" style="background-color: transparent; border:none; margin: 0;">
+                    <div class=" modal-body">
+                        <div class="container ">
+
+
+
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <label for="court_name"><b>اسم المحكمة</b></label>
+                                    <input type="text" id="court_name" placeholder="أدخل اسم المحكمة" name="court_name"
+                                        required>
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <label for="court_location"><b>موقع المحكمة</b></label>
+                                    <input type="text" id="court_location" placeholder="أدخل موقع المحكمة"
+                                        name="court_location" required>
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+                        <div id="addCourtError" class="error">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer " style="width:auto;">
+                        <button type="submit" class="operations-btn btn btn-success" onclick="add_court()">
+                            <span data-feather="edit-3" class="align-text-bottom"></span>
+                            أضف
+                        </button>
+                        <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                            <span data-feather="x" class="align-text-bottom"></span>
+                            أغلق
+                        </button>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
         integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
         crossorigin="anonymous"></script>
 
+
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>
-    <script src="../../js/cases/retreive_cases.js"></script>
+    <script src="../../js/courts/view.js"></script>
+
 
 
 

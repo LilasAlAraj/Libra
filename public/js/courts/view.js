@@ -43,30 +43,34 @@ function add_court() {
 
             var court_name = $('#court_name').val();
             var court_location = $('#court_location').val();
-          
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
             $.ajax({
-                url: "http://127.0.0.1:8000/login",
+                url: "http://127.0.0.1:8000/courts/store",
                 type: "POST",
                 data: {
-                    "court_name": court_name,
-                    "court_location": court_location
-                },
+                    "name": court_name,
+                    "place": court_location
+                }
+                , dataType: 'json',
                 success: function (response) {
                     if (response.status == 'success') {
                         console.log(response);
-                        alert("تم تغيير كلمة المرور بنجاح");
+                        alert("تم إضافة المحكمة بنجاح");
 
                     } else {
-                        $('.addCourtError').html(response.message);
+                        console.log(response);
+                        alert("تم إضافة المحكمة بنجاح");
+
                     }
                 },
 
                 error: function (response) {
+                    console.log(response)
                     // If the login is unsuccessful, display the error message
                     // $('#error').html(response.responseJSON.errors.phone[0]);
                     $('#addCourtError').html(response.responseJSON);
@@ -83,21 +87,23 @@ let data;
 $(document).ready(function () {
     setAuth();
 
-    // جلب البيانات من ملف JSON
-    $.ajax({
-        url: 'courts.json',
-        dataType: 'json',
-        success: function (response) {
+     // جلب البيانات من ملف JSON
+     $.ajax({
+         url: '/courts/show',
+         type:'get',
+         success: function (response) {
+            console.log(response);
 
-            data = response;
-            // تحديث Pagination
-            displayAll();
+             data = response;
+             // تحديث Pagination
+             displayAll();
 
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
-        }
-    });
+         },
+         error: function (response) {
+             console.log(response);
+
+         }
+     });
 });
 
 
@@ -133,7 +139,7 @@ function addCourtRow(table, court) {
     const row = $('<tr>').append(
 
         $('<td>').append(court.name),
-        $('<td>').append(court.location)
+        $('<td>').append(court.place)
     );
     row.attr('id', court.id);
     table.append(row);

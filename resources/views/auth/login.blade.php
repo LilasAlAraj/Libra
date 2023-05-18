@@ -40,7 +40,7 @@
 
             <div class="container">
                 <div class="row">
-                    <label for="username" style="font-size:medium;"><b>رقم الهاتف</b></label>
+                    <label for="username" style="font-size:medium;"><b>رقم الهاتف/البريد الإلكتروني</b></label>
                     <input type="tel" id="username" placeholder="أدخل رقم الهاتف" name="username"
                         class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}"
                         required autofocus required>

@@ -10,26 +10,21 @@
 /////////////////////
 
 let data, caseItem;
-let userID;
+let caseID;
 
 
 
 $(document).ready(function () {
-    userID = new URLSearchParams(window.location.search).get("id");
-    console.log(userID)
+    getCourts();
+
+    caseID = new URLSearchParams(window.location.search).get("id");
+    console.log(caseID)
     // جلب البيانات من ملف JSON
     $.ajax({
         url: 'test.json',
         dataType: 'json',
         success: function (response) {
-
-
-
-            function isBigEnough(value) {
-                return value.id == userID;
-            }
-
-            data = response.filter(isBigEnough);
+            data = response;
             setCaseData();
 
         },
@@ -41,11 +36,10 @@ $(document).ready(function () {
 );
 function setCaseData() {
 
-    caseItem = data[0];
+    caseItem = data;
     document.getElementById('case_tiltle').value = caseItem.case_title;
     document.getElementById('case_room').value = caseItem.room;
     document.getElementById('court').value = caseItem.court;
-
 
     totalBaseNumbers = caseItem.case_numbers.length;
     for (var i = 0; i < totalBaseNumbers; i++) {
@@ -81,6 +75,7 @@ function setCaseData() {
         addLawyerEnemyField();
         document.getElementById('lawyerEnemy_name-' + i).value = caseItem.defendant_lawyers[i];
     }
+
 }
 
 
@@ -142,7 +137,7 @@ function edit() {
         submitHandler: function (form) {
 
             case_ = collectData();
-            case_['id'] = userID;
+            case_['id'] = caseID;
             console.log(case_)
 
             $.ajaxSetup({
