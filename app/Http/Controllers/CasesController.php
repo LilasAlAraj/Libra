@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseNumber;
 use App\Models\Cases;
 use App\Models\Cases_attachments;
 use App\Models\Cases_details;
@@ -21,11 +22,11 @@ class CasesController extends Controller
     public function index()
 
     {
-        $cases=Cases::get();
+        $cases=Cases::get()::all;
 
-        $cases_attachments=Cases_attachments::all();
+        // $cases_attachments=Cases_attachments::all();
 
-        $cases_details=Cases_details::all();
+        // $cases_details=Cases_details::all();
 
         return view('cases.index',compact('cases','cases_attachments','cases_details'));
 
@@ -43,22 +44,11 @@ class CasesController extends Controller
         $request->validate([
 
             'court_id' => 'required',
-            'case_number'=>'case_number',
-            'case_Date' => 'required',
             'title' => 'title',
             'case_room'=>'case_room',
-            'judge'=> 'judge',
-            'side_judge'=> 'side_judge',
-            'enemy_Client_phone'=>'enemy_Client_phone',
-            'enemy_lawyer_phone'=>'enemy_Lawyer_phone',
-            'enemy_Lawyer_name'=>'enemy_Lawyer_name',
-            'enemy_Client_name'=>'enemy_Client_name',
 
         ]);
         Cases::create([
-            'case_number'=>$request->case_number,
-
-            'case_Date' => $request->case_Date,
 
             'court_id' => $request->court_id,
 
@@ -66,23 +56,31 @@ class CasesController extends Controller
 
             'title' => $request->title,
 
-            'enemy_client_name'=>$request->enemy_client_name,
+            'Status' => 'جارٍ العمل عليها',
 
-            'side_judge'=>$request->side_judge,
-
-            'enemy_Client_name'=>$request->enemy_Client_name,
-
-            'enemy_Lawyer_name'=>$request->enemy_Lawyer_name,
-
-            'enemy_lawyer_phone'=>$request->enemy_Lawyer_phone,
-
-            'enemy_Client_phone' =>$request->enemy_Client_phone,
-
-            'Status' => 'غير مدفوعة',
-
-            'Value_Status' => 2,
+            'Value_Status' => 3,
         ]);
         //-----المحاميين الخصم -------------------//
+
+        $case_id = Cases::latest()->first()->id;
+
+        $Base_Numbers = $request->Base_Numbers;
+
+        $validated = $request->validated();
+
+        foreach ($Base_Numbers as $Base_Number) {
+
+            $Base_Numbers = new BaseNumber();
+
+            $Base_Numbers->enemy_Lawyer_name = $Base_Number['number'];
+
+            $Base_Numbers->enemy_Lawyer_phone = $Base_Number['date'];
+
+            $Base_Numbers->case_id = $Base_Number['case_id'];
+
+            $Base_Numbers->save();
+        }
+
 
         $case_id = Cases::latest()->first()->id;
 
@@ -96,13 +94,12 @@ class CasesController extends Controller
 
             $Enemy_Lawyers->enemy_Lawyer_name = $List_Enemy_Lawyer['enemy_Lawyer_name'];
 
-            $Enemy_Lawyers->enemy_Lawyer_phone = $List_Enemy_Lawyer['enemy_lawyer_phone'];
+            $Enemy_Lawyers->enemy_Lawyer_phone = $List_Enemy_Lawyer['enemy_Lawyer_phone'];
 
             $Enemy_Lawyers->case_id = $List_Enemy_Lawyer['case_id'];
 
             $Enemy_Lawyers->save();
         }
-
         //------------------الخصم-------------------//
 
 
@@ -115,9 +112,9 @@ class CasesController extends Controller
 
             $Enemy_Clients = new Enemy_Clients();
 
-            $Enemy_Clients->enemy_Lawyer_name = $List_Enemy_Client['enemy_Lawyer_name'];
+            $Enemy_Clients->enemy_Lawyer_name = $List_Enemy_Client['enemy_Client_name'];
 
-            $Enemy_Clients->enemy_lawyer_phone = $List_Enemy_Client['enemy_lawyer_phone'];
+            $Enemy_Clients->enemy_lawyer_phone = $List_Enemy_Client['enemy_Client_phone'];
 
             $Enemy_Clients->case_id = $List_Enemy_Client['case_id'];
 
@@ -163,37 +160,37 @@ class CasesController extends Controller
         //---------  تفاصيل القضية --------------//
 
 
-        $cases_id=Cases::latest()->first()->id;
+    //     $cases_id=Cases::latest()->first()->id;
 
-            Cases_details::create([
+    //         Cases_details::create([
 
-            'id_cases'=>$cases_id,
-            'title' => $request->title,
-
-
-        ]);
-        if ($request->hasFile('pic'))
-       {
-
-            $cases_id = Cases::latest()->first()->id;
-
-            $image = $request->file('pic');
-
-            $file_name = $image->getClientOriginalName();
-
-            $cases_Number = $request->cases_Number;
-
-            $attachments = new Cases_attachments();
-
-            $attachments->file_name = $file_name;
-
-            $attachments->cases_Number = $cases_Number;
+    //         'id_cases'=>$cases_id,
+    //         'title' => $request->title,
 
 
+    //     ]);
+    //     if ($request->hasFile('pic'))
+    //    {
 
-            $attachments->cases_id = $cases_id;
+    //         $cases_id = Cases::latest()->first()->id;
 
-            $attachments->save();
+    //         $image = $request->file('pic');
+
+    //         $file_name = $image->getClientOriginalName();
+
+    //         $cases_Number = $request->cases_Number;
+
+    //         $attachments = new Cases_attachments();
+
+    //         $attachments->file_name = $file_name;
+
+    //         $attachments->cases_Number = $cases_Number;
+
+
+
+    //         $attachments->cases_id = $cases_id;
+
+    //         $attachments->save();
 
             //-------- move pic ----------//
 
@@ -203,18 +200,18 @@ class CasesController extends Controller
             //---------public\Attachments\اسم المرفق\ رقم القضية ------
 
 
-            $imageName = $request->pic->getClientOriginalName();
+        //     $imageName = $request->pic->getClientOriginalName();
 
-            $request->pic->move(public_path('Attachments/' . $cases_Number), $imageName);
-        }
+        //     $request->pic->move(public_path('Attachments/' . $cases_Number), $imageName);
+        // }
 
           // ------- 📩 اشعار اضافة قضية -----------
 
-         $user = User::get();
+        //  $user = User::get();
 
-         $cases = Cases::latest()->first();
+        //  $cases = Cases::latest()->first();
 
-         Notification::send($user, new \App\Notifications\AddCase($cases));
+        //  Notification::send($user, new \App\Notifications\AddCase($cases));
 
         session()->flash('message', 'This Cases is added');
 
@@ -245,31 +242,16 @@ class CasesController extends Controller
 
     $cases->update([
 
-        'case_number'=>$request->case_number,
-
-        'case_Date'=>$request->case_Date,
-
         'court_id'=>$request->court_id,
 
         'case_room'=>$request->case_room,
 
         'title' => $request->title,
 
-        'enemy_client_name'=>$request->enemy_client_name,
 
-        'side_judge'=>$request->side_judge,
+        'Status' => 'جارٍ العمل عليها',
 
-        'enemyClient_name'=>$request->enemyClient_name,
-
-        'enemyLawyer_name'=>$request->enemyLawyer_name,
-
-        'enemy_lawyer_phone'=>$request->enemy_lawyer_phone,
-
-        'enemyClient_phone' =>$request->enemyClient_phone,
-
-        'Status' => 'غير مدفوعة',
-
-        'Value_Status' => 2,
+        'Value_Status' =>3,
 
 
     ]);
@@ -285,7 +267,7 @@ class CasesController extends Controller
 
        $cases = Cases::where('id', $id)->first();
 
-       $Details = Cases_attachments::where('cases_id', $id)->first();
+    //    $Details = Cases_attachments::where('cases_id', $id)->first();
 
         $id_Archive =$request->id_Archive;
 
@@ -340,12 +322,19 @@ class CasesController extends Controller
                 'Status' => $request->Status,
             ]);
         }
-         else {
+         elseif ($request->Status === 'جاري العمل عليها'){
 
             $cases->update([
                 'Value_Status' => 3,
                 'Status' => $request->Status,
             ]);
+        }
+            else{
+
+                $cases->update([
+                    'Value_Status' => 4,
+                    'Status' => $request->Status,
+                ]);
         }
         session()->flash('Status_Update');
 
@@ -373,25 +362,31 @@ class CasesController extends Controller
 
         return view('cases.cases_Partial',compact('cases'));
     }
-
-    public function MarkAsRead_all (Request $request)
+    public function Case_block()
     {
+        $cases = Cases::where('Value_Status',4)->get();
 
-        $userUnreadNotification= auth()->user()->unreadNotifications;
-
-        if($userUnreadNotification) {
-
-            $userUnreadNotification->markAsRead();
-
-            $userUnreadNotification->save();
-
-            session()->flash('mark_as_read');
-
-            return back();
-        }
-
-
+        return view('cases.cases_block',compact('cases'));
     }
+
+    // public function MarkAsRead_all (Request $request)
+    // {
+
+    //     $userUnreadNotification= auth()->user()->unreadNotifications;
+
+    //     if($userUnreadNotification) {
+
+    //         $userUnreadNotification->markAsRead();
+
+    //         $userUnreadNotification->save();
+
+    //         session()->flash('mark_as_read');
+
+    //         return back();
+    //     }
+
+
+    // }
 
     }
 
