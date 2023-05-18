@@ -10,17 +10,11 @@ class Cases extends Model
     use HasFactory;
     use SoftDeletes;
     protected $fillable = [
-        'case_number',
-        'cases_Date',
         'title',
         'court_id',
         'case_room',
         'Status',
-        'Value_Status',
-        'enemyLawyer_name',
-        'enemy_lawyer_phone',
-        'enemyClient_name',
-        'enemyClient_phone',
+        'Value_Status'
 
         //'task_id'
     ];
