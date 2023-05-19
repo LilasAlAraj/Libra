@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('base_number', function (Blueprint $table) {
             $table->id();
             $table->integer('number');
-            $table->date('date');
+            $table->integer('date');
             $table->unsignedBigInteger('case_id');
             $table->foreign('case_id')->references('id')->on('cases')->onDelete('cascade');
             $table->timestamps();

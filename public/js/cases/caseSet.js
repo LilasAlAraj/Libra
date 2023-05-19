@@ -288,11 +288,9 @@ function collectData() {
 
 
     baseNumbers = [];
-    years = [];
     for (var i = 0, k = 0; i < base_Numbers.length; i++) {
         if (base_Numbers[i].value !== '') {
-            baseNumbers[k] = (base_Numbers[i].value);
-            years[k++] = (year_[i].value);
+            baseNumbers[k++] = { 'number': base_Numbers[i].value, 'date':year_[i].value };
         }
 
     }
@@ -300,20 +298,20 @@ function collectData() {
     DefendentClients = []
     for (var i = 0, k = 0; i < Defendent_Clients.length; i++) {
         if (Defendent_Clients[i].value != '') {
-            DefendentClients[k++] = { 'name': Defendent_Clients[i].value, 'phone': Defendent_Clients_Phones[i].value };
+            DefendentClients[k++] = { 'enemy_Client_name': Defendent_Clients[i].value, 'enemy_Client_phone': Defendent_Clients_Phones[i].value };
         }
     }
     DefendentLawyers = [];
     for (var i = 0, k = 0; i < Defendent_Lawyers.length; i++) {
         if (Defendent_Lawyers[i].value != '') {
-            DefendentLawyers[k++] = { 'name': Defendent_Lawyers[i].value, 'phone': Defendent_Lawyers_Phones[i].value };
+            DefendentLawyers[k++] = { 'enemy_Lawyer_name': Defendent_Lawyers[i].value, 'enemy_Lawyer_phone': Defendent_Lawyers_Phones[i].value };
         }
     }
 
     PlaintaiffClients = []
     for (var i = 0, k = 0; i < Plaintaiff_Clients.length; i++) {
         if (Plaintaiff_Clients[i].value != '') {
-            PlaintaiffClients[k++] = (Plaintaiff_Clients[i].getAttribute('data-id'));
+            PlaintaiffClients[k++] = Plaintaiff_Clients[i].getAttribute('data-id');
 
         }
     }
@@ -321,7 +319,7 @@ function collectData() {
     PlaintaiffLawyers = []
     for (var i = 0, k = 0; i < Plaintaiff_Lawyers.length; i++) {
         if (Plaintaiff_Lawyers[i].value != '') {
-            PlaintaiffLawyers[k++] = (Plaintaiff_Lawyers[i].value);
+            PlaintaiffLawyers[k++] = Plaintaiff_Lawyers[i].value;
         }
     }
 
@@ -330,16 +328,16 @@ function collectData() {
     room = document.getElementById('case_room').value;
 
     data["title"] = case_title;
-    data["court"] = court;
+    data["court_id"] = court;
     data["case_room"] = room;
     data["PlaintaiffClients"] = PlaintaiffClients;
     data["PlaintaiffLawyers"] = PlaintaiffLawyers;
     data["DefendentLawyers"] = DefendentLawyers;
     data["DefendentClients"] = DefendentClients;
-    data["baseNumbers"] = baseNumbers;
-    data["years"] = years;
+    data["Base_Numbers"] = baseNumbers;
 
-    console.log(data)
+
+    console.log(data);
     return data;
 
 

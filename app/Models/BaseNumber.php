@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BaseNumber extends Model
 {
     use HasFactory;
+    protected $table='base_number';
     protected $fillable = [
         'number',
         'date',

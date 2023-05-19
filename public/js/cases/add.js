@@ -72,21 +72,29 @@ function add() {
 
             case_ = collectData();
 
-            $.ajaxSetup ({
+            $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/add_case",
+                url: "http://127.0.0.1:8000/cases",
                 type: "POST",
-                data: case_,
+                data: {
+                    'court_id': case_.court_id,
+                    'case_room': case_.case_room,
+                    'title': case_.title,
+                    'Base_Numbers': case_.Base_Numbers,
+                    'DefendentLawyers': case_.DefendentLawyers,
+                    'DefendentClients': case_.DefendentClients,
+                    'PlaintaiffClients': case_.PlaintaiffClients,
+                    'PlaintaiffLawyers': case_.PlaintaiffLawyers
+                },
                 success: function (response) {
-                    if (response.status == 'success') {
-                        console.log(response);
 
-                        // redirect user to appropriate page
+                    if (response.status  == 'success') {
+                        alert(response.message);
                         window.location.href = response.data.page;
                     } else {
                         $('.error').html(response.message);
@@ -96,7 +104,8 @@ function add() {
                 error: function (response) {
                     // If the login is unsuccessful, display the error message
                     // $('#error').html(response.responseJSON.errors.phone[0]);
-                    $('#error').html(response.responseJSON);
+                    console.log(response)
+                    console.log(case_)
                 }
             });
 

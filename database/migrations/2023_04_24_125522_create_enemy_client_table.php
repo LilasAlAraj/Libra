@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('enemy_client', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('phone_number');
+            $table->integer('phone_number')->nullable();
             $table->timestamps();
         });
     }
