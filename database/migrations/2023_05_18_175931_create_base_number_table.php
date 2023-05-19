@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('number');
             $table->date('date');
-            $table->bigInteger('case_id');
+            $table->unsignedBigInteger('case_id');
             $table->foreign('case_id')->references('id')->on('cases')->onDelete('cascade');
             $table->timestamps();
         });

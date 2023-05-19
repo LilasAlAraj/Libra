@@ -167,11 +167,28 @@ function deleteLawyerEnemyField() {
 
 //جلب الاقتراحات من المخدم
 function fetchSuggestions(input) {
-    let suggestions;
-    if (input !== '')
-        suggestions = [input + ' list1', input + ' list2', input + ' list3', input + ' list4']; // قائمة الاقتراحات يمكن استبدالها ببيانات حقيقية
-    else
-        suggestions = []
+    let suggestions = [];
+    if (input !== '') {
+        $.ajax({
+            url: '/clients/'+input,
+            type: 'get',
+            success: function (response) {
+
+                for (var i = 0; i < response.length; i++) {
+                    suggestions.push({ 'name': response[i].first_name + ' ' + response[i].first_name, 'id': response[i].id });
+                }
+            },
+            error: function (response) {
+                console.log(response);
+
+            }
+        });
+
+
+
+
+
+    }
     return suggestions;
 }
 // ملئ قائمة القتراحات
@@ -306,9 +323,10 @@ function collectData() {
 
 function getCourts() {
     $.ajax({
-        url: "http://127.0.0.1:8000/courts",
+        url: "http://127.0.0.1:8000/courts/show",
         type: "Get",
         success: function (response) {
+            console.log(response)
             courts = document.getElementById('court');
             for (var i = 0; i < response.length; i++) {
                 option = document.createElement('option');

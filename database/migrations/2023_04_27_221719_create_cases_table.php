@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cases', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id()->autoIncrement();
             $table->string('title');
             $table->string('Status', 50); //حالة القضية
             $table->integer('Value_Status'); // رقم الحالة من اجل المقارنة
             $table->string('case_room');
-            $table->bigInteger('court_id');
-            $table->foreign('court_id')->references('id')->on('court')->onDelete('cascade');
+            $table->unsignedBigInteger('court_id');
+            $table->foreign('court_id')->references('id')->on('court');
             $table->softDeletes();
             $table->timestamps();
 

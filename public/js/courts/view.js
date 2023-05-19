@@ -18,6 +18,9 @@ function setAuth() {
 
 
 function add_court() {
+    $('#addCourtError').css('color', 'red');
+    $('#addCourtError').html('');
+
     $('#addCourt_form').validate({
         rules: {
 
@@ -50,7 +53,7 @@ function add_court() {
                 }
             });
             $.ajax({
-                url: "http://127.0.0.1:8000/courts/store",
+                url: "http://127.0.0.1:8000/courts/",
                 type: "POST",
                 data: {
                     "name": court_name,
@@ -59,12 +62,24 @@ function add_court() {
                 , dataType: 'json',
                 success: function (response) {
                     if (response.status == 'success') {
-                        console.log(response);
-                        alert("تم إضافة المحكمة بنجاح");
+                        court = [];
+                        court["name"] = court_name
+                        court["place"] = court_location
+                        // عرض الصفوف
+
+                        if (document.getElementById('NoData') != undefined) {
+                            document.getElementById('NoData').remove();
+                        }
+                        table = $('#table-body');
+
+                        addCourtRow(table, court)
+                        $('#addCourtError').css('color', 'green');
+                        $('#addCourtError').html('تم إضافة المحكمة بنجاح');
+
+
 
                     } else {
-                        console.log(response);
-                        alert("تم إضافة المحكمة بنجاح");
+                        $('#addCourtError').html(response.message);
 
                     }
                 },
@@ -87,23 +102,23 @@ let data;
 $(document).ready(function () {
     setAuth();
 
-     // جلب البيانات من ملف JSON
-     $.ajax({
-         url: '/courts/show',
-         type:'get',
-         success: function (response) {
+    // جلب البيانات من ملف JSON
+    $.ajax({
+        url: '/courts/show',
+        type: 'get',
+        success: function (response) {
+
+            data = response;
+            // تحديث Pagination
+            displayAll();
+
+        },
+        error: function (response) {
             console.log(response);
 
-             data = response;
-             // تحديث Pagination
-             displayAll();
+        }
+    });
 
-         },
-         error: function (response) {
-             console.log(response);
-
-         }
-     });
 });
 
 
@@ -129,6 +144,7 @@ function displayAll() {
         var cell = row.insertCell(0);
         cell.colSpan = numColumns;
         cell.innerHTML = "لا يوجد بيانات";
+        cell.id = 'NoData'
 
     }
 }
@@ -136,11 +152,23 @@ function displayAll() {
 
 function addCourtRow(table, court) {
 
+    const remove_btn = document.createElement('button')
+    remove_btn.type = "button"
+    remove_btn.id = "remove-button"
+    remove_btn.classList.add('operations-btn', 'btn', 'btn-danger')
+    remove_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
+        + ' إزالة المحكمة'
+
     const row = $('<tr>').append(
 
         $('<td>').append(court.name),
-        $('<td>').append(court.place)
+        $('<td>').append(court.place),
+        $('<td>').append(court.place),
+
     );
+    remove_btn.onclick = function () {
+        confirmDeleteSession(session.id);
+    }
     row.attr('id', court.id);
     table.append(row);
 
@@ -150,6 +178,5 @@ function addCourtRow(table, court) {
 function closeModal() {
     // حذف المعلومات المخزنة في ذاكرة التخزين المؤقت للجلسة
     sessionStorage.clear();
-    console.log('// إغلاق النافذة المنبثقة')
 
 }

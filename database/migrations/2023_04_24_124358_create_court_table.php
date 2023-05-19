@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('court', function (Blueprint $table) {
-            $table->Increments('id');
+            $table->id()->autoIncrement();
             $table->string('place');
             $table->string('name');
             // $table->softDeletes();

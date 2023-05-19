@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,7 +21,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('cases','App\Http\Controllers\CasesController');  // 🌷القضية
+Route::resource('cases', 'App\Http\Controllers\CasesController'); // 🌷القضية
 
-Route::resource('courts','App\Http\Controllers\CourtController'); // 🌷المحاكم
+Route::resource('courts', 'App\Http\Controllers\CourtController'); // 🌷المحاكم
 
+Route::get('lawyers', 'App\Http\Controllers\UserController@getAllLawyers');
+Route::get('clients/{name}', 'App\Http\Controllers\UserController@getAllClientWithName');

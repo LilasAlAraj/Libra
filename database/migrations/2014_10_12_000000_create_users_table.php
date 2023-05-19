@@ -30,7 +30,7 @@ return new class extends Migration
 
             $table->string('status',10);
 
-         //   $table->integer('role_id');
+            $table->string('role_name');
 
             $table->rememberToken();
             $table->timestamps();

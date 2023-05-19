@@ -32,7 +32,7 @@ class User extends Authenticatable
         'email',
 
         'status',
-        'role_id',
+        'role_name',
     ];
 
     /**
@@ -53,4 +53,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+
 }
