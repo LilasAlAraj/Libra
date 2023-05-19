@@ -50,7 +50,7 @@ function addClientPlaintiffField() {
 
 
           <label for="client_name-${clientPlaintiffCounter}"><b>اسم المدعي</b></label>
-          <input type="text" class="client_name"id="client_name-${clientPlaintiffCounter}" placeholder="أدخل اسم المدعي " name="client_names[]"
+          <input type="text" class="client_name"id="client_name-${clientPlaintiffCounter}" autocomplete = 'off' placeholder="أدخل اسم المدعي " name="client_names[]"
           oninput="showSuggestions(${clientPlaintiffCounter},'client')"  onblur="hideSuggestions(${clientPlaintiffCounter},'client')" required>
           <ul class="suggestions" id="suggestions-client-${clientPlaintiffCounter}"></ul>
 

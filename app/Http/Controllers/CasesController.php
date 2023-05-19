@@ -115,7 +115,6 @@ class CasesController extends Controller
 
         foreach ($List_Clients as $List_Client) {
 
-            dump($List_Client);
 
             Client_of_Cases::create([
 
@@ -220,9 +219,8 @@ class CasesController extends Controller
 
         //  Notification::send($user, new \App\Notifications\AddCase($cases));
 
-        session()->flash('message', 'This Cases is added');
 
-        return response()->json(['status' => 'success', 'message' => 'تم إضافة القضية بنجاح']);
+        return response()->json(['status' => 'success', 'message' => 'تم إضافة القضية بنجاح'],200);
 
     }
 

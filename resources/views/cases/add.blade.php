@@ -285,10 +285,11 @@
                 </div>
               </div>
             </div>
+            <div id="error" class="error">
+            </div>
             <button type="submit" id="add_btn" onclick="add()">إضافة</button>
           </div>
-          <div id="error" class="error">
-          </div>
+
         </form>
       </main>
     </div>

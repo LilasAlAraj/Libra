@@ -21,6 +21,8 @@ $(document).ready(function () {
 
 
 function add() {
+    $('.error').css('color', 'red');
+    $('.error').html('')
     $('#add-case-form').validate({
         rules: {
             case_tiltle: {
@@ -93,19 +95,24 @@ function add() {
                 },
                 success: function (response) {
 
-                    if (response.status  == 'success') {
-                        alert(response.message);
-                        window.location.href = response.data.page;
+                    console.log(response)
+                    console.log(response.status)
+                    console.log(response.message)
+                    if (response.status === 'success') {
+                        $('.error').css('color', 'green');
+                        $('#error').html(response.message);
+                       // window.location.href = response.data.page;
                     } else {
+
                         $('.error').html(response.message);
+
                     }
                 },
 
                 error: function (response) {
-                    // If the login is unsuccessful, display the error message
-                    // $('#error').html(response.responseJSON.errors.phone[0]);
-                    console.log(response)
-                    console.log(case_)
+
+                    $('.error').html(response.message);
+
                 }
             });
 
