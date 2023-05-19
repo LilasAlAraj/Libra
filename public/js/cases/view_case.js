@@ -142,15 +142,16 @@ function setCaseData() {
 
 
     // ضبط تفاصيل القضية
-    document.getElementById('dawa').append(caseItem.case_title)
-    document.getElementById('eltemas').append(caseItem.eltemas)
-    document.getElementById('waqae').append(caseItem.waqae)
+    document.getElementById('dawa').append(caseItem.case.title)
+    document.getElementById('eltemas').append(caseItem.case.claim)
+    document.getElementById('waqae').append(caseItem.case.facts)
 
 
 
     // ضبط جلسات القضية
     sessions_table = document.getElementById('sessions-table-body');
     sessions = caseItem.sessions;
+    console.log(caseItem);
     for (var i = 0; i < sessions.length; i++) {
         addSessionRow(sessions_table, sessions[i]);
     }
@@ -518,7 +519,7 @@ function changeStateCase() {
                         console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
 
                         state = document.getElementById("state");
-                        state.classList=[];
+                        state.classList = [];
                         if (statusID == 1) {
 
                             state.classList.add('text-bg-success', 'badge', 'state');
@@ -602,12 +603,12 @@ function editCase() {
 
 
 function loadAdditionalDetails() {
-    document.getElementById('eltemas_edit').value = caseItem.eltemas;
-    document.getElementById('waqae_edit').value = caseItem.waqae;
-    document.getElementById('dawa_edit').value = caseItem.case_title;
-
+    document.getElementById('dawa_edit').value = caseItem.case.title
+    document.getElementById('eltemas_edit').append(caseItem.case.claim)
+    document.getElementById('waqae_edit').append(caseItem.case.facts)
 
     $('#edit_case_details_form').validate({
+
         rules: {
             dawa: {
                 required: true
@@ -634,35 +635,39 @@ function loadAdditionalDetails() {
         submitHandler: function (form) {
             var eltemas = $('#eltemas_edit').val();
             var dawa = $('#dawa_edit').val();
-            var waqae = document.getElementById("waqae_edit").checked;
+            var waqae = $("#waqae_edit").val();
 
 
 
-            const caseID = new URLSearchParams(window.location.search).get("id");
 
             $('#errorEditAdditionalDetails').html('');
-
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: "http://127.0.0.1:8000/edit_details",
+                url: "http://127.0.0.1:8000/updateDetails",
                 type: "POST",
                 data: {
-                    //    "_token": "{{ csrf_token() }}",
-                    "eltemas": eltemas,
-                    "dawa": dawa,
-                    "waqae": waqae,
-                    "caseID": caseID
+                    "claim": eltemas,
+
+                    "facts": waqae,
+                    "id": caseID
                 },
                 success: function (response) {
+                    console.log(response);
+
                     if (response.status == 'success') {
 
-                        // redirect user to appropriate page
-                        window.location.href = "../view_case.html?id=" + caseID;
+                        document.getElementById('eltemas').innerHTML=(eltemas)
+                        document.getElementById('waqae').innerHTML=(waqae)
                     } else {
-                        $('.errorEditAdditionalDetails').html(response.message);
+                        $('.errorEditAdditionalDetails').html(response);
                     }
                 },
                 error: function (response) {
-                    $('#errorEditAdditionalDetails').html(response.responseJSON);
+                    console.log(response);
                 }
             });
 
@@ -719,20 +724,20 @@ function addNewSession() {
 
             // تجهيز البيانات للإرسال
             var formData = new FormData();
-            formData.append('newSessionNumber', newSessionNumber);
-            formData.append('newSessionDate', newSessionDate);
-            formData.append('newSessionDetails', newSessionDetails);
+            formData.append('number', newSessionNumber);
+            formData.append('date', newSessionDate);
+            formData.append('description', newSessionDetails);
             if (sessionAttachments != null)
                 for (var i = 0; i < sessionAttachments.length; i++) {
                     formData.append('sessionAttachments[]', sessionAttachments[i]);
                 }
-            formData.append('caseID', caseID);
+            formData.append('case_id', caseID);
 
 
             console.log(sessionAttachments)
             $.ajax({
-                url: 'add_new_session.php',
-                method: 'POST',
+                url: 'http://127.0.0.1:8000/sessionsOfCase',
+                method: 'G',
                 data: formData,
                 processData: false,
                 contentType: false,

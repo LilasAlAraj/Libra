@@ -11,7 +11,6 @@ use App\Models\Enemy_Lawyers;
 use App\Models\Enemy_Lawyers_of_Cases;
 use App\Models\Lawyer_of_Cases;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CasesController extends Controller
 {
@@ -180,14 +179,6 @@ class CasesController extends Controller
 
         //---------  تفاصيل القضية --------------//
 
-        //     $cases_id=Cases::latest()->first()->id;
-
-        //         Cases_details::create([
-
-        //         'id_cases'=>$cases_id,
-        //         'title' => $request->title,
-
-        //     ]);
         //     if ($request->hasFile('pic'))
         //    {
 
@@ -247,10 +238,11 @@ class CasesController extends Controller
                 $baseNumbers = $case->baseNumbers;
                 $enemyClients = $case->enemy_clients;
                 $enemyLawyers = $case->enemy_lawyers;
+                $sessions = $case->sessions;
                 $court = $case->court;
                 $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
                     'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                    'court' => $court]
+                    'court' => $court,'sessions'=>$sessions]
                 ;
             }
 
@@ -305,7 +297,7 @@ class CasesController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->case_id;
-        $cases = Cases::where('id','=', $id)->first();
+        $cases = Cases::where('id', '=', $id)->first();
 
         //    $Details = Cases_attachments::where('cases_id', $id)->first();
 
@@ -325,29 +317,37 @@ class CasesController extends Controller
 
             //if (!empty($Details->cases_number)) {
 
-              //  Storage::disk('public_uploads')->deleteDirectory($Details->cases_number);
+            //  Storage::disk('public_uploads')->deleteDirectory($Details->cases_number);
             //}
             //   يعني رح تحذفها بشكل نهائي forceDelete
 
             $cases->forceDelete();
 
-
-
-            return response()->json(['status'=>'success']);
+            return response()->json(['status' => 'success']);
 
         } else {
 
             $cases->delete();
 
-            return response()->json(['status'=>'success']);
+            return response()->json(['status' => 'success']);
 
         }
     }
 
-    public function Status_Update( Request $request)
+    public function updateDetails(Request $request)
     {
-        $id=$request->id;
-        $cases =Cases::where('id','=', $id)->first();
+        $id = $request->id;
+        $case = Cases::where('id', '=', $id)->first();
+
+        $case->update(['claim' => $request->claim, 'facts' => $request->facts]);
+        return response()->json(['status' => 'success']);
+
+    }
+
+    public function Status_Update(Request $request)
+    {
+        $id = $request->id;
+        $cases = Cases::where('id', '=', $id)->first();
 
         if ($request->Value_Status === '1') {
 
@@ -375,8 +375,7 @@ class CasesController extends Controller
             ]);
         }
 
-
-        return response()->json(['status'=>'success']);
+        return response()->json(['status' => 'success']);
 
     }
 

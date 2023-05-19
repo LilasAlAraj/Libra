@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('title');
             $table->string('Status', 50); //حالة القضية
             $table->integer('Value_Status'); // رقم الحالة من اجل المقارنة
+
+            $table->text('facts')->nullable(); //الحقائق
+            $table->text('claim')->nullable(); //الوقائع والالتماس
+
             $table->string('case_room');
             $table->unsignedBigInteger('court_id');
             $table->foreign('court_id')->references('id')->on('court')->onDelete('cascade');

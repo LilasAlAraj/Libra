@@ -20,6 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('sessions','App\Http\Controllers\SessionController');   // 🌷جلسات القضية
+Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
 Route::resource('cases', 'App\Http\Controllers\CasesController'); // 🌷القضية
 
@@ -33,3 +35,4 @@ Route::get('clients/{name}', 'App\Http\Controllers\UserController@getAllClientWi
 Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->name('Status_show');        // حالة القضية (رابحة -خاسرة -جاري العمل عليها - مفتوحة )🌷
 
 Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');  // 🌷تغيير حالة القضية
+Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails');  // 🌷تغيير حالة القضية

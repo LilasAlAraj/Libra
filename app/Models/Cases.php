@@ -17,6 +17,8 @@ class Cases extends Model
         'case_room',
         'Status',
         'Value_Status',
+        'facts',
+        'claim',
 
         //'task_id'
     ];
@@ -25,9 +27,9 @@ class Cases extends Model
 
         return $this->belongsToMany(tasks::class, 'case_of_task');
     }
-    public function sessions()
+    public function sessions(): HasMany
     {
-        return $this->hasMany(Sessions::class);
+        return $this->hasMany(Sessions::class,'case_id');
     }
     public function desicions()
     {
@@ -41,7 +43,6 @@ class Cases extends Model
     {
         return $this->belongsToMany(Enemy_Clients::class, 'enemy_client_of_cases', 'case_id', 'enemy_client_id');
     }
-
 
     public function lawyers()
     {
