@@ -7,27 +7,25 @@
 
 /********************* */
 
-let data, caseItem;
+let data, caseItem, caseID;
 
 
 
 $(document).ready(function () {
+    caseID = window.location.href.split('/');
+    caseID = caseID[caseID.length - 1];
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'test.json',
+        url: '/cases/' + caseID,
         dataType: 'json',
         success: function (response) {
 
 
 
-
-            const caseID = new URLSearchParams(window.location.search).get("id");
-            function isBigEnough(value) {
-                return value.id == caseID;
-            }
-            data = response.filter(isBigEnough);
-            caseItem = data[0]
+            data = response.cases[0];
+            caseItem = data
+            console.log(caseItem)
 
             setCaseAuth();
 
@@ -50,15 +48,16 @@ $(document).ready(function () {
 function setCaseData() {
 
     // ضبط المحكمة
-    document.getElementById('court').append(caseItem.court)
+    document.getElementById('court').append(caseItem.case.court.name + ' في ' + caseItem.case.court.place)
     // ضبط الغرفة
-    document.getElementById('room').append(caseItem.room)
+    document.getElementById('room').append(caseItem.case.case_room)
     // ضبط أرقام الأساس
 
 
     base_numbers = document.getElementById('base-numbers');
+    console.log(caseItem.case_numbers.length)
     for (var i = 0; i < caseItem.case_numbers.length; i++) {
-        bn = caseItem.case_numbers[i]
+
 
 
         row = document.createElement('div');
@@ -70,7 +69,7 @@ function setCaseData() {
 
         boldBn = document.createElement('b');
         boldBn.append('رقم الأساس: ')
-        baseNum.append(boldBn, bn.split("/")[0]);
+        baseNum.append(boldBn, caseItem.case_numbers[i].number);
 
         year = document.createElement('div');
         year.classList.add('col-6');
@@ -78,23 +77,13 @@ function setCaseData() {
 
         boldY = document.createElement('b');
         boldY.append('لعام: ')
-        year.append(boldY, bn.split("/")[1]);
+        year.append(boldY, caseItem.case_numbers[i].date);
 
 
         row.append(baseNum, year)
         base_numbers.append(row)
 
-        /************
-    
-     * <div class="row">
-                  <div class="col-6" id="base-number-0">
-                    <b>رقم الأساس: </b>
-                  </div>
-                  <div class="col-6" id="year-0">
-                    <b>لعام: </b>
-                  </div>
-                </div>
-     */
+
     }
 
 
@@ -112,20 +101,21 @@ function setCaseData() {
         row = document.createElement('tr');
         plaintiff_client_ = document.createElement('td');
         if (i < plaintiff_names.length)
-            plaintiff_client_.append(plaintiff_names[i])
+            plaintiff_client_.append(plaintiff_names[i].first_name + ' ' + plaintiff_names[i].father_name + ' ' + plaintiff_names[i].last_name)
 
         plaintiff_lawyer_ = document.createElement('td');
         if (i < plaintiff_lawyers.length)
-            plaintiff_lawyer_.append(plaintiff_lawyers[i])
+            plaintiff_lawyer_.append(plaintiff_lawyers[i].first_name + ' ' + plaintiff_lawyers[i].father_name + ' ' + plaintiff_lawyers[i].last_name)
 
 
         defendant_client_ = document.createElement('td');
         if (i < defendant_names.length)
-            defendant_client_.append(defendant_names[i])
+            defendant_client_.append(defendant_names[i].name + ' رقمه ' + defendant_names[i].phone_number)
 
         defendant_lawyer_ = document.createElement('td');
         if (i < defendant_lawyers.length)
-            defendant_lawyer_.append(defendant_lawyers[i])
+            defendant_lawyer_.append(defendant_lawyers[i].name + ' رقمه ' + defendant_lawyers[i].phone_number)
+
 
         row.append(plaintiff_client_, plaintiff_lawyer_, defendant_client_, defendant_lawyer_)
         tableVss.append(row)
@@ -135,7 +125,7 @@ function setCaseData() {
 
     // ضبط حالة القضية
     state = document.getElementById("state")
-    stateCase = caseItem.state; //1-winner. 2-losser. 3-running. 4-blocking
+    stateCase = caseItem.case.Value_Status; //1-winner. 2-losser. 3-running. 4-blocking
     if (stateCase == 1) {
         state.classList.add('text-bg-success');
         state.append('رابحة')
@@ -233,7 +223,7 @@ function addSessionRow(table, session) {
     operationMenu.append(viewOpLi)
 
     if (role == 1 || role == 2) {
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
 
             const deleteBtn = document.createElement('button');
@@ -250,7 +240,7 @@ function addSessionRow(table, session) {
                 document.getElementById('deleteSessionButton').onclick = function () {
                     deleteSession()
                 }
-        
+
             }
 
 
@@ -322,7 +312,7 @@ function addAttachmentRow(table, attachment) {
     operationMenu.append(downloadOpLi)
 
     if (role == 1 || role == 2) {
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             const deleteBtn = document.createElement('button');
             deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
@@ -337,7 +327,7 @@ function addAttachmentRow(table, attachment) {
                 document.getElementById('deleteAttachmentButton').onclick = function () {
                     deleteAttachmentOfCase()
                 }
-        
+
             }
 
             const delOpLi = document.createElement('li');
@@ -384,7 +374,7 @@ function setCaseAuth() {
 
         case_operation = document.createElement('div');
         case_operation.classList.add('container')
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             const edit_btn = document.createElement('button')
             edit_btn.type = "button"
@@ -415,7 +405,7 @@ function setCaseAuth() {
         archive_btn.setAttribute("data-bs-toggle", "modal")
         archive_btn.setAttribute("data-bs-target", "#archiveCaseBackdrop");
 
-        if (caseItem.isArchived==='true') {//القضية مؤرشفة
+        if (caseItem.isArchived === 'true') {//القضية مؤرشفة
             archive_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive align-text-bottom" aria-hidden="true"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>'
                 + ' إلغاء أرشفة القضية'
         } else { //القضية غير مؤرشفة
@@ -430,7 +420,7 @@ function setCaseAuth() {
 
 
         //لا يتم تغيير أي حالة مادام القضية مؤرشفة
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             edit_state_btn = document.createElement('button')
             edit_state_btn.type = "button"
@@ -445,7 +435,7 @@ function setCaseAuth() {
 
 
 
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
 
             edit_additional_details = document.createElement('div');
@@ -459,7 +449,7 @@ function setCaseAuth() {
             document.getElementById('additional_details').append(edit_additional_details)
         }
 
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             sessions = document.createElement('div');
             sessions.classList.add('container');
@@ -471,7 +461,7 @@ function setCaseAuth() {
             document.getElementById('sessions').append(sessions)
         }
 
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             attachments = document.createElement('div');
             attachments.classList.add('container');
@@ -483,7 +473,7 @@ function setCaseAuth() {
                 + '</button>'
             document.getElementById('attachments').append(attachments)
         }
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             decisions = document.createElement('div');
             decisions.classList.add('container');
@@ -512,24 +502,41 @@ function changeStateCase() {
             },
             submitHandler: function (form) {
 
-                state = document.getElementById("selected_state").value;
+                statusID = document.getElementById("selected_state").value;
 
+                console.log(statusID)
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
                 $.ajax({
-                    url: "change_state.php", // اسم ملف php الذي يقوم بالحذف
+                    url: "http://127.0.0.1:8000/status_update/" + statusID, // اسم ملف php الذي يقوم بالحذف
                     method: "POST", // طريقة الإرسال POST
-                    data: { 'id': caseItem.id, 'state': state },
+                    data: { 'id': caseID, 'Value_Status': statusID },
                     success: function (response) {
                         console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
-                        document.getElementById("state").innerHTML(state)
+
+                        state = document.getElementById("state");
+                        state.classList=[];
+                        if (statusID == 1) {
+
+                            state.classList.add('text-bg-success', 'badge', 'state');
+                            state.innerHTML = ('رابحة')
+                        } else if (statusID == 2) {
+                            state.classList.add('text-bg-danger', 'badge', 'state');
+                            state.innerHTML = ('خاسرة')
+                        } else if (statusID == 3) {
+                            state.classList.add('text-bg-info', 'badge', 'state');
+                            state.innerHTML = ('جارٍ العمل عليها')
+                        } else if (statusID == 4) {
+                            state.classList.add('text-bg-dark', 'badge', 'state');
+                            state.innerHTML = ('معلقة')
+                        }
 
                     },
-                    error: function (xhr, status, error) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-                        console.log(error); // عرض الخطأ في وحدة التحكم بالمتصفح
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
                 });
 
@@ -538,41 +545,48 @@ function changeStateCase() {
     )
 
 }
-function archiveCase() {
 
+function archiveCase() {
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
     $.ajax({
-        url: "archive.php", // اسم ملف php الذي يقوم بالحذف
-        method: "POST", // طريقة الإرسال POST
-        data: { id: caseItem.id }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
+        url: "http://127.0.0.1:8000/cases/" + caseID, // اسم ملف php الذي يقوم بالحذف
+        method: "Delete", // طريقة الإرسال POST
+        data: { id_Archive: 2, case_id: caseID },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
-            console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
-            window.location.href = "view.html"
 
+            if (response.status === 'success')
+                window.location.href = "http://127.0.0.1:8000/cases/"
         },
-        error: function (xhr, status, error) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-            console.log(error); // عرض الخطأ في وحدة التحكم بالمتصفح
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
         }
     });
 
 
 }
 function deleteCase() {
-
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $.ajax({
-        url: "delete.php", // اسم ملف php الذي يقوم بالحذف
-        method: "POST", // طريقة الإرسال POST
-        data: { id: caseItem.id }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
+        url: "http://127.0.0.1:8000/cases/" + caseID, // اسم ملف php الذي يقوم بالحذف
+        method: "Delete", // طريقة الإرسال POST
+        data: { id_Archive: 1, case_id: caseID },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
-            console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
-            window.location.href = "view.html"
+
+            //console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+            if (response.status === 'success')
+                window.location.href = "http://127.0.0.1:8000/cases/"
         },
-        error: function (xhr, status, error) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-            console.log(error); // عرض الخطأ في وحدة التحكم بالمتصفح
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
         }
     });
 }
@@ -737,7 +751,7 @@ function addNewSession() {
     });
 
     /***************
-     * 
+     *
      * public function store(Request $request)
 {
     $newSession = new Session();
@@ -745,7 +759,7 @@ function addNewSession() {
     $newSession->sessionDate = $request->input('newSessionDate');
     $newSession->sessionDetails = $request->input('newSessionDetails');
     $newSession->caseID = $request->input('caseID');
- 
+
     if ($request->hasFile('sessionAttachments')) {
         $files = $request->file('sessionAttachments');
         foreach ($files as $file) {
@@ -753,15 +767,15 @@ function addNewSession() {
             $file->storeAs('attachments', $filename);
         }
     }
- 
+
     $newSession->save();
- 
+
     return response()->json([
         'message' => 'Session added successfully',
         'session' => $newSession
     ]);
 }
-     * 
+     *
      */
 }
 

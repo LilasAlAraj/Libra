@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('Value_Status'); // رقم الحالة من اجل المقارنة
             $table->string('case_room');
             $table->unsignedBigInteger('court_id');
-            $table->foreign('court_id')->references('id')->on('court');
+            $table->foreign('court_id')->references('id')->on('court')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
 

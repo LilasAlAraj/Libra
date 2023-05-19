@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('case_id');
             $table->foreign('case_id')->references('id')->on('cases')->onDelete('cascade');
             $table->timestamps();
+            $table->unique(['number', 'date'])->together(); // تحديد الفرادة على الرقم والعام
         });
     }
 

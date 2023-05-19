@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('enemy_client_of_cases', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('enemy_client_id');
-            $table->foreign('enemy_client_id')->references('id')->on('enemy_client');
+            $table->foreign('enemy_client_id')->references('id')->on('enemy_client')->onDelete('cascade');
             $table->unsignedBigInteger('case_id');
-            $table->foreign('case_id')->references('id')->on('cases');
+            $table->foreign('case_id')->references('id')->on('cases')->onDelete('cascade');
             $table->timestamps();
         });
     }

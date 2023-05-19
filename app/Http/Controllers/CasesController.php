@@ -18,24 +18,34 @@ class CasesController extends Controller
 
     public function index()
     {
-        $cases = Cases::get()::all;
-
-        // $cases_attachments=Cases_attachments::all();
-
-        // $cases_details=Cases_details::all();
-
-        return view('cases.index', compact('cases', 'cases_attachments', 'cases_details'));
-
+        return view('cases.view');
     }
 
     public function create()
     {
         return view('cases.add');
     }
+    public function view_case()
+    {
+        return view('cases.view_case');
+    }
 
     public function store(Request $request)
     {
+        $Base_Numbers = $request->Base_Numbers;
+        foreach ($Base_Numbers as $Base_Number) {
+            $number = $Base_Number['number'];
+            $date = $Base_Number['date'];
+            $b_exit = BaseNumber::where('number', '=', $number)->where('date', '=', $date)->exists();
 
+            if ($b_exit) {
+
+                session()->flash('Erorr', 'Error the BaseNumber already exist');
+
+                $message = "رقم الأساس " . $number . "\\" . $date . " هذا موجود من قبل";
+                return response()->json(['status' => 'failed', 'message' => $message]);
+            }
+        }
         Cases::create([
 
             'court_id' => $request->court_id,
@@ -50,9 +60,8 @@ class CasesController extends Controller
         ]);
 
         /******أرقام الأساس */
-        $case_id = Cases::latest()->first()->id;
 
-        $Base_Numbers = $request->Base_Numbers;
+        $case_id = Cases::latest()->first()->id;
 
         foreach ($Base_Numbers as $Base_Number) {
 
@@ -64,6 +73,7 @@ class CasesController extends Controller
 
                 'case_id' => $case_id,
             ]);
+
         }
 
         //-----المحاميين الخصم -------------------//
@@ -114,7 +124,6 @@ class CasesController extends Controller
         $List_Clients = $request->PlaintaiffClients;
 
         foreach ($List_Clients as $List_Client) {
-
 
             Client_of_Cases::create([
 
@@ -219,16 +228,48 @@ class CasesController extends Controller
 
         //  Notification::send($user, new \App\Notifications\AddCase($cases));
 
-
-        return response()->json(['status' => 'success', 'message' => 'تم إضافة القضية بنجاح'],200);
+        return response()->json(['status' => 'success', 'message' => 'تم إضافة القضية بنجاح'], 200);
 
     }
 
     public function show($id)
     {
-        $cases = Cases::where('id', $id)->first();
+        $casesArray = [];
+        $i = 0;
 
-        return view('cases.status_update', compact('cases'));
+        if ($id == 'all') {
+
+            $cases = Cases::get();
+
+            foreach ($cases as $case) {
+                $clients = $case->clients;
+                $lawyers = $case->lawyers;
+                $baseNumbers = $case->baseNumbers;
+                $enemyClients = $case->enemy_clients;
+                $enemyLawyers = $case->enemy_lawyers;
+                $court = $case->court;
+                $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                    'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                    'court' => $court]
+                ;
+            }
+
+            return response()->json(['cases' => $casesArray]);
+        } else {
+            $case = Cases::where('id', $id)->first();
+            $clients = $case->clients;
+            $lawyers = $case->lawyers;
+            $baseNumbers = $case->baseNumbers;
+            $enemyClients = $case->enemy_clients;
+            $enemyLawyers = $case->enemy_lawyers;
+            $court = $case->court;
+            $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                'court' => $court]
+            ;
+            return response()->json(['cases' => $casesArray]);
+        }
+
     }
 
     public function edit($id)
@@ -263,10 +304,8 @@ class CasesController extends Controller
 
     public function destroy(Request $request)
     {
-
         $id = $request->case_id;
-
-        $cases = Cases::where('id', $id)->first();
+        $cases = Cases::where('id','=', $id)->first();
 
         //    $Details = Cases_attachments::where('cases_id', $id)->first();
 
@@ -282,56 +321,62 @@ class CasesController extends Controller
         //     <input type="hidden" name="id_Archive" id="id_Archive" value="2">
         // </div>
 
-        if (!$id_Archive == 2) {
+        if ($id_Archive != 2) {
 
-            if (!empty($Details->cases_number)) {
+            //if (!empty($Details->cases_number)) {
 
-                Storage::disk('public_uploads')->deleteDirectory($Details->cases_number);
-            }
+              //  Storage::disk('public_uploads')->deleteDirectory($Details->cases_number);
+            //}
             //   يعني رح تحذفها بشكل نهائي forceDelete
 
             $cases->forceDelete();
 
-            session()->flash('delete_case');
 
-            return redirect('/cases');
+
+            return response()->json(['status'=>'success']);
 
         } else {
 
             $cases->delete();
 
-            session()->flash('archive_case');
+            return response()->json(['status'=>'success']);
 
-            return redirect('/Archive');
         }
     }
 
-    public function Status_Update($id, Request $request)
+    public function Status_Update( Request $request)
     {
-        $cases = Cases::findOrFail($id);
+        $id=$request->id;
+        $cases =Cases::where('id','=', $id)->first();
 
-        if ($request->Status === 'رابحة') {
+        if ($request->Value_Status === '1') {
 
             $cases->update([
-                'Value_Status' => 1,
-                'Status' => $request->Status,
+                'Status' => 'رابحة',
+                'Value_Status' => $request->Value_Status,
             ]);
-        } elseif ($request->Status === 'جاري العمل عليها') {
+        } elseif ($request->Value_Status === '2') {
 
             $cases->update([
-                'Value_Status' => 3,
-                'Status' => $request->Status,
+                'Status' => 'خاسرة',
+                'Value_Status' => $request->Value_Status,
+            ]);
+        } elseif ($request->Value_Status === '3') {
+
+            $cases->update([
+                'Status' => 'جارِ العمل عليها',
+                'Value_Status' => $request->Value_Status,
             ]);
         } else {
 
             $cases->update([
-                'Value_Status' => 4,
-                'Status' => $request->Status,
+                'Status' => 'معلقة',
+                'Value_Status' => $request->Value_Status,
             ]);
         }
-        session()->flash('Status_Update');
 
-        return redirect('/cases');
+
+        return response()->json(['status'=>'success']);
 
     }
 
