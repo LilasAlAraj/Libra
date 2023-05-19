@@ -40,8 +40,6 @@ function add() {
                 required: true
             }, "clientEnemy_names[]": {
                 required: true
-            }, "lawyerEnemy_names[]": {
-                required: true
             }
         },
         messages: {
@@ -68,9 +66,6 @@ function add() {
             },
             "clientEnemy_names[]": {
                 required: "الرجاء إدخال  اسم المدعى عليه "
-            },
-            "lawyerEnemy_names[]": {
-                required: "الرجاء إدخال اسم محامي المدعى عليه"
             }
         },
         submitHandler: function (form) {

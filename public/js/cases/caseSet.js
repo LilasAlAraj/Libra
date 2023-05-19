@@ -73,10 +73,9 @@ function addLawyerPlaintiffField() {
     const plaintiffsContainer = document.getElementById('lawyervs1');
     const newPlaintiffField = document.createElement('div');
     newPlaintiffField.id = 'lawyerPlaintiff' + lawyerPlaintiffCounter;
-    newPlaintiffField.innerHTML = `
-  <label for="lawyer_name-${lawyerPlaintiffCounter}"><b>اسم الوكيل</b></label>
-                          <input type="text" id="lawyer_name-${lawyerPlaintiffCounter}" placeholder="أدخل اسم الوكيل" name="lawyer_names[]" required>
-      `
+    newPlaintiffField.innerHTML = '<label for="lawyer_name-${lawyerPlaintiffCounter}"><b>اسم الوكيل</b></label>'
+        + '<select  id="lawyer_name-' + lawyerPlaintiffCounter + '"  name="lawyer_names[]" required>'
+    getLawyers('lawyer_name-' + lawyerPlaintiffCounter)
     plaintiffsContainer.appendChild(newPlaintiffField);
     lawyerPlaintiffCounter++;
 }// حذف حقل محامي المدعي
@@ -89,6 +88,30 @@ function deleteLawyerPlaintiffField() {
     }
 }
 
+function getLawyers(lawyerList) {
+    $.ajax({
+        url: "http://127.0.0.1:8000/lawyers",
+        type: "Get",
+        success: function (response) {
+            const LawyerList = document.getElementById(lawyerList);
+            LawyerList.innerHTML='<option disabled selected>اختر اسم الوكيل</option>'
+            for (var i = 0; i < response.lawyers.length; i++) {
+                option = document.createElement('option');
+                option.value = response.lawyers[i].id;
+                option.innerHTML = response.lawyers[i].first_name + ' ' + response.lawyers[i].last_name;
+
+                LawyerList.append(option)
+            }
+        },
+
+        error: function (response) {
+            // If the login is unsuccessful, display the error message
+            // $('#error').html(response.responseJSON.errors.phone[0]);
+            $('#error').html(response.responseJSON);
+        }
+    });
+
+}
 
 
 // إضافة حقل جديد لاسم محامي المدعي
@@ -139,7 +162,7 @@ function addLawyerEnemyField() {
 
   <div class = 'col-6'>
   <label for="lawyerEnemy_name-${lawyerEnemyCounter}"><b>اسم الوكيل</b></label>
-  <input type="text" id="lawyerEnemy_name-${lawyerEnemyCounter}" placeholder="أدخل اسم الوكيل" name="lawyerEnemy_names[]" required>
+  <input type="text" id="lawyerEnemy_name-${lawyerEnemyCounter}" placeholder="أدخل اسم الوكيل" name="lawyerEnemy_names[]" >
 </div>
 
 <div class = 'col-6'>
@@ -166,18 +189,23 @@ function deleteLawyerEnemyField() {
 }
 
 //جلب الاقتراحات من المخدم
-function fetchSuggestions(input) {
+function fetchSuggestions(suggestionsList, input) {
     let suggestions = [];
     if (input !== '') {
+
         $.ajax({
-            url: '/clients/'+input,
+            url: '/clients/' + input.value,
             type: 'get',
             success: function (response) {
 
-                for (var i = 0; i < response.length; i++) {
-                    suggestions.push({ 'name': response[i].first_name + ' ' + response[i].first_name, 'id': response[i].id });
+                for (var i = 0; i < response.clients.length; i++) {
+                    suggestions.push({ 'name': response.clients[i].first_name + ' ' + response.clients[i].father_name + ' ' + response.clients[i].last_name, 'id': response.clients[i].id });
                 }
+                fillSuggestionList(suggestionsList, suggestions, input)
+
+
             },
+
             error: function (response) {
                 console.log(response);
 
@@ -185,25 +213,23 @@ function fetchSuggestions(input) {
         });
 
 
-
-
-
     }
     return suggestions;
 }
 // ملئ قائمة القتراحات
-function fillSuggestionList(suggestionsList, suggestions) {
+function fillSuggestionList(suggestionsList, suggestions, input) {
 
     suggestionsList.innerHTML = '';
     for (let i = 0; i < suggestions.length; i++) {
-        const suggestion = suggestions[i];
+        const suggestion = suggestions[i].name;
 
         const suggestionElement = document.createElement('li');
         suggestionElement.textContent = suggestion;
-        suggestionElement.addEventListener('click', function () {
+        suggestionElement.onmousedown = function () {
             input.value = suggestion;
             suggestionsList.innerHTML = '';
-        });
+            input.setAttribute('data-id',suggestions[i].id)
+        };
         suggestionsList.appendChild(suggestionElement);
     }
     if (suggestions.length != 0)
@@ -216,8 +242,8 @@ function fillSuggestionList(suggestionsList, suggestions) {
 function showSuggestions(inputId, state) {
     const input = document.getElementById(state + "_name-" + inputId);
     const suggestionsList = document.getElementById(`suggestions-${state}-${inputId}`);
-    const suggestions = fetchSuggestions(input.value);
-    fillSuggestionList(suggestionsList, suggestions)
+    const suggestions = fetchSuggestions(suggestionsList, input);
+
 
 }
 
@@ -287,7 +313,7 @@ function collectData() {
     PlaintaiffClients = []
     for (var i = 0, k = 0; i < Plaintaiff_Clients.length; i++) {
         if (Plaintaiff_Clients[i].value != '') {
-            PlaintaiffClients[k++] = (Plaintaiff_Clients[i].value);
+            PlaintaiffClients[k++] = (Plaintaiff_Clients[i].getAttribute('data-id'));
 
         }
     }
@@ -326,7 +352,6 @@ function getCourts() {
         url: "http://127.0.0.1:8000/courts/show",
         type: "Get",
         success: function (response) {
-            console.log(response)
             courts = document.getElementById('court');
             for (var i = 0; i < response.length; i++) {
                 option = document.createElement('option');
