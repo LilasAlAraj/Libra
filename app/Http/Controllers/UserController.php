@@ -126,4 +126,32 @@ class UserController extends Controller
             ->get();
         return response()->json(['clients' => $clients]);
     }
+
+    public function update_account_status(Request $request)
+   {
+        $userId=$request->id;
+        $user = User::find($userId);
+
+         if ($user)
+       {
+
+        if ($user->status == 'مفغل')
+        {
+          $user->status = 'غير مفعل';
+        }
+        elseif ($user->status == 'غير مفعل')
+        {
+        $user->status = 'مفعل';
+        }
+
+        return response()->json(['status' => 'تم تغيير حالة الحساب بنجاح']);
+      }
+   }
+   public function destroy($id)
+ {
+
+   User::find($id)->forceDelete();
+
+   return response()->json(['status' => 'success','message'=>'تم الحذف بنجاح']);
+ }
 }

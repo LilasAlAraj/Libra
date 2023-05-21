@@ -83,7 +83,7 @@
                                         </a>
                                     </li>
                                     <li id="viewPrivateCaseNav">
-                                        
+
                                     </li>
                                     <li id="retreiveCaseNav">
 
@@ -214,6 +214,7 @@
                                     <th>اسم الأم</th>
                                     <th>رقم الهاتف</th>
                                     <th>الدور</th>
+                                    <th>حالة الحساب</th>
                                     <th>العمليات</th>
                                 </tr>
 

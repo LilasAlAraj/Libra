@@ -247,6 +247,7 @@ function addClientRow(table, client) {
     const client_current_address = client.current_address;
     const client_email = client.email;
     const client_id = client.id;
+    const client_status= client.status;
 
     const operations = document.createElement('div');
     operations.classList.add('dropdown');
@@ -287,12 +288,6 @@ function addClientRow(table, client) {
     editBtn.onclick = function () {
         editClient(client_id)
     }
-
-
-
-
-
-
     const editOpLi = document.createElement('li');
     editOpLi.append(editBtn)
     editOpLi.classList = 'operationMenuItem'
@@ -351,7 +346,7 @@ function showPage(pageNumber, data) {
 
 
 function viewClient(clientId) {
-    window.location.href = "http://127.0.0.1:8000/users/client/" + clientId;
+    window.location.href = "http://127.0.0.1:8000/users/clients/" + clientId;
 
 
 }

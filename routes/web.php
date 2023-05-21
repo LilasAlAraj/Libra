@@ -32,8 +32,11 @@ Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
 
 Route::post('users/register','App\Http\Controllers\UserController@store');
 Route::get('users/clients','App\Http\Controllers\UserController@clientsIndex');
-Route::get('users/client/{id}','App\Http\Controllers\UserController@clientIndex');
-Route::get('users/member/{id}','App\Http\Controllers\UserController@memberIndex');
+Route::post('users/update_status','App\Http\Controllers\UserController@update_account_status');
+Route::get('users/clients/create','App\Http\Controllers\UserController@clientsCreate');
+Route::get('users/clients/{id}','App\Http\Controllers\UserController@clientIndex');
+Route::get('users/members/create','App\Http\Controllers\UserController@membersCreate');
+Route::get('users/members/{id}','App\Http\Controllers\UserController@memberIndex');
 Route::get('users/members','App\Http\Controllers\UserController@membersIndex');
 Route::get('users/{getclients}','App\Http\Controllers\UserController@show');
 Route::get('users/{getmembers}','App\Http\Controllers\UserController@show');
