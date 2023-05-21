@@ -38,17 +38,18 @@ $(document).ready(function () {
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'clients.json',
+        url: 'http://127.0.0.1:8000/users/getclients',
         dataType: 'json',
         success: function (response) {
+            console.log(response)
 
-            currentData = data = response;
+            currentData = data = response.clients;
             // تحديث Pagination
             displayAll();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response)
         }
     });
 });
@@ -242,7 +243,7 @@ function addClientRow(table, client) {
     const client_mother_name = client.mother_name;
     const client_date_of_birth = client.date_of_birth;
     const client_place_of_birth = client.place_of_birth;
-    const client_phone_number = client.phone_number;
+    const client_phone_number = client.phone;
     const client_current_address = client.current_address;
     const client_email = client.email;
     const client_id = client.id;
@@ -350,7 +351,8 @@ function showPage(pageNumber, data) {
 
 
 function viewClient(clientId) {
-    window.location.href = "view_client.html?id=" + clientId;
+    window.location.href = "http://127.0.0.1:8000/users/client/" + clientId;
+
 
 }
 

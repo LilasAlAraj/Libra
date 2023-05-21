@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
-            $table->integer('number')->primary();
+            $table->integer('number');
             $table->date('date');
             $table->string('description');
             $table->date('delay_date')->nullabe();

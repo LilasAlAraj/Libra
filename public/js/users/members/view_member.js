@@ -12,28 +12,23 @@ let data, member;
 
 $(document).ready(function () {
 
+    memberID = window.location.href.split('/');
+    memberID = memberID[memberID.length - 1];
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'members.json',
+        url: 'http://127.0.0.1:8000/users/'+memberID,
         dataType: 'json',
         success: function (response) {
 
 
-
-
-            const memberID = new URLSearchParams(window.location.search).get("id");
-            function isClient(value) {
-                return value.id == memberID;
-            }
-            data = response.filter(isClient);
-            member = data[0]
+            member = response
 
 
             setMemberData();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response);
         }
     });
 
@@ -50,7 +45,7 @@ function setMemberData() {
     // ضبط الاسم
     document.getElementById('name').append(member.first_name + ' ' + member.last_name)
     // ضبط رقم الهاتف
-    document.getElementById('phone_number').append(member.phone_number)
+    document.getElementById('phone_number').append(member.phone)
     // ضبط اسم الأب
     document.getElementById('father_name').append(member.father_name)
     // ضبط اسم الأم
@@ -62,10 +57,11 @@ function setMemberData() {
     // ضبط العنوان الحالي
     document.getElementById('current_address').append(member.current_address)
     // ضبط الدور الحالي
-    document.getElementById('rule').append(member.rule)
+    document.getElementById('rule').append(member.role_name)
+    document.getElementById('status').append(member.status)
 
 
-    if (member.email != '') {
+    if (member.email != null) {
         b = document.createElement('b')
         b.innerHTML = 'البريد الإلكتروني: '
         document.getElementById('email').append(b, member.email)

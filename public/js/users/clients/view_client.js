@@ -7,34 +7,32 @@
 
 /********************* */
 
-let data, client;
+let data, client,clientID;
 
 
 
 $(document).ready(function () {
 
+    clientID = window.location.href.split('/');
+    clientID = clientID[clientID.length - 1];
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'clients.json',
+        url: 'http://127.0.0.1:8000/users/'+clientID,
         dataType: 'json',
         success: function (response) {
 
 
 
 
-            const clientID = new URLSearchParams(window.location.search).get("id");
-            function isClient(value) {
-                return value.id == clientID;
-            }
-            data = response.filter(isClient);
-            client = data[0]
+
+            client =response
 
 
             setClientData();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response);
         }
     });
 
@@ -51,7 +49,7 @@ function setClientData() {
     // ضبط الاسم
     document.getElementById('name').append(client.first_name + ' ' + client.last_name)
     // ضبط رقم الهاتف
-    document.getElementById('phone_number').append(client.phone_number)
+    document.getElementById('phone_number').append(client.phone)
     // ضبط اسم الأب
     document.getElementById('father_name').append(client.father_name)
     // ضبط اسم الأم
@@ -62,9 +60,10 @@ function setClientData() {
     document.getElementById('place_of_birth').append(client.place_of_birth)
     // ضبط العنوان الحالي
     document.getElementById('current_address').append(client.current_address)
+    document.getElementById('status').append(client.status)
 
 
-    if (client.email != '') {
+    if (client.email != null) {
         b = document.createElement('b')
         b.innerHTML='البريد الإلكتروني: '
         document.getElementById('email').append(b,client.email)

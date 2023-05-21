@@ -36,11 +36,11 @@ $(document).ready(function () {
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'members.json',
+        url: 'http://127.0.0.1:8000/users/getmembers',
         dataType: 'json',
         success: function (response) {
 
-            currentData = data = response;
+            currentData = data = response.members;
             // تحديث Pagination
             displayAll();
 
@@ -240,10 +240,10 @@ function addMemberRow(table, member) {
     const member_mother_name = member.mother_name;
     const member_date_of_birth = member.date_of_birth;
     const member_place_of_birth = member.place_of_birth;
-    const member_phone_number = member.phone_number;
+    const member_phone_number = member.phone;
     const member_current_address = member.current_address;
     const member_email = member.email;
-    const member_rule = member.rule;
+    const member_role = member.role_name;
     const member_id = member.id;
 
     const operations = document.createElement('div');
@@ -309,7 +309,7 @@ function addMemberRow(table, member) {
         $('<td>').append(member_father_name),
         $('<td>').append(member_mother_name),
         $('<td>').append(member_phone_number),
-        $('<td>').append(member_rule),
+        $('<td>').append(member_role),
         $('<td>').append(operations)
     );
     row.attr('id', member_id);
@@ -350,7 +350,7 @@ function showPage(pageNumber, data) {
 
 
 function viewMember(memberId) {
-    window.location.href = "view_member.html?id=" + memberId;
+    window.location.href = "http://127.0.0.1:8000/users/member/" + memberId;
 
 }
 
