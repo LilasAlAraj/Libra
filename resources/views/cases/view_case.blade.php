@@ -89,7 +89,7 @@
 
                                         </li>
                                         <li id="viewCaseNav">
-                                            <a href="../cases/view.html" class="nav-link d-inline-flex  collapse-items">
+                                            <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
                                                 <span data-feather="file-text" class="align-text-bottom"></span>
                                                 عرض القضايا
                                             </a>
@@ -131,7 +131,7 @@
                                         <li id="role_permessionSettingsNav">
                                         </li>
 
-                                        <li><a href="../users/account_settings.html"
+                                        <li><a href="http://127.0.0.1:8000/account/setting"
                                                 class="nav-link d-inline-flex  collapse-items">
                                                 <span data-feather="tool" class="align-text-bottom"></span>
                                                 إعدادات حسابي
@@ -1118,7 +1118,7 @@
                         تعديل القرار
                     </h1>
                 </div>
-                <form id='editDecision_form' method="post" style="background-color: transparent; border:none">
+                <form id='editDecision_form'  style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -1147,7 +1147,9 @@
                         </div>
                     </div>
                     <div class="modal-footer " style="width:auto;">
-                        <button type="submit" class="operations-btn btn btn-secondary">
+                        <div id="errorEditDecision" class="error">
+                        </div>
+                         <button type="submit" class="operations-btn btn btn-secondary"  data-bs-dismiss="modal" onclick="closeModal()">
                             <span data-feather="edit-2" class="align-text-bottom"></span>
                             تعديل القرار
 
@@ -1156,9 +1158,7 @@
                             <span data-feather="x" class="align-text-bottom"></span>
                             أغلق
                         </button>
-                        <br>
-                        <div id="errorEditDecision" class="error">
-                        </div>
+
                     </div>
                 </form>
             </div>

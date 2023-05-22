@@ -90,23 +90,23 @@ class UserController extends Controller
         return view('users.members.edit_member');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
 
-        $this->validate($request, [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'mother_name' => 'required',
-            'father_name' => 'required',
-            'phone' => 'required',
-            'location' => 'required',
-            // 'email' => 'required|email|unique:users,email',
+        // $this->validate($request, [
+        //     'first_name' => 'required',
+        //     'last_name' => 'required',
+        //     'mother_name' => 'required',
+        //     'father_name' => 'required',
+        //     'phone' => 'required',
+        //     'location' => 'required',
+        //     // 'email' => 'required|email|unique:users,email',
 
-            'roles_name' => 'required',
-        ]);
+        //     'roles_name' => 'required',
+        // ]);
         $input = $request->all();
 
-        $user = User::find($id);
+        $user = User::find($input['id']);
         $user->update($input);
         return response()->json(['status' => 'success', 'message' => 'تم التعديل بنجاح'], 200);
     }

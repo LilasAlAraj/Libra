@@ -31,9 +31,9 @@ class Cases extends Model
     {
         return $this->hasMany(Sessions::class,'case_id');
     }
-    public function desicions()
+    public function decisions()
     {
-        return $this->hasMany(Desicions::class);
+        return $this->hasMany(Decision::class, 'case_id');
     }
     public function enemy_lawyers()
     {

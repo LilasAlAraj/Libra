@@ -69,13 +69,14 @@ function deleteClientPlaintiffField() {
 }
 
 // إضافة حقل جديد لاسم محامي المدعي
-function addLawyerPlaintiffField() {
+function addLawyerPlaintiffField(selected) {
+
     const plaintiffsContainer = document.getElementById('lawyervs1');
     const newPlaintiffField = document.createElement('div');
     newPlaintiffField.id = 'lawyerPlaintiff' + lawyerPlaintiffCounter;
     newPlaintiffField.innerHTML = '<label for="lawyer_name-${lawyerPlaintiffCounter}"><b>اسم الوكيل</b></label>'
         + '<select  id="lawyer_name-' + lawyerPlaintiffCounter + '"  name="lawyer_names[]" required>'
-    getLawyers('lawyer_name-' + lawyerPlaintiffCounter)
+    getLawyers('lawyer_name-' + lawyerPlaintiffCounter, selected)
     plaintiffsContainer.appendChild(newPlaintiffField);
     lawyerPlaintiffCounter++;
 }// حذف حقل محامي المدعي
@@ -88,20 +89,24 @@ function deleteLawyerPlaintiffField() {
     }
 }
 
-function getLawyers(lawyerList) {
+function getLawyers(lawyerList, selected) {
     $.ajax({
         url: "http://127.0.0.1:8000/lawyers",
         type: "Get",
         success: function (response) {
             const LawyerList = document.getElementById(lawyerList);
-            LawyerList.innerHTML='<option disabled selected>اختر اسم الوكيل</option>'
+            LawyerList.innerHTML = '<option disabled selected>اختر اسم الوكيل</option>'
             for (var i = 0; i < response.lawyers.length; i++) {
                 option = document.createElement('option');
                 option.value = response.lawyers[i].id;
                 option.innerHTML = response.lawyers[i].first_name + ' ' + response.lawyers[i].last_name;
 
+                if ( option.value  == selected)
+                    option.selected = true;
                 LawyerList.append(option)
             }
+
+
         },
 
         error: function (response) {
@@ -228,7 +233,7 @@ function fillSuggestionList(suggestionsList, suggestions, input) {
         suggestionElement.onmousedown = function () {
             input.value = suggestion;
             suggestionsList.innerHTML = '';
-            input.setAttribute('data-id',suggestions[i].id)
+            input.setAttribute('data-id', suggestions[i].id)
         };
         suggestionsList.appendChild(suggestionElement);
     }
@@ -290,7 +295,7 @@ function collectData() {
     baseNumbers = [];
     for (var i = 0, k = 0; i < base_Numbers.length; i++) {
         if (base_Numbers[i].value !== '') {
-            baseNumbers[k++] = { 'number': base_Numbers[i].value, 'date':year_[i].value };
+            baseNumbers[k++] = { 'number': base_Numbers[i].value, 'date': year_[i].value };
         }
 
     }

@@ -24,8 +24,8 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-  <link href="../../../css/navs.css" rel="stylesheet">
-  <link href="../../../css/style.css" rel="stylesheet">
+  <link href="../../../../css/navs.css" rel="stylesheet">
+  <link href="../../../../css/style.css" rel="stylesheet">
 
 
 </head>
@@ -39,7 +39,7 @@
 
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
       <div class="imgcontainer">
-        <img src="../../../Img/Logo.jpg" alt="Avatar" class="avatar">
+        <img src="../../../../Img/Logo.jpg" alt="Avatar" class="avatar">
       </div>
     </a>
 
@@ -79,13 +79,13 @@
 
                   </li>
                   <li id="viewCaseNav">
-                    <a href="../../cases/view.html" class="nav-link d-inline-flex  collapse-items">
+                    <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
                       <span data-feather="file-text" class="align-text-bottom"></span>
                       عرض القضايا
                     </a>
                   </li>
                   <li id="viewPrivateCaseNav">
-                      
+
                   </li>
                   <li id="retreiveCaseNav">
 
@@ -120,7 +120,7 @@
                   <li id="role_permessionSettingsNav">
                   </li>
 
-                  <li><a href="../users/account_settings.html" class="nav-link d-inline-flex  collapse-items">
+                  <li><a href="http://127.0.0.1:8000/account/setting"  class="nav-link d-inline-flex  collapse-items">
                       <span data-feather="tool" class="align-text-bottom"></span>
                       إعدادات حسابي
                     </a>
@@ -199,13 +199,13 @@
             </div>
             <div class="row">
               <div class="form-check col-6" style="width: fit-content;">
-                <input class="form-check-input" type="radio" name="rule" id="secretaria" value="secretaria" disabled>
+                <input class="form-check-input" type="radio" name="rule" id="سكرتاريا" value="سكرتاريا" disabled>
                 <label class="form-check-label" for="secretaria">
                   <b>سكرتاريا</b>
                 </label>
               </div>
               <div class="form-check col-6 " style="width: fit-content;">
-                <input class="form-check-input" type="radio" name="rule" id="lawyer" value="lawyer" disabled>
+                <input class="form-check-input" type="radio" name="rule" id="محامي" value="محامي" disabled>
                 <label class="form-check-label" for="lawyer">
                   <b>محامي</b>
                 </label>
@@ -229,9 +229,9 @@
   <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
     integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
     crossorigin="anonymous"></script>
-  <script src="../../../js/users/auth.js"></script>
-  <script src="../../../js/navs.js"></script>
-  <script src="../../../js/users/edit.js"></script>
+  <script src="../../../../js/users/auth.js"></script>
+  <script src="../../../../js/navs.js"></script>
+  <script src="../../../../js/users/edit.js"></script>
 
 
 

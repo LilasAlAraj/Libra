@@ -25,7 +25,7 @@ function setAuth() {
 }
 
 function add_member() {
-    window.location.href = "add_member.html";
+    window.location.href = "http://127.0.0.1:8000/users/members/create";
 }
 
 let data;
@@ -470,7 +470,7 @@ function editStatus(memberId) {
 }
 
 function editMember(memberId) {
-    window.location.href = "edit_member.html?id=" + memberId;
+    window.location.href = 'http://127.0.0.1:8000/users/member/'+memberId+'/edit/';
 
 }
 function reverseData() {

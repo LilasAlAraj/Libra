@@ -148,6 +148,14 @@ function setCaseData() {
 
 
 
+     // ضبط قرارات القضية
+     decision_table = document.getElementById('decision-table-body');
+     decisions = data.decisions;
+     console.log(decisions)
+     for (var i = 0; i < decisions.length; i++) {
+         addDecisionRow(decision_table, decisions[i]);
+     }
+
     // ضبط جلسات القضية
     sessions_table = document.getElementById('sessions-table-body');
     sessions = caseItem.sessions;
@@ -165,12 +173,6 @@ function setCaseData() {
 
 
 
-    // ضبط قرارات القضية
-    decision_table = document.getElementById('decision-table-body');
-    decisions = caseItem.decisions;
-    for (var i = 0; i < decisions.length; i++) {
-        addDecisionRow(decision_table, decisions[i]);
-    }
 
 
 }
@@ -622,8 +624,7 @@ function deleteCase() {
 
 
 function editCase() {
-    const caseID = new URLSearchParams(window.location.search).get("id");
-    window.location.href = "edit.html?id=" + caseID;
+    window.location.href = 'http://127.0.0.1:8000/cases/'+caseID+'/edit'
 
 
 }

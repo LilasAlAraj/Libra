@@ -238,14 +238,14 @@ class CasesController extends Controller
                 $enemyClients = $case->enemy_clients;
                 $enemyLawyers = $case->enemy_lawyers;
                 $sessions = $case->sessions;
+                $decisions = $case->decisions;
                 $court = $case->court;
                 $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
                     'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                    'court' => $court, 'sessions' => $sessions]
+                    'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions]
                 ;
             }
 
-            return response()->json(['cases' => $casesArray]);
         } else {
 
             $archivedCase = Cases::withTrashed()->where('id', $id)->first();
@@ -259,20 +259,21 @@ class CasesController extends Controller
             $enemyClients = $case->enemy_clients;
             $enemyLawyers = $case->enemy_lawyers;
             $court = $case->court;
+            $sessions = $case->sessions;
+            $decisions = $case->decisions;
             $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
                 'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                'court' => $court]
+                'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions]
             ;
-            return response()->json(['cases' => $casesArray]);
         }
+        return response()->json(['cases' => $casesArray]);
 
     }
 
     public function edit($id)
     {
-        $cases = Cases::where('id', $id)->first();
 
-        return view('cases.edit_case', compact('cases'));
+        return view('cases.edit');
     }
 
     public function update(Request $request)
@@ -345,7 +346,6 @@ class CasesController extends Controller
     {
         $id = $request->id;
         $case = Cases::where('id', '=', $id)->first();
-
         $case->update(['claim' => $request->claim, 'facts' => $request->facts]);
         return response()->json(['status' => 'success']);
 

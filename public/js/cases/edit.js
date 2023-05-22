@@ -16,64 +16,89 @@ let caseID;
 
 $(document).ready(function () {
     getCourts();
-
-    caseID = new URLSearchParams(window.location.search).get("id");
+    caseID = window.location.href.split('/');
+    caseID = caseID[caseID.length - 2];
     console.log(caseID)
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'test.json',
-        dataType: 'json',
+        url: 'http://127.0.0.1:8000/cases/' + caseID,
+        type: 'get',
         success: function (response) {
-            data = response;
+            console.log(response)
+            data = response.cases[0];
+            console.log(data)
+
             setCaseData();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response)
+
         }
     });
+
+
 }
 );
+
+
+
+
+
+
+
+
+
 function setCaseData() {
 
-    caseItem = data;
-    document.getElementById('case_tiltle').value = caseItem.case_title;
-    document.getElementById('case_room').value = caseItem.room;
-    document.getElementById('court').value = caseItem.court;
+    caseItem = data.case;
+    document.getElementById('case_tiltle').value = caseItem.title;
+    document.getElementById('case_room').value = caseItem.case_room;
+    document.getElementById('court').value = data.court.id;
 
-    totalBaseNumbers = caseItem.case_numbers.length;
+    totalBaseNumbers = data.case_numbers.length;
     for (var i = 0; i < totalBaseNumbers; i++) {
         addBaseNumber();
-        document.getElementById('base-number-' + i).value = caseItem.case_numbers[i].split('/')[0];
-        document.getElementById('yearSelect-' + i).value = caseItem.case_numbers[i].split('/')[1];
+        document.getElementById('base-number-' + i).value = data.case_numbers[i].number;
+        document.getElementById('yearSelect-' + i).value = data.case_numbers[i].date;
     }
 
 
 
-    totalClientName = caseItem.plaintiff_names.length;
+    totalClientName = data.plaintiff_names.length;
     for (var i = 0; i < totalClientName; i++) {
         addClientPlaintiffField();
-        document.getElementById('client_name-' + i).value = caseItem.plaintiff_names[i];
+        plaintiff_name = data.plaintiff_names[i].first_name + ' ' + data.plaintiff_names[i].father_name + ' ' + data.plaintiff_names[i].last_name
+        document.getElementById('client_name-' + i).value = plaintiff_name;
+        document.getElementById('client_name-' + i).setAttribute('data-id', data.plaintiff_names[i].id)
+
     }
 
 
-    totalLawyerName = caseItem.plaintiff_lawyers.length;
+    totalLawyerName = data.plaintiff_lawyers.length;
     for (var i = 0; i < totalLawyerName; i++) {
-        addLawyerPlaintiffField();
-        document.getElementById('lawyer_name-' + i).value = caseItem.plaintiff_lawyers[i];
+        addLawyerPlaintiffField(data.plaintiff_lawyers[i].id);
     }
 
 
-    totalClientDefName = caseItem.defendant_names.length;
+    totalClientDefName = data.defendant_names.length;
     for (var i = 0; i < totalClientDefName; i++) {
         addClientEnemyField();
-        document.getElementById('enemy_name-' + i).value = caseItem.defendant_names[i];
+        document.getElementById('enemy_name-' + i).value = data.defendant_names[i].name;
+        if (data.defendant_names[i].phone_number != null) {
+            document.getElementById('enemy_phone-' + i).value = data.defendant_names[i].phone_number;
+
+        }
     }
 
-    totalLawyerDefName = caseItem.defendant_lawyers.length;
+    totalLawyerDefName = data.defendant_lawyers.length;
     for (var i = 0; i < totalLawyerDefName; i++) {
         addLawyerEnemyField();
-        document.getElementById('lawyerEnemy_name-' + i).value = caseItem.defendant_lawyers[i];
+        document.getElementById('lawyerEnemy_name-' + i).value = data.defendant_lawyers[i].name;
+        if (data.defendant_lawyers[i].number_phone != null) {
+            document.getElementById('lawyerEnemy_phone-' + i).value = data.defendant_lawyers[i].number_phone;
+
+        }
     }
 
 }
@@ -137,8 +162,6 @@ function edit() {
         submitHandler: function (form) {
 
             case_ = collectData();
-            case_['id'] = caseID;
-            console.log(case_)
 
             $.ajaxSetup({
                 headers: {
@@ -149,7 +172,17 @@ function edit() {
             $.ajax({
                 url: "http://127.0.0.1:8000/edit_case",
                 type: "POST",
-                data: case_,
+                data: {
+                    'id':caseID,
+                    'court_id': case_.court_id,
+                    'case_room': case_.case_room,
+                    'title': case_.title,
+                    'Base_Numbers': case_.Base_Numbers,
+                    'DefendentLawyers': case_.DefendentLawyers,
+                    'DefendentClients': case_.DefendentClients,
+                    'PlaintaiffClients': case_.PlaintaiffClients,
+                    'PlaintaiffLawyers': case_.PlaintaiffLawyers
+                },
                 success: function (response) {
                     if (response.status == 'success') {
                         console.log(response);

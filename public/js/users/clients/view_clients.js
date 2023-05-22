@@ -26,7 +26,7 @@ function setAuth() {
 }
 
 function add_client() {
-    window.location.href = "add_client.html";
+    window.location.href = "http://127.0.0.1:8000/users/clients/create";
 }
 
 let data;
@@ -464,7 +464,7 @@ function editStatus(clientId) {
 }
 
 function editClient(clientId) {
-    window.location.href = "edit_client.html?id=" + clientId;
+    window.location.href = 'http://127.0.0.1:8000/users/client/'+clientId+'/edit/'
 
 }
 function reverseData() {

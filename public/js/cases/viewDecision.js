@@ -2,7 +2,7 @@ let decision;
 
 function setDecisionAuth() {
     if (role == 1 || role == 2) {
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             const edit_btn = document.createElement('button')
             edit_btn.type = "button"
@@ -41,24 +41,22 @@ function viewDecision(id) {
     console.log(id)
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'decision.json',
-        dataType: 'json',
+        url: 'http://127.0.0.1:8000/decision/' + id,
+        type: 'get',
         success: function (response) {
-            for (var i = 0; i < response.length; i++) {
-                if (response[i].id === id)
-                    decision = response[i];
-            }
+            decision = response;
+
 
             document.getElementById('decisionNumber').innerHTML = decision.number;
             document.getElementById('decisionDate').innerHTML = decision.date;
-            document.getElementById('decisionDetails').innerHTML = decision.details;
+            document.getElementById('decisionDetails').innerHTML = decision.description;
 
             setDecisionAuth();
 
             /// ضبط الآيدي مشان وقت بدي احذف هي الجلسة
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response);
         }
     });
 
@@ -71,16 +69,25 @@ function deleteDecision() {
     id = $('#deleteDecisionBackdrop').data('decision-id');
 
     console.log(id)
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $.ajax({
-        url: "deletesession.php", // اسم ملف php الذي يقوم بالحذف
-        method: "POST", // طريقة الإرسال POST
+        url: "http://127.0.0.1:8000/decision", // اسم ملف php الذي يقوم بالحذف
+        method: "delete", // طريقة الإرسال POST
         data: { id: id }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
             console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
-            window.location.href = "view.html"
+
+            document.getElementById('decision-row' +id).remove();
+            $('#deleteDecisionBackdrop').modal('hide');
+            $('#viewDecicionBackdrop').modal('hide');
+
         },
-        error: function (xhr, status, error) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-            console.log(error); // عرض الخطأ في وحدة التحكم بالمتصفح
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
         }
     });
 }
@@ -90,7 +97,7 @@ function deleteDecision() {
 function confirmDeleteDecision(id) {
     $('#deleteDecisionBackdrop').modal('show');
     $('#deleteDecisionBackdrop').css('background', 'rgba(0,0,0,.3)');
-    
+
     $('#deleteDecisionBackdrop').data('decision-id', id);
     document.getElementById('deleteDecisionButton').onclick = function () {
         deleteDecision()
@@ -104,7 +111,8 @@ function confirmEditDecision() {
 
     document.getElementById('editDecisionNumber').value = decision.number;
     document.getElementById('editDecisionDate').value = decision.date;
-    document.getElementById('editDecisionDetails').value = decision.details;
+    document.getElementById('editDecisionDetails').value = decision.description;
+
 
 
     $('#editDecision_form').validate({
@@ -134,32 +142,49 @@ function confirmEditDecision() {
         submitHandler: function (form) {
             var editDecisionNumber = $('#editDecisionNumber').val();
             var editDecisionDate = $('#editDecisionDate').val();
-            var editDecisionDetails = document.getElementById("editDecisionDetails").val();
+            var editDecisionDetails = document.getElementById("editDecisionDetails").value;
 
 
 
             $('#errorEditDecision').html('');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/edit_details",
-                type: "POST",
+                url: "http://127.0.0.1:8000/decision/update",
+                type: "Put",
                 data: {
-                    //    "_token": "{{ csrf_token() }}",
-                    "decisionNumber": editDecisionNumber,
-                    "decisionDate": editDecisionDate,
-                    "decisionDetails": editDecisionDetails,
-                    "decisionID": decision.id
+                    "number": editDecisionNumber,
+                    "date": editDecisionDate,
+                    "description": editDecisionDetails,
+                    "id": decision.id
                 },
                 success: function (response) {
+                    console.log(response);
+
                     if (response.status == 'success') {
 
-                        // redirect user to appropriate page
-                        window.location.href = "../view_case.html?id=" + caseID;
+                        decision_row = document.getElementById('decision-row' + decision.id);
+                        decisionNumber = document.getElementById('decisionNumber');
+                        decisionDate = document.getElementById('decisionDate');
+                        decisionDetails = document.getElementById('decisionDetails');
+                        console.log(decisionNumber,decisionDate, decisionDetails)
+                        cells = decision_row.getElementsByTagName('td');
+                        cells[0].innerHTML = editDecisionNumber
+                        decisionNumber.innerHTML = editDecisionNumber;
+                        cells[1].innerHTML = editDecisionDate
+                        decisionDate.innerHTML = editDecisionDate;
+                        cells[2].innerHTML = editDecisionDetails
+                        decisionDetails.innerHTML = editDecisionDetails;
                     } else {
                         $('.errorEditDecision').html(response.message);
                     }
                 },
                 error: function (response) {
+                    console.log(response);
                     $('#errorEditDecision').html(response.responseJSON);
                 }
             });
@@ -185,7 +210,7 @@ function addDecisionRow(table, decision) {
     date.append(decision.date);
 
     details = document.createElement('td');
-    details_str = decision.details;
+    details_str = decision.description;
     if (details_str.length > 50)
         details_str = details_str.substring(0, 50) + '.. إلخ'
 
@@ -225,7 +250,7 @@ function addDecisionRow(table, decision) {
     operationMenu.append(viewOpLi)
 
     if (role == 1 || role == 2) {
-        if (caseItem.isArchived!=='true') {
+        if (caseItem.isArchived !== 'true') {
 
             const deleteBtn = document.createElement('button');
             deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
@@ -234,16 +259,16 @@ function addDecisionRow(table, decision) {
             deleteBtn.classList.add('btn', 'btn-danger', 'menu-operations-btn');
             deleteBtn.setAttribute("data-bs-toggle", "modal")
             deleteBtn.setAttribute("data-bs-target", "#deleteDecisionBackdrop")
-            
-            
-            
+
+
+
             deleteBtn.setAttribute('data-decision-id', decisionID)
             deleteBtn.onclick = function () {
                 $('#deleteDecisionBackdrop').data('decision-id', deleteBtn.getAttribute('data-decision-id'));
                 document.getElementById('deleteDecisionButton').onclick = function () {
                     deleteDecision()
                 }
-        
+
             }
 
 
@@ -261,6 +286,7 @@ function addDecisionRow(table, decision) {
     }
     operations.append(opBtn, operationMenu);
     row.append(num, date, details, operations);
+    row.id = 'decision-row' + decisionID;
     table.append(row)
 
 }
@@ -278,9 +304,7 @@ function addNewDecision() {
                 required: true
             },
             newDecisionDetails: {
-                required: true,
-                extension: 'pdf|jpeg|jpg|png'
-
+                required: true
             }
         },
         messages: {
@@ -300,8 +324,16 @@ function addNewDecision() {
             newDecisionDate = $("#newDecisionDate").val();
             newDecisionDetails = $("#newDecisionDetails").val();
 
-            caseID = new URLSearchParams(window.location.search).get("id");
+            caseID = window.location.href.split('/');
+            caseID = caseID[caseID.length - 1];
 
+            decision = {
+                "number": newDecisionNumber,
+                "date": newDecisionDate,
+                "description": newDecisionDetails,
+                "case_id": caseID
+
+            }
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -309,22 +341,21 @@ function addNewDecision() {
             });
 
             $.ajax({
-                url: 'add_new_session.php',
+                url: 'http://127.0.0.1:8000/decision',
                 method: 'POST',
-                data: {
-                    //    "_token": "{{ csrf_token() }}",
-                    "newDecisionNumber": newDecisionNumber,
-                    "newDecisionDate": newDecisionDate,
-                    "newDecisionDetails": newDecisionDetails,
-                    "caseID": caseID
-                },
+                data: decision,
                 success: function (response) {
                     // Handle the response from the server
                     console.log(response);
+                    decision_table = document.getElementById('decision-table-body');
+
+                    decision['id'] = response.id
+                    addDecisionRow(decision_table, decision);
                 },
-                error: function (xhr, status, error) {
+                error: function (response) {
                     // Handle the error
-                    console.log(xhr.responseText);
+                    console.log(response);
+
                     $('#errorAddDecision').html('error 404');
 
                 }

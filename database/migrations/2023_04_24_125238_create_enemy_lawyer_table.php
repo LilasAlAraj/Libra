@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('enemy_lawyer', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('number_phone')->nullable();
+            $table->string('number_phone')->nullable();
             $table->timestamps();
         });
     }

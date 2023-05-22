@@ -101,7 +101,7 @@ function add() {
                     if (response.status === 'success') {
                         $('.error').css('color', 'green');
                         $('#error').html(response.message);
-                       // window.location.href = response.data.page;
+                        window.location.href = 'http://127.0.0.1:8000/cases';
                     } else {
 
                         $('.error').html(response.message);

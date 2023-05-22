@@ -24,6 +24,14 @@ Route::resource('sessions','App\Http\Controllers\SessionController');   // ðŸŒ·Ø
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
 
+//decisions
+Route::post('decision','App\Http\Controllers\DecisionController@store');
+Route::get('decision/{id}','App\Http\Controllers\DecisionController@show');
+Route::put('decision/update','App\Http\Controllers\DecisionController@update');
+Route::delete('decision/','App\Http\Controllers\DecisionController@destroy');
+
+
+
 
 
 // archive
@@ -51,6 +59,9 @@ Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
 //clients and members
 
 Route::post('users/register','App\Http\Controllers\UserController@store');
+Route::post('users/update','App\Http\Controllers\UserController@update');
+Route::get('users/client/{id}/edit/','App\Http\Controllers\UserController@editClient');
+Route::get('users/member/{id}/edit','App\Http\Controllers\UserController@editMember');
 Route::get('users/clients','App\Http\Controllers\UserController@clientsIndex');
 Route::post('users/update_status','App\Http\Controllers\UserController@update_account_status');
 Route::get('users/clients/create','App\Http\Controllers\UserController@clientsCreate');
