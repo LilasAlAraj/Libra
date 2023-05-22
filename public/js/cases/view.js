@@ -506,7 +506,7 @@ function showPage(pageNumber, data) {
         archiveBtn.setAttribute('title', 'نقل القضية إلى الأرشيف');
         archiveBtn.classList.add('btn', 'btn-warning', 'menu-operations-btn');
         archiveBtn.onclick = function () {
-            archiveCase(case_.id)
+            ArhiveCase(case_.id)
         }
         const archOpLi = document.createElement('li');
         archOpLi.append(archiveBtn);
@@ -634,7 +634,7 @@ function deleteCase(caseId) {
     }
 
 }
-function archiveCase(caseId) {
+function ArhiveCase(caseId) {
     var confirmation = confirm("هل أنت متأكد من أرشفة هذه القضية؟");
     if (confirmation) {
 
@@ -649,7 +649,7 @@ function archiveCase(caseId) {
             data: { id_Archive: 2, case_id: caseId },
             success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
 
-                //console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+                console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
 
                 if (response.status === 'success')
                     window.location.href = "http://127.0.0.1:8000/cases/"

@@ -231,7 +231,6 @@ class CasesController extends Controller
         if ($id == 'all') {
 
             $cases = Cases::get();
-
             foreach ($cases as $case) {
                 $clients = $case->clients;
                 $lawyers = $case->lawyers;
@@ -242,13 +241,18 @@ class CasesController extends Controller
                 $court = $case->court;
                 $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
                     'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                    'court' => $court,'sessions'=>$sessions]
+                    'court' => $court, 'sessions' => $sessions]
                 ;
             }
 
             return response()->json(['cases' => $casesArray]);
         } else {
+
+            $archivedCase = Cases::withTrashed()->where('id', $id)->first();
             $case = Cases::where('id', $id)->first();
+            if (is_null($case)) {
+                $case = $archivedCase;
+            }
             $clients = $case->clients;
             $lawyers = $case->lawyers;
             $baseNumbers = $case->baseNumbers;
@@ -321,15 +325,18 @@ class CasesController extends Controller
             //}
             //   يعني رح تحذفها بشكل نهائي forceDelete
 
-            $cases->forceDelete();
-
-            return response()->json(['status' => 'success']);
-
+            if ($cases->forceDelete()) {
+                return response()->json(['status' => 'success']);
+            } else {
+                return response()->json(['status' => 'failed']);
+            }
         } else {
 
-            $cases->delete();
-
-            return response()->json(['status' => 'success']);
+            if ($cases->delete()) {
+                return response()->json(['status' => 'success']);
+            } else {
+                return response()->json(['status' => 'failed']);
+            }
 
         }
     }

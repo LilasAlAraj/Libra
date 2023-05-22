@@ -3,7 +3,7 @@
     'use strict'
 
     feather.replace({ 'aria-hidden': 'true' })
-   
+
 
 })();
 function fillYears() {
@@ -38,17 +38,18 @@ $(document).ready(function () {
     setAuth();
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'test.json',
+        url: 'http://127.0.0.1:8000/cases/archive/all',
         dataType: 'json',
         success: function (response) {
+            console.log(response)
 
-            currentData = data = response;
+            currentData = data = response.cases;
             // تحديث Pagination
             displayAll();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response)
         }
     });
 });
@@ -404,44 +405,49 @@ function showPage(pageNumber, data) {
     // عرض الصفوف
     $('#table-body').empty();
     for (var i = startIndex; i < endIndex; i++) {
-        const case_ = data[i];
+        const case_ = data[i].case;
 
 
 
         var case_numbers = '';
-        for (var j = 0; j < case_.case_numbers.length; j++) {
-            case_numbers += case_.case_numbers[j];
-            if (j !== case_.case_numbers.length - 1)
+        for (var j = 0; j < data[i].case_numbers.length; j++) {
+            case_numbers += data[i].case_numbers[j].date + '/' + data[i].case_numbers[j].number;
+            if (j !== data[i].case_numbers.length - 1)
                 case_numbers += "\n____________\n";
         }
 
 
         var plaintiff_names = '';
-        for (var j = 0; j < case_.plaintiff_names.length; j++) {
-            plaintiff_names += case_.plaintiff_names[j];
-            if (j !== case_.plaintiff_names.length - 1)
+        for (var j = 0; j < data[i].plaintiff_names.length; j++) {
+            plaintiff_names += data[i].plaintiff_names[j].first_name + ' ' + data[i].plaintiff_names[j].father_name + ' ' + data[i].plaintiff_names[j].last_name;
+            if (j !== data[i].plaintiff_names.length - 1)
                 plaintiff_names += "\n____________\n";
         }
 
+
+
         var plaintiff_lawyers = '';
-        for (var j = 0; j < case_.plaintiff_lawyers.length; j++) {
-            plaintiff_lawyers += case_.plaintiff_lawyers[j];
-            if (j !== case_.plaintiff_lawyers.length - 1)
+        for (var j = 0; j < data[i].plaintiff_lawyers.length; j++) {
+            plaintiff_lawyers += data[i].plaintiff_lawyers[j].first_name + ' ' + data[i].plaintiff_lawyers[j].father_name + ' ' + data[i].plaintiff_lawyers[j].last_name;
+            if (j !== data[i].plaintiff_lawyers.length - 1)
                 plaintiff_lawyers += "\n____________\n";
         }
         var defendant_names = '';
-        for (var j = 0; j < case_.defendant_names.length; j++) {
-            defendant_names += case_.defendant_names[j];
-            if (j !== case_.defendant_names.length - 1)
+        for (var j = 0; j < data[i].defendant_names.length; j++) {
+            defendant_names += data[i].defendant_names[j].name;
+            if (j !== data[i].defendant_names.length - 1)
                 defendant_names += "\n____________\n";
         }
 
+
         var defendant_lawyers = '';
-        for (var j = 0; j < case_.defendant_lawyers.length; j++) {
-            defendant_lawyers += case_.defendant_lawyers[j];
-            if (j !== case_.defendant_lawyers.length - 1)
+        for (var j = 0; j < data[i].defendant_lawyers.length; j++) {
+            defendant_lawyers += data[i].defendant_lawyers[j].name;
+
+            if (j !== data[i].defendant_lawyers.length - 1)
                 defendant_lawyers += "\n____________\n";
         }
+
 
 
         const operations = document.createElement('div');
@@ -478,7 +484,7 @@ function showPage(pageNumber, data) {
         archiveBtn.setAttribute('title', 'إزالة القضية من الأرشيف');
         archiveBtn.classList.add('btn', 'btn-warning', 'menu-operations-btn');
         archiveBtn.onclick = function () {
-            confirmArchiveCase(case_.id)
+            confirmCancelingArchiveCase(case_.id)
         }
         const archOpLi = document.createElement('li');
         archOpLi.append(archiveBtn);
@@ -504,36 +510,36 @@ function showPage(pageNumber, data) {
 
         operations.append(opBtn, operationMenu);
 
-        const state = document.createElement('span');
-        state.classList.add('badge', 'state');
+        const status = document.createElement('span');
+        status.classList.add('badge', 'state');
 
-        if (case_.state === 1) {
+        if (case_.Value_Status === 1) {
             //winner
-            state.classList.add('text-bg-success');
-            state.innerHTML = 'رابحة'
-        } else if (case_.state === 2) {
+            status.classList.add('text-bg-success');
+            status.innerHTML = 'رابحة'
+        } else if (case_.Value_Status === 2) {
             //losser
-            state.innerHTML = 'خاسرة'
-            state.classList.add('text-bg-danger');
-        } else if (case_.state === 3) {
+            status.innerHTML = 'خاسرة'
+            status.classList.add('text-bg-danger');
+        } else if (case_.Value_Status === 3) {
             //running
-            state.innerHTML = 'جار العمل عليها'
-            state.classList.add('text-bg-info');
-        } else if (case_.state === 4) {
+            status.innerHTML = 'جار العمل عليها'
+            status.classList.add('text-bg-info');
+        } else if (case_.Value_Status === 4) {
             //blocked
-            state.innerHTML = 'معلقة'
-            state.classList.add('text-bg-dark');
+            status.innerHTML = 'معلقة'
+            status.classList.add('text-bg-dark');
         }
 
         const row = $('<tr>').append(
             $('<td>').append($('<pre>').text(case_numbers)),
-            $('<td>').text(case_.case_title),
-            $('<td>').text(case_.court + "/" + case_.room),
+            $('<td>').text(case_.title),
+            $('<td>').text(data[i].court.name + "/" + case_.case_room),
             $('<td>').append($('<pre>').text(plaintiff_names)),
             $('<td>').append($('<pre>').text(plaintiff_lawyers)),
             $('<td>').append($('<pre>').text(defendant_names)),
             $('<td>').append($('<pre>').text(defendant_lawyers)),
-            $('<td>').append(state),
+            $('<td>').append(status),
             $('<td>').append(operations)
 
         );
@@ -547,7 +553,7 @@ function showPage(pageNumber, data) {
 
 
 function viewCase(caseId) {
-    window.location.href = "view_case.html?id=" + caseId;
+    window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
 
 }
 
@@ -559,38 +565,59 @@ function confirmDeleteCase(caseId) {
     }
 }
 function deleteCase(caseId) {
-    var confirmation = confirm("هل أنت متأكد من حذف هذا العنصر؟");
-    if (confirmation) {
-        $.ajax({
-            url: "delete.php", // اسم ملف php الذي يقوم بالحذف
-            method: "POST", // طريقة الإرسال POST
-            data: { id: caseId }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
-            success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
-                // احذف الصف من الجدول هنا، ويمكن استخدام المعرف المحدد لهذا الصف
-                table = document.getElementById('table-body');
-                for (var i = 0; i < rows.length; i++) {
-                    if (rows[i].getAttribute('id') == caseId) {
-                        rows[i].remove();
-                    }
-                }
-            },
-            error: function (xhr, status, error) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-                console.log(error); // عرض الخطأ في وحدة التحكم بالمتصفح
-            }
-        });
-    }
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/cases/archive" , // اسم ملف php الذي يقوم بالحذف
+        method: "Delete",
+        data: {  case_id: caseId },
+        success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
+
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+            if (response.status === 'success')
+                window.location.href = "http://127.0.0.1:8000/cases/archive"
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
+
 }
 
-function confirmArchiveCase(caseId) {
+function confirmCancelingArchiveCase(caseId) {
     $('#archiveCaseBackdrop').modal('show');
     $('#archiveCaseBackdrop').css('background', 'rgba(0,0,0,.3)');
     document.getElementById('cancelArchivingBtn').onclick = function () {
-        archiveCase(caseId);
+        cancelArhiveCase(caseId);
     }
 }
-function archiveCase(caseId) {
+function cancelArhiveCase(caseId) {
 
-    //fill with ajax request
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/cases/archive/restore" , // اسم ملف php الذي يقوم بالحذف
+        method: "post",
+        data: {  case_id: caseId },
+        success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
+
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+            if (response.status === 'success')
+                window.location.href = "http://127.0.0.1:8000/cases/archive"
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 }
 
 function closeModal() {

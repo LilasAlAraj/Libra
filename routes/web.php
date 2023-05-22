@@ -23,12 +23,32 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('sessions','App\Http\Controllers\SessionController');   // 🌷جلسات القضية
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
+
+
+
+// archive
+Route::get('cases/archive','App\Http\Controllers\CaseArchiveController@index');
+Route::get('cases/archive/all','App\Http\Controllers\CaseArchiveController@showAll');
+Route::delete('cases/archive','App\Http\Controllers\CaseArchiveController@destroy');
+Route::post('cases/archive/restore','App\Http\Controllers\CaseArchiveController@restore');
+
+
+
+//account setting
+Route::get('account/setting','App\Http\Controllers\SettingAccountController@index');
+Route::post('account/change_password','App\Http\Controllers\SettingAccountController@update');
+Route::get('account','App\Http\Controllers\SettingAccountController@show');
+
+
+
+
 Route::resource('cases', 'App\Http\Controllers\CasesController'); // 🌷القضية
 
 Route::resource('courts', 'App\Http\Controllers\CourtController'); // 🌷المحاكم
 Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
 
 
+//clients and members
 
 Route::post('users/register','App\Http\Controllers\UserController@store');
 Route::get('users/clients','App\Http\Controllers\UserController@clientsIndex');
@@ -40,11 +60,14 @@ Route::get('users/members/{id}','App\Http\Controllers\UserController@memberIndex
 Route::get('users/members','App\Http\Controllers\UserController@membersIndex');
 Route::get('users/{getclients}','App\Http\Controllers\UserController@show');
 Route::get('users/{getmembers}','App\Http\Controllers\UserController@show');
-
+Route::delete('users/{id}','App\Http\Controllers\UserController@destroy');
 Route::get('members','App\Http\Controllers\UserController@membersCreate');
 Route::get('clients','App\Http\Controllers\UserController@clientsCreate');
 Route::get('lawyers', 'App\Http\Controllers\UserController@getAllLawyers');
 Route::get('clients/{name}', 'App\Http\Controllers\UserController@getAllClientWithName');
+
+
+
 
 
 Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->name('Status_show');        // حالة القضية (رابحة -خاسرة -جاري العمل عليها - مفتوحة )🌷

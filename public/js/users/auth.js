@@ -1,7 +1,7 @@
 let role = 3; //1->supervisor , 2->secretaria, 3->lawyer, 4->client
 
 (() => {
-    role = 1;
+    role = 2;
 
 
     /*

@@ -189,11 +189,7 @@
                                         <b>العنوان الحالي: </b>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12" id="status">
-                                        <b>حالة الحساب: </b>
-                                    </div>
-                                </div>
+
 
                                 <div class="row">
                                     <div class="col-6" id="rule">
@@ -203,6 +199,12 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-12" >
+                                        <b>حالة الحساب: </b>
+                                        <span class="badge state" id="status"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

@@ -100,10 +100,10 @@ $(document).ready(function () {
             var email = $('email').val();
             var password = $('#password').val();
             var confirm_password = $('#confirm_password').val();
-            var rule = $('input[name="rule"]:checked').val();
+            var role = $('input[name="rule"]:checked').val();
             var status = 'مفعل';
-            if (rule == undefined) {
-                rule = 'زبون'
+            if (role == undefined) {
+                role = 'زبون'
             }
 
 
@@ -115,7 +115,7 @@ $(document).ready(function () {
                 $('.error').html("كلمتا السر غير متطابقتين");
             } else {
                 // Perform register
-console.log(date_of_birth);
+                console.log(date_of_birth);
                 if (isValidPhoneNumber(phone)) {
                     $.ajaxSetup({
                         headers: {
@@ -137,12 +137,15 @@ console.log(date_of_birth);
                             "email": email,
                             "password": password,
                             "confirm_password": confirm_password,
-                            "role_name": rule,
+                            "role_name": role,
                             "status": status
                         },
                         success: function (response) {
                             if (response.status == 'success') {
-                                console.log(response)
+                                if (role === 'زبون')
+                                    window.location.href = 'http://127.0.0.1:8000/users/clients'
+                                else
+                                    window.location.href = 'http://127.0.0.1:8000/users/members'
                             } else {
                                 console.log(response)
 

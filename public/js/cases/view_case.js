@@ -22,18 +22,18 @@ $(document).ready(function () {
         success: function (response) {
 
 
+            console.log(response)
 
             data = response.cases[0];
             caseItem = data
-            console.log(caseItem)
 
             setCaseAuth();
 
             setCaseData();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response)
         }
     });
 
@@ -373,6 +373,7 @@ function setCaseAuth() {
     else {
 
 
+
         case_operation = document.createElement('div');
         case_operation.classList.add('container')
         if (caseItem.isArchived !== 'true') {
@@ -404,14 +405,17 @@ function setCaseAuth() {
         archive_btn.id = "archive-button"
         archive_btn.classList.add('operations-btn', 'btn', 'btn-warning')
         archive_btn.setAttribute("data-bs-toggle", "modal")
-        archive_btn.setAttribute("data-bs-target", "#archiveCaseBackdrop");
 
-        if (caseItem.isArchived === 'true') {//القضية مؤرشفة
+        if (caseItem.case.deleted_at != null) {//القضية مؤرشفة
             archive_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive align-text-bottom" aria-hidden="true"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>'
                 + ' إلغاء أرشفة القضية'
+            archive_btn.setAttribute("data-bs-target", "#cancelArchiveCaseBackdrop");
+
         } else { //القضية غير مؤرشفة
             archive_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive align-text-bottom" aria-hidden="true"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>'
                 + ' أرشفة القضية'
+            archive_btn.setAttribute("data-bs-target", "#archiveCaseBackdrop");
+
         }
         case_operation.append(remove_btn)
         case_operation.append(archive_btn);
@@ -421,7 +425,7 @@ function setCaseAuth() {
 
 
         //لا يتم تغيير أي حالة مادام القضية مؤرشفة
-        if (caseItem.isArchived !== 'true') {
+        if (caseItem.case.deleted_at === null) {
 
             edit_state_btn = document.createElement('button')
             edit_state_btn.type = "button"
@@ -435,8 +439,8 @@ function setCaseAuth() {
         }
 
 
+        if (caseItem.case.deleted_at === null) {
 
-        if (caseItem.isArchived !== 'true') {
 
 
             edit_additional_details = document.createElement('div');
@@ -449,8 +453,8 @@ function setCaseAuth() {
                 + '</button>'
             document.getElementById('additional_details').append(edit_additional_details)
         }
+        if (caseItem.case.deleted_at === null) {
 
-        if (caseItem.isArchived !== 'true') {
 
             sessions = document.createElement('div');
             sessions.classList.add('container');
@@ -461,8 +465,8 @@ function setCaseAuth() {
                 + '</button>'
             document.getElementById('sessions').append(sessions)
         }
+        if (caseItem.case.deleted_at === null) {
 
-        if (caseItem.isArchived !== 'true') {
 
             attachments = document.createElement('div');
             attachments.classList.add('container');
@@ -473,8 +477,8 @@ function setCaseAuth() {
                 + ' إضافة مرفق جديد'
                 + '</button>'
             document.getElementById('attachments').append(attachments)
-        }
-        if (caseItem.isArchived !== 'true') {
+        } if (caseItem.case.deleted_at === null) {
+
 
             decisions = document.createElement('div');
             decisions.classList.add('container');
@@ -547,6 +551,29 @@ function changeStateCase() {
 
 }
 
+function cancelArchiveCase() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/cases/archive/restore",
+        method: "post",
+        data: { case_id: caseID },
+        success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
+
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+            if (response.status === 'success')
+                window.location.href = "http://127.0.0.1:8000/cases/view/" + caseID
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
+}
+
 function archiveCase() {
     $.ajaxSetup({
         headers: {
@@ -560,7 +587,7 @@ function archiveCase() {
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
 
             if (response.status === 'success')
-                window.location.href = "http://127.0.0.1:8000/cases/"
+                window.location.href = "http://127.0.0.1:8000/cases/view/" + caseID
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -660,8 +687,8 @@ function loadAdditionalDetails() {
 
                     if (response.status == 'success') {
 
-                        document.getElementById('eltemas').innerHTML=(eltemas)
-                        document.getElementById('waqae').innerHTML=(waqae)
+                        document.getElementById('eltemas').innerHTML = (eltemas)
+                        document.getElementById('waqae').innerHTML = (waqae)
                     } else {
                         $('.errorEditAdditionalDetails').html(response);
                     }

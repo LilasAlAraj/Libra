@@ -19,8 +19,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -86,7 +86,7 @@
                                         </a>
                                     </li>
                                     <li id="viewPrivateCaseNav">
-                                        
+
                                     </li>
                                     <li id="retreiveCaseNav">
 
@@ -141,13 +141,13 @@
                     <div class="row">
                         <div class="col-12" id="account_name">
                             <b>
-                                account_name:
+                                الاسم:
                             </b>
 
                         </div>
                         <div class="col-12" id="account_type">
                             <b>
-                                account_type:
+                                نوع الحساب:
                             </b>
 
                         </div>
@@ -166,8 +166,8 @@
 
 
     <!--change password Modal -->
-    <div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal fade" id="changePasswordModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
@@ -186,8 +186,8 @@
                                     <label for="current_password"><b>كلمة المرور الحالية</b></label>
                                 </div>
                                 <div class="col-11" style="padding: 0;">
-                                    <input type="password" id="current_password" placeholder="أدخل كلمة المرور الحالية"
-                                        name="current_password" required>
+                                    <input type="password" id="current_password"
+                                        placeholder="أدخل كلمة المرور الحالية" name="current_password" required>
                                 </div>
                                 <div class="col-1" style="padding: 0;">
                                     <button type="button" id="show-current_password-btn"
@@ -237,6 +237,10 @@
                         </div>
                     </div>
                     <div class="modal-footer " style="width:auto;">
+                        <div id="changePasswordError" class="error">
+                        </div>
+
+
                         <button type="submit" class="operations-btn btn btn-warning" onclick="changePassword()">
                             <span data-feather="edit-3" class="align-text-bottom"></span>
                             تغيير
@@ -245,9 +249,7 @@
                             <span data-feather="x" class="align-text-bottom"></span>
                             أغلق
                         </button>
-                        <br>
-                        <div id="changePasswordError" class="error">
-                        </div>
+
                     </div>
                 </form>
             </div>
@@ -257,8 +259,8 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-        crossorigin="anonymous"></script>
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    </script>
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>
     <script src="../../js/users/account_settings.js"></script>

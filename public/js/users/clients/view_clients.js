@@ -247,8 +247,20 @@ function addClientRow(table, client) {
     const client_current_address = client.current_address;
     const client_email = client.email;
     const client_id = client.id;
-    const client_status= client.status;
+    const client_status = client.status;
+    const status = document.createElement('span');
+    status.classList.add('badge', 'state');
+    status.id = 'status-' + client_id;
 
+    if (client_status === "مفعل") {
+        //winner
+        status.classList.add('text-bg-success');
+        status.innerHTML = 'مفعل'
+    } else if (client_status === "غير مفعل") {
+        //losser
+        status.innerHTML = 'غير مفعل'
+        status.classList.add('text-bg-danger');
+    }
     const operations = document.createElement('div');
     operations.classList.add('dropdown');
     const opBtn = document.createElement('button');
@@ -296,7 +308,46 @@ function addClientRow(table, client) {
         operationMenu.append(editOpLi);
 
 
+
+
+    const editStatusBtn = document.createElement('button');
+    editStatusBtn.innerHTML = '<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'
+        + ' تغيير حالة الحساب'
+    editStatusBtn.setAttribute('title', 'تغيير حالة الحساب');
+    editStatusBtn.classList.add('btn', 'btn-secondary', 'menu-operations-btn');
+
+    editStatusBtn.onclick = function () {
+        editStatus(client_id)
+    }
+    const editStatusOpLi = document.createElement('li');
+    editStatusOpLi.append(editStatusBtn)
+    editStatusOpLi.classList = 'operationMenuItem'
+
+    if (role == 1 || role == 2)
+        operationMenu.append(editStatusOpLi);
     operations.append(opBtn, operationMenu);
+
+
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>'
+        + ' حذف الحساب'
+    deleteBtn.setAttribute('title', 'حذف الحساب');
+    deleteBtn.classList.add('btn', 'btn-danger', 'menu-operations-btn');
+
+    deleteBtn.onclick = function () {
+        deleteClient(client_id)
+    }
+    const deleteOpLi = document.createElement('li');
+    deleteOpLi.append(deleteBtn)
+    deleteOpLi.classList = 'operationMenuItem'
+
+    if (role == 1)
+        operationMenu.append(deleteOpLi);
+
+    operations.append(opBtn, operationMenu);
+
+
 
 
 
@@ -306,6 +357,8 @@ function addClientRow(table, client) {
         $('<td>').append(client_father_name),
         $('<td>').append(client_mother_name),
         $('<td>').append(client_phone_number),
+        $('<td>').append(status),
+
         $('<td>').append(operations)
     );
     row.attr('id', client_id);
@@ -351,6 +404,64 @@ function viewClient(clientId) {
 
 }
 
+
+function deleteClient(clientId) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: 'http://127.0.0.1:8000/users/'+clientId,
+        type: 'delete',
+        success: function (response) {
+            console.log(response)
+
+            // وقت الحذف لازم يطلع بوب أب برسالة الاستجابة
+
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    });
+
+}
+
+
+function editStatus(clientId) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: 'http://127.0.0.1:8000/users/update_status',
+        type: 'post',
+        data: { 'id': clientId },
+        success: function (response) {
+            console.log(response)
+
+            if (response.status === 'success') {
+                const status = document.getElementById('status-' + clientId);
+                if (status.classList.contains('text-bg-success')) {
+                    status.innerHTML = 'غير مفعل'
+                    status.classList = '';
+                    status.classList.add('badge', 'state', 'text-bg-danger');
+                } else {
+                    status.innerHTML = 'مفعل'
+                    status.classList = '';
+                    status.classList.add('badge', 'state', 'text-bg-success');
+                }
+            }
+
+
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    });
+
+}
 
 function editClient(clientId) {
     window.location.href = "edit_client.html?id=" + clientId;

@@ -66,11 +66,11 @@ class UserController extends Controller
     {
 
         if ($id == 'getclients') {
-            $clients = User::where('role_name', '=', 'client')->get();
+            $clients = User::where('role_name', '=', 'زبون')->get();
             return response()->json(['clients' => $clients]);
 
         } else if ($id == 'getmembers') {
-            $members = User::where('role_name', '!=', 'client')->get();
+            $members = User::where('role_name', '!=', 'زبون')->get();
             return response()->json(['members' => $members]);
 
         } else {
@@ -113,13 +113,13 @@ class UserController extends Controller
 
     public function getAllLawyers()
     {
-        $lawyers = User::select('first_name', 'last_name', 'id')->where('role_name', '=', 'lawyer')->get();
+        $lawyers = User::select('first_name', 'last_name', 'id')->where('role_name', '=', 'محامي')->get();
         return response()->json(['lawyers' => $lawyers]);
 
     }public function getAllClientWithName(Request $request)
     {
         $clients = User::select('first_name', 'father_name', 'last_name', 'id')
-            ->where('role_name', '=', "client")
+            ->where('role_name', '=', "زبون")
             ->where('first_name', 'like', "$request->name%")
             ->orWhere('last_name', 'like', "$request->name%")
             ->orWhere('father_name', 'like', "$request->name%")
@@ -128,30 +128,34 @@ class UserController extends Controller
     }
 
     public function update_account_status(Request $request)
-   {
-        $userId=$request->id;
+    {
+        $userId = $request->id;
         $user = User::find($userId);
 
-         if ($user)
-       {
+        if ($user) {
 
-        if ($user->status == 'مفغل')
-        {
-          $user->status = 'غير مفعل';
+            if ($user->status === 'مفعل') {
+                $user->update([
+                    'status' => 'غير مفعل',
+                ]);
+                return response()->json(['status' => 'success', 'message' => 'تم تغيير حالة الحساب بنجاح']);
+
+            } elseif ($user->status === 'غير مفعل') {
+                $user->update([
+                    'status' => 'مفعل',
+                ]);
+                return response()->json(['status' => 'success', 'message' => 'تم تغيير حالة الحساب بنجاح']);
+
+            }
+
         }
-        elseif ($user->status == 'غير مفعل')
-        {
-        $user->status = 'مفعل';
-        }
+    }
+    public function destroy($id)
+    {
+        if (User::find($id)->forceDelete()) {
+            return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح']);
+        }else
+        return response()->json(['status' => 'failed', 'message' => 'لم يتم الحذف ']);
 
-        return response()->json(['status' => 'تم تغيير حالة الحساب بنجاح']);
-      }
-   }
-   public function destroy($id)
- {
-
-   User::find($id)->forceDelete();
-
-   return response()->json(['status' => 'success','message'=>'تم الحذف بنجاح']);
- }
+    }
 }

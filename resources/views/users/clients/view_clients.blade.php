@@ -19,8 +19,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -87,7 +87,7 @@
                                         </a>
                                     </li>
                                     <li id="viewPrivateCaseNav">
-                                        
+
                                     </li>
                                     <li id="retreiveCaseNav">
 
@@ -149,8 +149,8 @@
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link tab searchBy active " id="all-tab" data-bs-toggle="tab"
-                                    data-bs-target="#all-tab-pane" type="button" role="tab" aria-controls="all-tab-pane"
-                                    aria-selected="true" onclick="displayAll()">
+                                    data-bs-target="#all-tab-pane" type="button" role="tab"
+                                    aria-controls="all-tab-pane" aria-selected="true" onclick="displayAll()">
                                     عرض الكل
                                 </button>
                             </li>
@@ -179,20 +179,21 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <label for="name"><b>اسم العميل</b></label>
-                                            <input type="text" id="name" name="name" placeholder="الرجاء ادخال الاسم"
-                                                required>
+                                            <input type="text" id="name" name="name"
+                                                placeholder="الرجاء ادخال الاسم" required>
                                         </div>
 
 
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByName()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByName()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
 
                                         </button>
-                                        <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger">
                                             <span data-feather="x-circle" class="align-text-bottom"></span>
                                             امسح
                                         </button>
@@ -217,6 +218,7 @@
                                     <th>اسم الأب</th>
                                     <th>اسم الأم</th>
                                     <th>رقم الهاتف</th>
+                                    <th>حالة الحساب</th>
                                     <th>العمليات</th>
                                 </tr>
 
@@ -252,8 +254,8 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-        crossorigin="anonymous"></script>
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    </script>
 
 
     <script src="../../../js/users/auth.js"></script>

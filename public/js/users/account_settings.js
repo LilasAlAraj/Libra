@@ -5,21 +5,44 @@
 
 })();
 
+
+$(document).ready(function () {
+
+
+    $.ajax({
+        url: "http://127.0.0.1:8000/account",
+        type: "get",
+        success: function (response) {
+
+            user = response.user
+
+            document.getElementById('account_name').append(user.first_name + ' ' + user.father_name + ' ' + user.last_name)
+            document.getElementById('account_type').append(user.role_name);
+        },
+        error: function (response) {
+            console.log(response)
+
+        }
+    });
+
+});
 function changePassword() {
-    alert("تم تغيير كلمة المرور بنجاح");
+
+    $('#changePasswordError').html("");
+    $('#changePasswordError').css('color','red');
 
     $('#changePassword_form').validate({
         rules: {
 
             current_password: {
                 required: true,
-                minlength: 6
+                minlength: 8
             }, new_password: {
                 required: true,
-                minlength: 6
+                minlength: 8
             }, confirm_new_password: {
                 required: true,
-                minlength: 6
+                minlength: 8
             }
         },
         messages: {
@@ -36,7 +59,7 @@ function changePassword() {
             }
         },
         submitHandler: function (form) {
-            $('.changePasswordError').html("")
+
 
 
             var current_password = $('#current_password').val();
@@ -48,13 +71,10 @@ function changePassword() {
 
 
             //check passwords matching
-            if (getOldPassword() !== current_password) {
-                $('.changePasswordError').html("كلمة السر الحالية غير صحيحة");
 
-            }
             if (new_password != confirm_new_password) {
 
-                $('.changePasswordError').html("كلمتا السر الجديدتان غير متطابقتين");
+                $('#changePasswordError').html("كلمتا السر الجديدتان غير متطابقتين");
             } else {
                 // Perform register
 
@@ -64,26 +84,28 @@ function changePassword() {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/login",
+                    url: "http://127.0.0.1:8000/account/change_password",
                     type: "POST",
                     data: {
                         "new_password": new_password,
-                        "confirm_new_password": confirm_new_password
+                        "current_password": current_password
                     },
                     success: function (response) {
-                        if (response.status == 'success') {
-                            console.log(response);
-                            alert("تم تغيير كلمة المرور بنجاح");
 
+                        console.log(response);
+                        if (response.status == 'success') {
+
+                                $('#changePasswordError').html(response.message);
+                                $('#changePasswordError').css('color','green');
                         } else {
-                            $('.changePasswordError').html(response.message);
+                            $('#changePasswordError').html(response.message);
+
                         }
                     },
 
                     error: function (response) {
-                        // If the login is unsuccessful, display the error message
-                        // $('#error').html(response.responseJSON.errors.phone[0]);
-                        $('#changePasswordError').html(response.responseJSON);
+                        console.log(response);
+
                     }
                 });
 
@@ -92,30 +114,12 @@ function changePassword() {
     });
 }
 
-function getOldPassword() {
-    let oldPass = '';
-    $.ajax({
-        url: "http://127.0.0.1:8000/login",
-        type: "get",
-        success: function (response) {
-            oldPass = response.data.password;
-        },
-        error: function (response) {
-            // If the login is unsuccessful, display the error message
-            // $('#error').html(response.responseJSON.errors.phone[0]);
-            $('#changePasswordError').html(response.responseJSON);
-        }
-    });
-    return oldPass;
-}
-
-
 
 function showPassword(name) {
 
     console.log(name)
 
-    const passwordInput = document.querySelector('#'+name);
+    const passwordInput = document.querySelector('#' + name);
     const showPasswordBtn = document.querySelector('#show-' + name + '-btn');
 
     if (passwordInput.type === "password") {
@@ -130,6 +134,7 @@ function showPassword(name) {
 function closeModal() {
     // حذف المعلومات المخزنة في ذاكرة التخزين المؤقت للجلسة
     sessionStorage.clear();
-    console.log('// إغلاق النافذة المنبثقة')
+       $('#changePasswordError').html("");
+
 
 }

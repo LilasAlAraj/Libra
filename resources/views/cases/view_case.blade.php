@@ -619,6 +619,40 @@
     </div>
 
 
+
+
+    <!--popup cancel archive case-->
+    <div class="modal fade" id="cancelArchiveCaseBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="cancelArchiveCaseBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="cancelArchiveCaseBackdropLabel" style=" color:white;">
+                        تأكيد عملية إلغاء الأرشفة
+                    </h1>
+                </div>
+                <div class=" modal-body">
+                    <p>
+                        هل أنت متأكد من إلغاء أرشفة هذه القضية؟
+                    </p>
+                </div>
+                <div class="modal-footer " style="width:auto;">
+                    <button type="submit" class="operations-btn btn btn-warning" onclick="cancelArchiveCase()">
+                        <span data-feather="archive" class="align-text-bottom"></span>
+                        ألغِ الأرشفة
+                    </button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                        <span data-feather="x" class="align-text-bottom"></span>
+                        أغلق
+                    </button>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!--popup delete case-->
     <div class="modal fade" id="deleteCaseBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="deleteCaseBackdropLabel" aria-hidden="true">

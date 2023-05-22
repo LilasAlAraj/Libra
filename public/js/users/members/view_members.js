@@ -248,7 +248,7 @@ function addMemberRow(table, member) {
     const member_status = member.status;
     const status = document.createElement('span');
     status.classList.add('badge', 'state');
-    status.id='status-'+member_id;
+    status.id = 'status-' + member_id;
 
     if (member_status === "مفعل") {
         //winner
@@ -320,7 +320,7 @@ function addMemberRow(table, member) {
 
 
     const editStatusBtn = document.createElement('button');
-    editStatusBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit align-text-bottom" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>'
+    editStatusBtn.innerHTML = '<svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'
         + ' تغيير حالة الحساب'
     editStatusBtn.setAttribute('title', 'تغيير حالة الحساب');
     editStatusBtn.classList.add('btn', 'btn-secondary', 'menu-operations-btn');
@@ -335,6 +335,22 @@ function addMemberRow(table, member) {
     if (role == 1)
         operationMenu.append(editStatusOpLi);
 
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>'
+        + ' حذف الحساب'
+    deleteBtn.setAttribute('title', 'حذف الحساب');
+    deleteBtn.classList.add('btn', 'btn-danger', 'menu-operations-btn');
+
+    deleteBtn.onclick = function () {
+        deleteMember(member_id)
+    }
+    const deleteOpLi = document.createElement('li');
+    deleteOpLi.append(deleteBtn)
+    deleteOpLi.classList = 'operationMenuItem'
+
+    if (role == 1)
+        operationMenu.append(deleteOpLi);
 
 
 
@@ -393,12 +409,56 @@ function viewMember(memberId) {
     window.location.href = "http://127.0.0.1:8000/users/members/" + memberId;
 
 }
+function deleteMember(memberId) {
+
+
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: 'http://127.0.0.1:8000/users/'+memberId,
+        type: 'delete',
+        success: function (response) {
+            console.log(response)
+
+            // وقت الحذف لازم يطلع بوب أب برسالة الاستجابة
+
+        },
+        error: function (response) {
+            console.log(response)
+        }
+    });
+
+
+}
 function editStatus(memberId) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $.ajax({
         url: 'http://127.0.0.1:8000/users/update_status',
         type: 'post',
         data: { 'id': memberId },
         success: function (response) {
+            console.log(response)
+
+            if (response.status === 'success') {
+                const status = document.getElementById('status-' + memberId);
+                if (status.classList.contains('text-bg-success')) {
+                    status.innerHTML = 'غير مفعل'
+                    status.classList = '';
+                    status.classList.add('badge', 'state', 'text-bg-danger');
+                } else {
+                    status.innerHTML = 'مفعل'
+                    status.classList = '';
+                    status.classList.add('badge', 'state', 'text-bg-success');
+                }
+            }
 
 
         },
