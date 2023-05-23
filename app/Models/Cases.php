@@ -22,6 +22,11 @@ class Cases extends Model
 
         //'task_id'
     ];
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Case_attachment::class,'case_id');
+    }
     public function tasks()
     {
 

@@ -89,7 +89,8 @@
 
                                         </li>
                                         <li id="viewCaseNav">
-                                            <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                            <a href="http://127.0.0.1:8000/cases"
+                                                class="nav-link d-inline-flex  collapse-items">
                                                 <span data-feather="file-text" class="align-text-bottom"></span>
                                                 عرض القضايا
                                             </a>
@@ -178,7 +179,8 @@
                             </div>
                             <div class="basic-info">
                                 <div class="row container">
-                                    <table class="table table-bordered ">
+                                    <table class="table table-bordered "
+                                        style="table-layout: fixed; width: 100%;">
                                         <thead>
                                             <tr>
                                                 <th colspan="2">الجهة المدعية</th>
@@ -245,7 +247,7 @@
 
                                             </div>
 
-                                            <div class="container" >
+                                            <div class="container">
                                                 <b>الوقائع: </b>
                                                 <div id="waqae"></div>
 
@@ -307,8 +309,7 @@
 
                                                 <tr>
                                                     <th>رقم المرفق</th>
-                                                    <th>النوع</th>
-                                                    <th>التفاصيل</th>
+                                                    <th>الاسم</th>
                                                     <th>العمليات</th>
                                                 </tr>
                                             </thead>
@@ -368,8 +369,7 @@
 
 
 
-                <form id='chang_state_form'
-                    style="background-color: transparent; border:none;width: 100%;">
+                <form id='chang_state_form' style="background-color: transparent; border:none;width: 100%;">
                     <div class=" modal-body">
                         <label for="selected_state"><b>الحالة الجديدة: </b></label>
                         <select id="selected_state" name="selected_state" required>
@@ -473,7 +473,7 @@
 
 
 
-                <form id='addNewSession_form'  style="background-color: transparent; border:none">
+                <form id='addNewSession_form' style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -541,23 +541,10 @@
                         إضافة مرفق جديد للقضية
                     </h1>
                 </div>
-                <form id='addNewAttachment_form'  style="background-color: transparent; border:none">
+                <form id='addNewAttachment_form' style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
-                            <div class="row ">
-                                <div class="col-12">
-                                    <label for="newAttachment_type"><b>نوع المرفق</b></label>
-                                    <input class="form-control" id="newAttachment_type" name="newAttachment_type"
-                                        required>
-                                </div>
-                            </div>
-                            <div class="row ">
-                                <div class="col-12">
-                                    <label for="newAttachment_detail"><b>تفاصيل المرفق</b></label>
-                                    <textarea class="form-control" id="newAttachment_detail" name="newAttachment_detail" rows="5"
-                                        style="max-height:8em;" required></textarea>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-12">
                                     <label for="newAttachmentFile"><b>اختيار المرفق</b></label>
@@ -882,8 +869,7 @@
                         إضافة مرفق جديد للجلسة
                     </h1>
                 </div>
-                <form id='addNewSessionAttachment_form'
-                    style="background-color: transparent; border:none">
+                <form id='addNewSessionAttachment_form' style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
 
@@ -929,7 +915,7 @@
 
 
 
-                <form id='editSession_form'  style="background-color: transparent; border:none">
+                <form id='editSession_form' style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -1047,7 +1033,7 @@
                         إضافة قرار جديد للقضية
                     </h1>
                 </div>
-                <form id='addNewDecision_form'  style="background-color: transparent; border:none">
+                <form id='addNewDecision_form' style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -1104,7 +1090,7 @@
                         تعديل القرار
                     </h1>
                 </div>
-                <form id='editDecision_form'  style="background-color: transparent; border:none">
+                <form id='editDecision_form' style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -1135,7 +1121,8 @@
                     <div class="modal-footer " style="width:auto;">
                         <div id="errorEditDecision" class="error">
                         </div>
-                         <button type="submit" class="operations-btn btn btn-secondary"  data-bs-dismiss="modal" onclick="closeModal()">
+                        <button type="submit" class="operations-btn btn btn-secondary" data-bs-dismiss="modal"
+                            onclick="closeModal()">
                             <span data-feather="edit-2" class="align-text-bottom"></span>
                             تعديل القرار
 

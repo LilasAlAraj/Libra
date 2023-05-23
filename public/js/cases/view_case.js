@@ -2,7 +2,6 @@
     'use strict'
 
     feather.replace({ 'aria-hidden': 'true' })
-
 })();
 
 /********************* */
@@ -22,7 +21,6 @@ $(document).ready(function () {
         success: function (response) {
 
 
-            console.log(response)
 
             data = response.cases[0];
             caseItem = data
@@ -55,7 +53,6 @@ function setCaseData() {
 
 
     base_numbers = document.getElementById('base-numbers');
-    console.log(caseItem.case_numbers.length)
     for (var i = 0; i < caseItem.case_numbers.length; i++) {
 
 
@@ -109,13 +106,17 @@ function setCaseData() {
 
 
         defendant_client_ = document.createElement('td');
-        if (i < defendant_names.length)
-            defendant_client_.append(defendant_names[i].name + ' رقمه ' + defendant_names[i].phone_number)
-
+        if (i < defendant_names.length) {
+            defendant_client_.append(defendant_names[i].name)
+            if (defendant_names[i].phone_number != null)
+                defendant_client_.append(' رقمه ' + defendant_names[i].phone_number)
+        }
         defendant_lawyer_ = document.createElement('td');
-        if (i < defendant_lawyers.length)
-            defendant_lawyer_.append(defendant_lawyers[i].name + ' رقمه ' + defendant_lawyers[i].phone_number)
-
+        if (i < defendant_lawyers.length) {
+            defendant_lawyer_.append(defendant_lawyers[i].name)
+            if (defendant_lawyers[i].phone_number != null)
+                defendant_lawyer_.append(' رقمه ' + defendant_lawyers[i].phone_number)
+        }
 
         row.append(plaintiff_client_, plaintiff_lawyer_, defendant_client_, defendant_lawyer_)
         tableVss.append(row)
@@ -143,15 +144,21 @@ function setCaseData() {
 
     // ضبط تفاصيل القضية
     document.getElementById('dawa').append(caseItem.case.title)
-    document.getElementById('eltemas').append(caseItem.case.claim)
-    document.getElementById('waqae').append(caseItem.case.facts)
-
+    if (caseItem.case.claim != undefined)
+        document.getElementById('eltemas').append(caseItem.case.claim)
+    else {
+        document.getElementById('eltemas').append("لا يوجد أي تفاصيل عن الالتماس")
+    }
+    if (caseItem.case.facts != undefined)
+        document.getElementById('waqae').append(caseItem.case.facts)
+    else {
+        document.getElementById('waqae').append("لا يوجد أي تفاصيل عن الوقائع")
+    }
 
 
     // ضبط قرارات القضية
     decision_table = document.getElementById('decision-table-body');
     decisions = data.decisions;
-    console.log(decisions)
     for (var i = 0; i < decisions.length; i++) {
         addDecisionRow(decision_table, decisions[i]);
     }
@@ -278,27 +285,44 @@ function addAttachmentRow(table, attachment) {
     num = document.createElement('td');
     num.append(attachmentID);
 
-    type = document.createElement('td');
-    type.append(attachment.type);
 
-    details = document.createElement('td');
-    details.append(attachment.details);
+
+    const name = document.createElement('td');
+    name.append(attachment.file_name);
 
 
 
 
     const downloadOp = document.createElement('button');
-    downloadOp.title = 'تحميل المرفق';
+    downloadOp.title = 'تنزيل المرفق';
     downloadOp.classList.add('btn', 'btn-info');
-    downloadOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-hard-drive align-text-bottom" aria-hidden="true"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>'
-        + " تحميل";
+    downloadOp.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>'
+        + " تنزيل";
     downloadOp.onclick = function () {
         downloadAttachmentOfCase(attachment.id);
     }
 
+
     const downloadOpLi = document.createElement('li');
     downloadOpLi.append(downloadOp)
     downloadOpLi.classList = 'operationMenuItem'
+
+
+
+
+    const viewOp = document.createElement('button');
+    viewOp.title = 'معاينة المرفق';
+    viewOp.classList.add('btn', 'btn-primary');
+    viewOp.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+        + " معاينة";
+    viewOp.onclick = function () {
+        viewAttachmentOfCase(attachment.id);
+    }
+
+
+    const viewOpLi = document.createElement('li');
+    viewOpLi.append(viewOp)
+    viewOpLi.classList = 'operationMenuItem'
 
 
 
@@ -314,7 +338,7 @@ function addAttachmentRow(table, attachment) {
     const operationMenu = document.createElement('ul');
     operationMenu.id = 'operationMenu';
     operationMenu.classList.add('dropdown-menu');
-    operationMenu.append(downloadOpLi)
+    operationMenu.append(downloadOpLi, viewOpLi)
 
     if (role == 1 || role == 2) {
         if (caseItem.isArchived !== 'true') {
@@ -347,26 +371,73 @@ function addAttachmentRow(table, attachment) {
 
 
     operations.append(opBtn, operationMenu);
-    row.append(num, type, details, operations);
+    row.append(num, name, operations);
+    row.id = 'case-attachment-row' + attachmentID;
+
     table.append(row)
 
 }
 
 
-
+function saveFile(fileUrl) {
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    console.log(link.href);
+    link.setAttribute('download', '');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 function downloadAttachmentOfCase(attID) {
-    attID = $('#deleteCaseAttachmentBackdrop').data('attachment-id');
+    $.ajax({
+        url: "http://127.0.0.1:8000/case/attachment/download",
+        method: "get",
+        data: { 'attachment_id': attID },
+        success: function (response) {
+            saveFile(response.download_link);
 
-    console.log('downloadAttachmentOfCase' + attID)
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
+}
 
 
+function viewAttachmentOfCase(attID) {
+    $.ajax({
+        url: "http://127.0.0.1:8000/case/attachment/download",
+        method: "get",
+        data: { 'attachment_id': attID },
+        success: function (response) {
+            window.open(response.download_link, '_blank');
+
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 }
 
 function deleteAttachmentOfCase() {
     attID = $('#deleteCaseAttachmentBackdrop').data('attachment-id');
 
-    console.log('deleteAttachmentOfCase' + attID)
-
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/case/attachment/delete",
+        method: "delete",
+        data: { 'attachment_id': attID },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 }
 function setCaseAuth() {
 
@@ -542,7 +613,8 @@ function changeStateCase() {
                             state.classList.add('text-bg-dark', 'badge', 'state');
                             state.innerHTML = ('معلقة')
                         }
-
+                        closeModal();
+                        $('#staticBackdrop').modal('hide');
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -634,8 +706,10 @@ function editCase() {
 
 function loadAdditionalDetails() {
     document.getElementById('dawa_edit').value = caseItem.case.title
-    document.getElementById('eltemas_edit').append(caseItem.case.claim)
-    document.getElementById('waqae_edit').append(caseItem.case.facts)
+    if (caseItem.case.claim != undefined)
+        document.getElementById('eltemas_edit').append(caseItem.case.claim)
+    if (caseItem.case.facts != undefined)
+        document.getElementById('waqae_edit').append(caseItem.case.facts)
 
     $('#edit_case_details_form').validate({
 
@@ -692,6 +766,9 @@ function loadAdditionalDetails() {
 
                         document.getElementById('eltemas').innerHTML = (eltemas)
                         document.getElementById('waqae').innerHTML = (waqae)
+                        closeModal();
+                        $('#changeAdditionalDetailsBackdrop').modal('hide');
+
                     } else {
                         $('.errorEditAdditionalDetails').html(response);
                     }
@@ -794,6 +871,8 @@ function addNewSession() {
                         };
                         addSessionRow(sessions_table, session);
 
+                        closeModal();
+                        $('#addNewSessionBackdrop').modal('hide');
                     }
 
                 },
@@ -839,15 +918,11 @@ function addNewSession() {
 
 function addNewAttachment() {
 
-
+    caseID = window.location.href.split('/');
+    caseID = caseID[caseID.length - 1];
     $('#addNewAttachment_form').validate({
         rules: {
-            newAttachment_detail: {
-                required: true
-            },
-            newAttachment_type: {
-                required: true
-            },
+
             newAttachmentFile: {
                 required: true,
                 extension: 'pdf|jpeg|jpg|png'
@@ -855,12 +930,7 @@ function addNewAttachment() {
             }
         },
         messages: {
-            newAttachment_detail: {
-                required: "الرجاء إدخال تفاصيل المرفق"
-            },
-            newAttachment_type: {
-                required: "الرجاء إدخال نوع المرفق"
-            },
+
             newAttachmentFile: {
                 required: "الرجاء اختيار المرفق",
                 extension: "الرجاء تحميل ملفات بصيغة صحيحة. application/pdf, image/jpeg, image/jpg, image/png"
@@ -868,33 +938,44 @@ function addNewAttachment() {
         },
         submitHandler: function (form) {
             // تحديد المتغيرات اللازمة
-            newAttachmentDetail = $("#newAttachment_detail").val();
-            newAttachmentType = $("#newAttachment_type").val();
-            newAttachmentFile = $("#newAttachmentFile")[0].files;
 
-            caseID = new URLSearchParams(window.location.search).get("id");
+            newAttachmentFile = $("#newAttachmentFile")[0].files[0];
+
 
             // تجهيز البيانات للإرسال
             var formData = new FormData();
-            formData.append('newAttachmentDetail', newAttachmentDetail);
-            formData.append('newAttachmentType', newAttachmentType);
-            formData.append('newAttachmentFile', newAttachmentFile);
+
+            formData.append('attachment', newAttachmentFile);
             formData.append('caseID', caseID);
 
-
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: 'bla/bla',
+                url: 'http://127.0.0.1:8000/case/attachment',
                 method: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response) {
                     // Handle the response from the server
-                    console.log(response);
+                    attachment = {
+                        'id': response.id,
+                        'file_name': newAttachmentFile.name
+                    };
+                    const caseAttachments = document.getElementById('attachment-case-table-body');
+
+                    addAttachmentRow(caseAttachments, attachment)
+                    closeModal();
+                    $('#addNewAttachmentBackdrop').modal('hide');
+
                 },
-                error: function (xhr, status, error) {
+                error: function (response) {
                     // Handle the error
-                    console.log(xhr.responseText);
+                    console.log(response);
+
                     $('#errorAddAttachment').html('error 404');
 
                 }
@@ -904,6 +985,8 @@ function addNewAttachment() {
 }
 
 function closeModal() {
+    $('.error').html('');
+
     // حذف المعلومات المخزنة في ذاكرة التخزين المؤقت للجلسة
     sessionStorage.clear();
 }

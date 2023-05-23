@@ -239,10 +239,11 @@ class CasesController extends Controller
                 $enemyLawyers = $case->enemy_lawyers;
                 $sessions = $case->sessions;
                 $decisions = $case->decisions;
+                $attachments = $case->attachments;
                 $court = $case->court;
                 $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
                     'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                    'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions]
+                    'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
                 ;
             }
 
@@ -261,9 +262,10 @@ class CasesController extends Controller
             $court = $case->court;
             $sessions = $case->sessions;
             $decisions = $case->decisions;
+            $attachments = $case->attachments;
             $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
                 'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions]
+                'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
             ;
         }
         return response()->json(['cases' => $casesArray]);

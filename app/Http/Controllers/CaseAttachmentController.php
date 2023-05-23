@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sessions;
-use App\Models\session_attachment;
+use App\Models\Case_attachment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
-class SessionAttachmentController extends Controller
+class CaseAttachmentController extends Controller
 {
 
     public function store(Request $request)
@@ -24,31 +24,26 @@ class SessionAttachmentController extends Controller
 
         $file_name = $file->getClientOriginalName();
 
-        $attachment = new session_attachment();
+        $attachment = new Case_attachment();
 
         $attachment->file_name = $file_name;
 
-        $attachment->session_number = $request->number;
-
-        $attachment->session_id = $request->session_id;
-
+        $attachment->case_id = $request->caseID;
         $attachment->save();
 
-        $id = session_attachment::latest()->first()->id;
+        $id = Case_attachment::latest()->first()->id;
 
-        $case_id = Sessions::where('id', $attachment->session_id)->first()->case_id;
-        $file->move(public_path('Attachments/Case_' . $case_id . '/Session_' . $request->session_id), $file_name);
+        $file->move(storage_path('Attachments/Case_' . $request->caseID), $file_name);
         return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id]);
 
     }
 
     public function destroy(Request $request)
     {
-        $attachment = session_attachment::findOrFail($request->attachment_id);
-        $session_id = $attachment->session_id;
-        $case_id = $attachment->session->case->id;
+        $attachment = Case_attachment::findOrFail($request->attachment_id);
+        $case_id = $attachment->case_id;
         $file_name = $attachment->file_name;
-        $path = 'Attachments\Case_' . $case_id . '\Session_' . $session_id . '\\';
+        $path = 'Attachments\Case_' . $case_id . '\\';
 
         if ($attachment->delete()) {
             if (unlink(public_path($path . $file_name))) {
@@ -66,17 +61,18 @@ class SessionAttachmentController extends Controller
             return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف من قاعدة البيانات! أعد المحاولة'], 500);
         }
     }
+
     public function get_file(Request $request)
     {
 
-        $file = session_attachment::findOrFail($request->attachment_id);
-        $session_id = $file->session_id;
-        $case_id = $file->session->case->id;
+        $file = Case_attachment::findOrFail($request->attachment_id);
+        $case_id = $file->case_id;
         $file_name = $file->file_name;
-        $path = 'Attachments\Case_' . $case_id . '\Session_' . $session_id . '\\' . $file_name;
+        $path = 'Attachments\Case_' . $case_id.'\\'.$file_name;
         //return Response::download(public_path($path));
         $download_link = asset($path);
 
         return Response::json(['download_link' => $download_link]);
     }
+
 }

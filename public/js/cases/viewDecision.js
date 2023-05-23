@@ -353,6 +353,9 @@ function addNewDecision() {
 
                     decision['id'] = response.id
                     addDecisionRow(decision_table, decision);
+
+                    closeModal();
+                    $('#addNewDecisionBackdrop').modal('hide');
                 },
                 error: function (response) {
                     // Handle the error

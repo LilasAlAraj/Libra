@@ -100,9 +100,18 @@ function addNewAttachmentRow(table, attachment) {
         downloadAttachmentOfSession(attachment.id);
     }
 
+    const viewOp = document.createElement('button');
+    viewOp.title = 'معاينة المرفق';
+    viewOp.classList.add('btn', 'btn-primary');
+    viewOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-hard-drive align-text-bottom" aria-hidden="true"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>'
+        + " معاينة";
+    viewOp.onclick = function () {
+        viewAttachmentOfSession(attachment.id);
+    }
+
     const opperation = document.createElement('div');
     opperation.classList.add('d-flex', 'justify-content-evenly');
-    opperation.append(downloadOp)
+    opperation.append(downloadOp, viewOp)
 
     if (role == 1 || role == 2) {
         if (caseItem.isArchived !== 'true') {
@@ -139,12 +148,63 @@ function addNewAttachmentRow(table, attachment) {
 }
 
 
-function downloadAttachmentOfSession(sessionID) {
+function saveFile(fileUrl) {
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.setAttribute('download', '');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+function downloadAttachmentOfSession(attID) {
 
+    $.ajax({
+        url: "http://127.0.0.1:8000/session/attachment/download", // اسم ملف php الذي يقوم بالحذف
+        method: "get", // طريقة الإرسال POST
+        data: { 'attachment_id': attID },
+        success: function (response) {
+            console.log(response)
+            saveFile(response.download_link);
+
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 }
 
-function deleteAttachmentOfSession(sessionID) {
+function viewAttachmentOfSession(attID) {
+    $.ajax({
+        url: "http://127.0.0.1:8000/session/attachment/download",
+        method: "get",
+        data: { 'attachment_id': attID },
+        success: function (response) {
+            window.open(response.download_link, '_blank');
 
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
+}
+
+function deleteAttachmentOfSession(attID) {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/session/attachment/delete", // اسم ملف php الذي يقوم بالحذف
+        method: "delete", // طريقة الإرسال POST
+        data: { 'attachment_id': attID },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 }
 
 function addNewSessionAttachment() {
@@ -196,12 +256,12 @@ function addNewSessionAttachment() {
                     if (response.status === 'success') {
                         const sessionAttachments = document.getElementById('sessionAttachments-body');
 
-                        attachment={
-                            'id':response.id,
-                            'file_name':newAttachmentFile.name
+                        attachment = {
+                            'id': response.id,
+                            'file_name': newAttachmentFile.name
                         };
                         addNewAttachmentRow(sessionAttachments, attachment)
-
+                        closeModal();
                         $('#addNewSessionAttachmentBackdrop').modal('hide');
 
                     }
@@ -249,6 +309,7 @@ function addNewAttachmentSession() {
     // عرض Modal 2 فوق Modal 1 عند النقر على الزر
     $('#addNewSessionAttachmentBackdrop').modal('show');
     $('#addNewSessionAttachmentBackdrop').css('background', 'rgba(0,0,0,.3)');
+
 }
 
 
