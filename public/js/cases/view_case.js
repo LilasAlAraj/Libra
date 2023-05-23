@@ -148,18 +148,18 @@ function setCaseData() {
 
 
 
-     // ضبط قرارات القضية
-     decision_table = document.getElementById('decision-table-body');
-     decisions = data.decisions;
-     console.log(decisions)
-     for (var i = 0; i < decisions.length; i++) {
-         addDecisionRow(decision_table, decisions[i]);
-     }
+    // ضبط قرارات القضية
+    decision_table = document.getElementById('decision-table-body');
+    decisions = data.decisions;
+    console.log(decisions)
+    for (var i = 0; i < decisions.length; i++) {
+        addDecisionRow(decision_table, decisions[i]);
+    }
 
     // ضبط جلسات القضية
     sessions_table = document.getElementById('sessions-table-body');
-    sessions = caseItem.sessions;
-    console.log(caseItem);
+    sessions = data.sessions;
+
     for (var i = 0; i < sessions.length; i++) {
         addSessionRow(sessions_table, sessions[i]);
     }
@@ -185,12 +185,12 @@ function addSessionRow(table, session) {
     date = document.createElement('td');
     date.append(session.date);
 
-    details = document.createElement('td');
-    details_str = session.details;
-    if (session.details.length > 50)
-        details_str = session.details.substring(0, 50) + '.. إلخ'
+    description = document.createElement('td');
+    description_str = session.description;
+    if (session.description.length > 50)
+        description_str = session.description.substring(0, 50) + '.. إلخ'
 
-    details.append(details_str);
+    description.append(description_str);
 
 
 
@@ -262,7 +262,9 @@ function addSessionRow(table, session) {
 
 
     operations.append(opBtn, operationMenu);
-    row.append(num, date, details, operations);
+    row.append(num, date, description, operations);
+    row.id = 'session-row' + sessionID;
+
     table.append(row)
 
 }
@@ -624,7 +626,7 @@ function deleteCase() {
 
 
 function editCase() {
-    window.location.href = 'http://127.0.0.1:8000/cases/'+caseID+'/edit'
+    window.location.href = 'http://127.0.0.1:8000/cases/' + caseID + '/edit'
 
 
 }
@@ -707,6 +709,10 @@ function loadAdditionalDetails() {
 
 function addNewSession() {
 
+    caseID = window.location.href.split('/');
+
+    caseID = caseID[caseID.length - 1];
+    console.log(caseID)
 
     $('#addNewSession_form').validate({
         rules: {
@@ -741,41 +747,60 @@ function addNewSession() {
         },
         submitHandler: function (form) {
             // تحديد المتغيرات اللازمة
-            sessionNumber = $("#newSessionNumber").val();
-            sessionDate = $("#newSessionDate").val();
-            sessionDetails = $("#newSessionDetails").val();
-            sessionAttachments = null;
+            SessionNumber = $("#newSessionNumber").val();
+            SessionDate = $("#newSessionDate").val();
+            SessionDetails = $("#newSessionDetails").val();
+            SessionAttachments = null;
             if ($("#sessionAttachments")[0].files.length > 0) {
-                sessionAttachments = $("#sessionAttachments")[0].files;
+                SessionAttachments = $("#sessionAttachments")[0].files;
             }
-            caseID = new URLSearchParams(window.location.search).get("id");
 
+
+            console.log(caseID)
             // تجهيز البيانات للإرسال
             var formData = new FormData();
-            formData.append('number', newSessionNumber);
-            formData.append('date', newSessionDate);
-            formData.append('description', newSessionDetails);
-            if (sessionAttachments != null)
-                for (var i = 0; i < sessionAttachments.length; i++) {
-                    formData.append('sessionAttachments[]', sessionAttachments[i]);
-                }
+            formData.append('number', SessionNumber);
+            formData.append('date', SessionDate);
+            formData.append('description', SessionDetails);
             formData.append('case_id', caseID);
 
+            if (SessionAttachments != null)
+                for (var i = 0; i < SessionAttachments.length; i++) {
+                    formData.append('atachments[]', SessionAttachments[i]);
+                }
 
-            console.log(sessionAttachments)
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: 'http://127.0.0.1:8000/sessionsOfCase',
-                method: 'G',
+                url: 'http://127.0.0.1:8000/session',
+                method: 'post',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response) {
                     // Handle the response from the server
                     console.log(response);
+
+                    if (response.status === 'success') {
+                        sessions_table = document.getElementById('sessions-table-body');
+                        session = {
+                            'number': SessionNumber,
+                            'date': SessionDate,
+                            'description': SessionDetails,
+                            'id': response.id
+                        };
+                        addSessionRow(sessions_table, session);
+
+                    }
+
                 },
-                error: function (xhr, status, error) {
+                error: function (response) {
                     // Handle the error
-                    console.log(xhr.responseText);
+                    console.log(response);
+
                     $('#errorAddSession').html('error 404');
 
                 }

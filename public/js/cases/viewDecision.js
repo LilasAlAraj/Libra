@@ -81,7 +81,7 @@ function deleteDecision() {
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
             console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
 
-            document.getElementById('decision-row' +id).remove();
+            document.getElementById('decision-row' + id).remove();
             $('#deleteDecisionBackdrop').modal('hide');
             $('#viewDecicionBackdrop').modal('hide');
 
@@ -171,7 +171,7 @@ function confirmEditDecision() {
                         decisionNumber = document.getElementById('decisionNumber');
                         decisionDate = document.getElementById('decisionDate');
                         decisionDetails = document.getElementById('decisionDetails');
-                        console.log(decisionNumber,decisionDate, decisionDetails)
+                        console.log(decisionNumber, decisionDate, decisionDetails)
                         cells = decision_row.getElementsByTagName('td');
                         cells[0].innerHTML = editDecisionNumber
                         decisionNumber.innerHTML = editDecisionNumber;
@@ -179,6 +179,8 @@ function confirmEditDecision() {
                         decisionDate.innerHTML = editDecisionDate;
                         cells[2].innerHTML = editDecisionDetails
                         decisionDetails.innerHTML = editDecisionDetails;
+                        $('#editDecisionBackdrop').modal('hide');
+
                     } else {
                         $('.errorEditDecision').html(response.message);
                     }

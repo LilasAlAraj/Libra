@@ -368,7 +368,7 @@
 
 
 
-                <form id='chang_state_form' method="post"
+                <form id='chang_state_form'
                     style="background-color: transparent; border:none;width: 100%;">
                     <div class=" modal-body">
                         <label for="selected_state"><b>الحالة الجديدة: </b></label>
@@ -473,7 +473,7 @@
 
 
 
-                <form id='addNewSession_form' method="post" style="background-color: transparent; border:none">
+                <form id='addNewSession_form'  style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -541,7 +541,7 @@
                         إضافة مرفق جديد للقضية
                     </h1>
                 </div>
-                <form id='addNewAttachment_form' method="post" style="background-color: transparent; border:none">
+                <form id='addNewAttachment_form'  style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -818,8 +818,7 @@
 
                                 <tr>
                                     <th>رقم المرفق</th>
-                                    <th>النوع</th>
-                                    <th>التفاصيل</th>
+                                    <th>اسم الملف</th>
                                     <th>العمليات</th>
                                 </tr>
                             </thead>
@@ -883,24 +882,11 @@
                         إضافة مرفق جديد للجلسة
                     </h1>
                 </div>
-                <form id='addNewSessionAttachment_form' method="post"
+                <form id='addNewSessionAttachment_form'
                     style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
-                            <div class="row ">
-                                <div class="col-12">
-                                    <label for="newSessionAttachment_type"><b>نوع المرفق</b></label>
-                                    <input class="form-control" id="newSessionAttachment_type"
-                                        name="newSessionAttachment_type" required>
-                                </div>
-                            </div>
-                            <div class="row ">
-                                <div class="col-12">
-                                    <label for="newSessionAttachment_detail"><b>تفاصيل المرفق</b></label>
-                                    <textarea class="form-control" id="newSessionAttachment_detail" name="newSessionAttachment_detail" rows="5"
-                                        style="max-height:8em;" required></textarea>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-12">
                                     <label for="newSeesionAttachmentFile"><b>اختيار المرفق</b></label>
@@ -943,7 +929,7 @@
 
 
 
-                <form id='editSession_form' method="post" style="background-color: transparent; border:none">
+                <form id='editSession_form'  style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">
@@ -1061,7 +1047,7 @@
                         إضافة قرار جديد للقضية
                     </h1>
                 </div>
-                <form id='addNewDecision_form' method="post" style="background-color: transparent; border:none">
+                <form id='addNewDecision_form'  style="background-color: transparent; border:none">
                     <div class=" modal-body">
                         <div class="container">
                             <div class="row ">

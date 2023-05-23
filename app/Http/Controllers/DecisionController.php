@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 class DecisionController extends Controller
 {
 
-    public function index()
-    {
+    // public function index()
+    // {
 
-        $desicion = Decision::all();
+    //     $desicion = Decision::all();
 
-        return view('Decision.desicion.index', compact('desicion'));
+    //     return view('Decision.desicion.index', compact('desicion'));
 
-    }
+    // }
 
     public function show($id)
     {

@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('file_name');
             $table->integer('session_number');
-            $table->string('Created_by');
             $table->unsignedBigInteger('session_id');
             $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade');
-           // $table->foreign('session_number')->references('number')->on('sessions')->onUpdate('cascade');
             $table->timestamps();
         });
     }

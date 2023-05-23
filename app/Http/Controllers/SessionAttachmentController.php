@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cases_attachments;
+use App\Models\session_attachment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SessionAttachmentController extends Controller
@@ -12,51 +11,46 @@ class SessionAttachmentController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
+        // $this->validate($request, [
 
-            'file_name' => 'mimes:pdf,jpeg,png,jpg',
+        //     'file_name' => 'mimes:pdf,jpeg,png,jpg',
 
-        ], [
-            'file_name.mimes' => 'صيغة المرفق يجب ان تكون   pdf, jpeg , png , jpg',
-        ]);
+        // ], [
+        //     'file_name.mimes' => 'صيغة المرفق يجب ان تكون   pdf, jpeg , png , jpg',
+        // ]);
 
-        $image = $request->file('file_name');
+        $file = $request->file('attachment');
 
-        $file_name = $image->getClientOriginalName();
+        $file_name = $file->getClientOriginalName();
 
-        $attachments = new Cases_attachments();
+        $attachment = new session_attachment();
 
-        $attachments->file_name = $file_name;
+        $attachment->file_name = $file_name;
 
-        $attachments->cases_number = $request->cases_number;
+        $attachment->session_number = $request->number;
 
-        $attachments->cases_id = $request->cases_id;
+        $attachment->session_id = $request->session_id;
 
-        $attachments->Created_by = Auth::user()->name;
+        $attachment->save();
 
-        $attachments->save();
+        $id = session_attachment::latest()->first()->id;
 
-        // move pic
-        $imageName = $request->file_name->getClientOriginalName();
-
-        $request->file_name->move(public_path('Attachments/' . $request->cases_number), $imageName);
-
-        session()->flash('Add', 'تم اضافة المرفق بنجاح');
-        return back();
+        $file->move(public_path('Attachments/Session_' . $request->number), $file_name);
+        return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id]);
 
     }
 
     public function destroy(Request $request)
     {
-        $cases = Cases_attachments::findOrFail($request->id_file);
+        $attachment = session_attachment::findOrFail($request->id_file);
 
-        $cases->delete();
+        if ($attachment->delete()) {
+            Storage::disk('public_uploads')->delete($request->session_number . '/' . $request->file_name);
 
-        Storage::disk('public_uploads')->delete($request->cases_number . '/' . $request->file_name);
-
-        session()->flash('delete', 'تم حذف المرفق بنجاح');
-
-        return back();
+            return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'], 200);
+        } else {
+            return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف! أعد المحاولة'], 500);
+        }
     }
 
     public function get_file($cases_number, $file_name)
@@ -67,11 +61,5 @@ class SessionAttachmentController extends Controller
 
     }
 
-    public function open_file($cases_number, $file_name)
-    {
 
-        $files = Storage::disk('public_uploads')->getDriver()->getAdapter()->applyPathPrefix($cases_number . '/' . $file_name);
-
-        return response()->file($files);
-    }
 }

@@ -31,6 +31,16 @@ Route::put('decision/update','App\Http\Controllers\DecisionController@update');
 Route::delete('decision/','App\Http\Controllers\DecisionController@destroy');
 
 
+//attachments of session
+Route::post('session/attachment','App\Http\Controllers\SessionAttachmentController@store');
+
+//sessions
+Route::post('session','App\Http\Controllers\SessionController@store');
+Route::get('session/{id}','App\Http\Controllers\SessionController@show');
+Route::put('session/update','App\Http\Controllers\SessionController@update');
+Route::delete('session/','App\Http\Controllers\SessionController@destroy');
+
+
 
 
 

@@ -49,20 +49,14 @@ function viewSession(id) {
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'session.json',
-        dataType: 'json',
+        url: 'http://127.0.0.1:8000/session/' + id,
+
+        type: 'get',
         success: function (response) {
-
-
-            for (var i = 0; i < response.length; i++) {
-                if (response[i].id === id)
-                    session = response[i];
-            }
-
-
+            session = response;
 
             document.getElementById('sessionNumber').innerHTML = session.number;
-            document.getElementById('sessionDetails').innerHTML = session.details;
+            document.getElementById('sessionDetails').innerHTML = session.description;
             document.getElementById('sessionDate').innerHTML = session.date;
             setSessionAuth();
 
@@ -76,93 +70,89 @@ function viewSession(id) {
 
     function setSessionAttachments(session) {
 
-        sessionAttachments = document.getElementById('sessionAttachments-body');
+        const sessionAttachments = document.getElementById('sessionAttachments-body');
         sessionAttachments.innerHTML = ''
+        console.log(session)
 
-        const nAttachment = session.attachment.length;
+        const nAttachment = session.attachments.length;
         for (var i = 0; i < nAttachment; i++) {
-            addNewAttachmentRow(sessionAttachments, session.attachment[i])
+            addNewAttachmentRow(sessionAttachments, session.attachments[i])
 
         }
     }
 
-
-    function addNewAttachmentRow(table, attachment) {
-
-        const number = attachment.number;
-        const type = attachment.type;
-        const details = attachment.details;
-
-
-        const downloadOp = document.createElement('button');
-        downloadOp.title = 'تحميل المرفق';
-        downloadOp.classList.add('btn', 'btn-info');
-        downloadOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-hard-drive align-text-bottom" aria-hidden="true"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>'
-            + "تحميل";
-        downloadOp.onclick = function () {
-            downloadAttachmentOfSession(attachment.id);
-        }
-
-        const opperation = document.createElement('div');
-        opperation.classList.add('d-flex', 'justify-content-evenly');
-        opperation.append(downloadOp)
-
-        if (role == 1 || role == 2) {
-            if (caseItem.isArchived !== 'true') {
-
-                const removeOp = document.createElement('button');
-                removeOp.title = 'حذف المرفق';
-                removeOp.classList.add('btn', 'btn-danger');
-                removeOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
-                    + " حذف";
-                removeOp.onclick = function () {
-                    deleteAttachmentOfSession(attachment.id);
-                }
-                opperation.append(removeOp)
-            }
-
-        }
-
-        const numberCol = document.createElement('td');
-        numberCol.append(number);
-
-        const typeCol = document.createElement('td');
-        typeCol.append(type);
-
-        const detailsCol = document.createElement('td');
-        detailsCol.append(details);
-
-        const opperationCol = document.createElement('td');
-        opperationCol.append(opperation);
-
-
-        const row = document.createElement('tr');
-        row.append(numberCol, typeCol, detailsCol, opperationCol)
-        table.append(row)
-    }
-
-
-    function downloadAttachmentOfSession(sessionID) {
-
-    }
-
-    function deleteAttachmentOfSession(sessionID) {
-
-    }
 }
 
+
+function addNewAttachmentRow(table, attachment) {
+
+    const attchmentID = attachment.id;
+    const name = attachment.file_name;
+
+
+
+    const downloadOp = document.createElement('button');
+    downloadOp.title = 'تنزيل المرفق';
+    downloadOp.classList.add('btn', 'btn-info');
+    downloadOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-hard-drive align-text-bottom" aria-hidden="true"><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>'
+        + " تنزيل";
+    downloadOp.onclick = function () {
+        downloadAttachmentOfSession(attachment.id);
+    }
+
+    const opperation = document.createElement('div');
+    opperation.classList.add('d-flex', 'justify-content-evenly');
+    opperation.append(downloadOp)
+
+    if (role == 1 || role == 2) {
+        if (caseItem.isArchived !== 'true') {
+
+            const removeOp = document.createElement('button');
+            removeOp.title = 'حذف المرفق';
+            removeOp.classList.add('btn', 'btn-danger');
+            removeOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
+                + " حذف";
+            removeOp.onclick = function () {
+                deleteAttachmentOfSession(attachment.id);
+            }
+            opperation.append(removeOp)
+        }
+
+    }
+
+    const numberCol = document.createElement('td');
+    numberCol.append(attchmentID);
+
+    const nameCol = document.createElement('td');
+    nameCol.append(name);
+
+
+    const opperationCol = document.createElement('td');
+    opperationCol.append(opperation);
+
+
+    const row = document.createElement('tr');
+    row.append(numberCol, nameCol, opperationCol)
+    row.id = 'session-attachment-row' + attchmentID;
+
+    table.append(row)
+}
+
+
+function downloadAttachmentOfSession(sessionID) {
+
+}
+
+function deleteAttachmentOfSession(sessionID) {
+
+}
 
 function addNewSessionAttachment() {
 
 
     $('#addNewSessionAttachment_form').validate({
         rules: {
-            newSessionAttachment_detail: {
-                required: true
-            },
-            newSessionAttachment_type: {
-                required: true
-            },
+
             newSeesionAttachmentFile: {
                 required: true,
                 extension: 'pdf|jpeg|jpg|png'
@@ -170,12 +160,7 @@ function addNewSessionAttachment() {
             }
         },
         messages: {
-            newSessionAttachment_detail: {
-                required: "الرجاء إدخال تفاصيل المرفق"
-            },
-            newSessionAttachment_type: {
-                required: "الرجاء إدخال نوع المرفق"
-            },
+
             newSeesionAttachmentFile: {
                 required: "الرجاء اختيار المرفق",
                 extension: "الرجاء تحميل ملفات بصيغة صحيحة. application/pdf, image/jpeg, image/jpg, image/png"
@@ -183,32 +168,48 @@ function addNewSessionAttachment() {
         },
         submitHandler: function (form) {
             // تحديد المتغيرات اللازمة
-            newAttachmentDetail = $("#newSessionAttachment_detail").val();
-            newAttachmentType = $("#newSessionAttachment_type").val();
-            newAttachmentFile = $("#newSeesionAttachmentFile")[0].files;
+
+            newAttachmentFile = $("#newSeesionAttachmentFile")[0].files[0];
 
 
             // تجهيز البيانات للإرسال
             var formData = new FormData();
-            formData.append('newAttachmentDetail', newAttachmentDetail);
-            formData.append('newAttachmentType', newAttachmentType);
-            formData.append('newAttachmentFile', newAttachmentFile);
-            formData.append('sessionID', session.id);
 
+            formData.append('attachment', newAttachmentFile);
+            formData.append('session_id', session.id);
+            formData.append('number', session.number);
 
+            console.log(newAttachmentFile);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: 'add_new_session.php',
+                url: 'http://127.0.0.1:8000/session/attachment',
                 method: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response) {
                     // Handle the response from the server
-                    console.log(response);
+                    if (response.status === 'success') {
+                        const sessionAttachments = document.getElementById('sessionAttachments-body');
+
+                        attachment={
+                            'id':response.id,
+                            'file_name':newAttachmentFile.name
+                        };
+                        addNewAttachmentRow(sessionAttachments, attachment)
+
+                        $('#addNewSessionAttachmentBackdrop').modal('hide');
+
+                    }
                 },
-                error: function (xhr, status, error) {
+                error: function (response) {
                     // Handle the error
-                    console.log(xhr.responseText);
+                    console.log(response);
+
                     $('#errorAddSessionAttachment').html('error 404');
 
                 }
@@ -220,25 +221,31 @@ function addNewSessionAttachment() {
 function deleteSession() {
     id = $('#deleteSessionBackdrop').data('session-id');
 
-    console.log(id)
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $.ajax({
-        url: "deletesession.php", // اسم ملف php الذي يقوم بالحذف
-        method: "POST", // طريقة الإرسال POST
+        url: "http://127.0.0.1:8000/session", // اسم ملف php الذي يقوم بالحذف
+        method: "delete", // طريقة الإرسال POST
         data: { id: id }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
             console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
-            window.location.href = "view.html"
+            if (response.status === 'success') {
+                document.getElementById('session-row' + id).remove();
+                $('#deleteSessionBackdrop').modal('hide');
+                $('#viewSessionBackdrop').modal('hide');
+            }
         },
-        error: function (xhr, status, error) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-            console.log(error); // عرض الخطأ في وحدة التحكم بالمتصفح
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
         }
     });
 }
 
 function addNewAttachmentSession() {
-    console.log('here');
-    console.log('we');
-    console.log('are');
+
     // عرض Modal 2 فوق Modal 1 عند النقر على الزر
     $('#addNewSessionAttachmentBackdrop').modal('show');
     $('#addNewSessionAttachmentBackdrop').css('background', 'rgba(0,0,0,.3)');
@@ -262,7 +269,7 @@ function confirmEditSession() {
 
     document.getElementById('editSessionNumber').value = session.number;
     document.getElementById('editSessionDate').value = session.date;
-    document.getElementById('editSessionDetails').value = session.details;
+    document.getElementById('editSessionDetails').value = session.description;
 
 
     $('#editSession_form').validate({
@@ -292,33 +299,53 @@ function confirmEditSession() {
         submitHandler: function (form) {
             var editSessionNumber = $('#editSessionNumber').val();
             var editSessionDate = $('#editSessionDate').val();
-            var editSessionDetails = document.getElementById("editSessionDetails").val();
+            var editSessionDetails = document.getElementById("editSessionDetails").value;
 
 
 
             $('#errorEditSession').html('');
-
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
-                url: "http://127.0.0.1:8000/edit_details",
-                type: "POST",
+                url: "http://127.0.0.1:8000/session/update",
+                type: "put",
                 data: {
                     //    "_token": "{{ csrf_token() }}",
-                    "sessionNumber": editSessionNumber,
-                    "sessionDate": editSessionDate,
-                    "sessionDetails": editSessionDetails,
-                    "sessionID": session.id
+                    "number": editSessionNumber,
+                    "date": editSessionDate,
+                    "description": editSessionDetails,
+                    "id": session.id
                 },
                 success: function (response) {
+                    console.log(response);
+
                     if (response.status == 'success') {
 
-                        // redirect user to appropriate page
-                        window.location.href = "../view_case.html?id=" + caseID;
+                        session_row = document.getElementById('session-row' + session.id);
+                        sessionNumber = document.getElementById('sessionNumber');
+                        sessionDate = document.getElementById('sessionDate');
+                        sessionDescreption = document.getElementById('sessionDetails');
+                        console.log(sessionNumber, sessionDate, sessionDescreption)
+                        cells = session_row.getElementsByTagName('td');
+                        cells[0].innerHTML = editSessionNumber
+                        sessionNumber.innerHTML = editSessionNumber;
+                        cells[1].innerHTML = editSessionDate
+                        sessionDate.innerHTML = editSessionDate;
+                        cells[2].innerHTML = editSessionDetails
+                        sessionDescreption.innerHTML = editSessionDetails;
+                        $('#editSessionBackdrop').modal('hide');
+
                     } else {
                         $('.errorEditSession').html(response.message);
                     }
                 },
                 error: function (response) {
-                    $('#errorEditSession').html(response.responseJSON);
+                    console.log(response);
+
+
                 }
             });
 
