@@ -25,17 +25,44 @@ class CaseArchiveController extends Controller
         $cases = Cases::onlyTrashed()->get();
 
         foreach ($cases as $case) {
-            $clients = $case->clients;
-            $lawyers = $case->lawyers;
             $baseNumbers = $case->baseNumbers;
             $enemyClients = $case->enemy_clients;
             $enemyLawyers = $case->enemy_lawyers;
-            $sessions = $case->sessions;
             $court = $case->court;
-            $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
-                'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                'court' => $court, 'sessions' => $sessions]
-            ;
+            $sessions = $case->sessions;
+            $decisions = $case->decisions;
+            $attachments = $case->attachments;
+            $lawyers = $case->lawyers;
+            $clients = $case->clients;
+            if (Auth::user()->role_name === 'زبون') {
+                foreach ($clients as $client) {
+                    if (Auth::user()->id == $client->id) {
+                        $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                            'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                            'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                        ;
+                        break;
+
+                    }
+                }
+
+            } else if (Auth::user()->role_name === 'محامي') {
+                foreach ($lawyers as $lawyer) {
+                    if (Auth::user()->id == $lawyer->id) {
+                        $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                            'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                            'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                        ;
+                        break;
+                    }
+                }
+
+            } else {
+                $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                    'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                    'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                ;
+            }
         }
 
         return response()->json(['cases' => $casesArray]);

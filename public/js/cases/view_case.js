@@ -16,7 +16,7 @@ $(document).ready(function () {
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: '/cases/' + caseID,
+        url: 'http://127.0.0.1:8000/cases/' + caseID,
         dataType: 'json',
         success: function (response) {
 
@@ -436,8 +436,8 @@ function deleteAttachmentOfCase() {
                 document.getElementById("case-attachment-row" + attID).remove();
 
             }
-            document.getElementById('message-text').innerHTML = response.message;
             $('#deleteCaseAttachmentBackdrop').modal('hide');
+            document.getElementById('message-text').innerHTML = response.message;
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
         },

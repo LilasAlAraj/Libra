@@ -53,7 +53,7 @@ function add_court() {
                 }
             });
             $.ajax({
-                url: "http://127.0.0.1:8000/courts/",
+                url: "http://127.0.0.1:8000/court",
                 type: "POST",
                 data: {
                     "name": court_name,
@@ -61,22 +61,25 @@ function add_court() {
                 }
                 , dataType: 'json',
                 success: function (response) {
+                    console.log(response)
                     if (response.status == 'success') {
                         court = [];
                         court["name"] = court_name
                         court["place"] = court_location
+                        court['id'] = response.id;
                         // عرض الصفوف
 
-                        if (document.getElementById('NoData') != undefined) {
-                            document.getElementById('NoData').remove();
-                        }
+
                         table = $('#table-body');
 
                         addCourtRow(table, court)
-                        $('#addCourtError').css('color', 'green');
-                        $('#addCourtError').html('تم إضافة المحكمة بنجاح');
 
+                        $('#addCourtModal').modal('hide');
 
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                        closeModal();
 
                     } else {
                         $('#addCourtError').html(response.message);
@@ -104,7 +107,7 @@ $(document).ready(function () {
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: '/courts/show',
+        url: 'http://127.0.0.1:8000/court/all',
         type: 'get',
         success: function (response) {
 
@@ -163,15 +166,55 @@ function addCourtRow(table, court) {
 
         $('<td>').append(court.name),
         $('<td>').append(court.place),
-        $('<td>').append(court.place),
+        $('<td>').append(remove_btn),
 
     );
     remove_btn.onclick = function () {
-        confirmDeleteSession(session.id);
+        confirmDeleteCourt(court.id);
     }
-    row.attr('id', court.id);
+    row.attr('id', 'court-row' + court.id);
     table.append(row);
 
+}
+
+
+function confirmDeleteCourt(id) {
+    $('#deleteCourtBackdrop').modal('show');
+    $('#deleteCourtBackdrop').css('background', 'rgba(0,0,0,.3)');
+    $('#deleteCourtBackdrop').data('court-id', id);
+
+    document.getElementById('deleteCourtButton').onclick = function () {
+        deleteCourt()
+    }
+}
+
+
+function deleteCourt() {
+    id = $('#deleteCourtBackdrop').data('court-id');
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/court",
+        method: "delete",
+        data: { id: id },
+        success: function (response) {
+            console.log(response);
+            if (response.status === 'success') {
+                document.getElementById('court-row' + id).remove();
+            }
+            $('#deleteCourtBackdrop').modal('hide');
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
+        }
+    });
 }
 
 

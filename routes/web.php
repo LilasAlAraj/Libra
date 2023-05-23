@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +15,8 @@ use App\Models\User;
  */
 
 Route::get('/', function () {
-    dump(Auth::user()->id);
-    dump(User::where('id',Auth::user()->id)->first());
+    dump(Auth::user()->first_name);
+    dump(Auth::user()->role_name);
 
     return view('test');
 });
@@ -25,6 +26,18 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('sessions', 'App\Http\Controllers\SessionController'); // 🌷جلسات القضية
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
+
+//Filters of case
+Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');
+
+//Filters of users
+Route::get('users/filter', 'App\Http\Controllers\FilterController@usersFilter');
+
+//courts
+Route::post('court', 'App\Http\Controllers\CourtController@store');
+Route::get('courts', 'App\Http\Controllers\CourtController@index');
+Route::get('court/all', 'App\Http\Controllers\CourtController@show');
+Route::delete('court', 'App\Http\Controllers\CourtController@destroy');
 
 //decisions
 Route::post('decision', 'App\Http\Controllers\DecisionController@store');
@@ -61,7 +74,6 @@ Route::get('account', 'App\Http\Controllers\SettingAccountController@show');
 
 Route::resource('cases', 'App\Http\Controllers\CasesController'); // 🌷القضية
 
-Route::resource('courts', 'App\Http\Controllers\CourtController'); // 🌷المحاكم
 Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
 
 //clients and members

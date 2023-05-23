@@ -147,7 +147,7 @@
                     <hr>
                     <div class="container">
 
-                        <table class="table table-bordered  table-striped ">
+                        <table class="table table-bordered  table-striped "  style="table-layout: fixed; width: 100%;">
                             <thead>
                                 <tr>
                                     <th>اسم المحكمة</th>
@@ -241,6 +241,56 @@
 
 
 
+
+    <!--popup delete court-->
+    <div class="modal fade" id="deleteCourtBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="deleteCourtBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="deleteCourtBackdropLabel" style=" color:white;">
+                        تأكيد عملية الحذف
+                    </h1>
+                </div>
+                <div class=" modal-body">
+                    <p>
+                        هل أنت متأكد من حذف هذه المحكمة؟
+                    </p>
+                </div>
+                <div class="modal-footer " style="width:auto;">
+                    <button type="submit" id="deleteCourtButton" class="operations-btn btn btn-danger">
+                        <span data-feather="trash" class="align-text-bottom"></span>
+                        احذف
+                    </button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                        <span data-feather="x" class="align-text-bottom"></span>
+                        أغلق
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="messageBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
+                        رسالة
+                    </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class=" modal-body">
+                    <p id="message-text">
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
 

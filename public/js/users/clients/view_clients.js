@@ -75,15 +75,28 @@ function searchByName() {
             submitHandler: function (form) {
                 $('.error').html()
                 var name = $('#name').val();
-                var searchResults = [];
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/users/filter',
+                    data: {
+                        'name': name,
+                        "search_key": 1
+                    },
+                    type: 'get',
+                    success: function (response) {
 
+                        $('#table-body').empty();
 
+                        console.log(response)
+                        currentData = response.clients;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
 
-                //اضافة جلب بيانات البحث
-
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+                    }
+                });
             }
         }
     )

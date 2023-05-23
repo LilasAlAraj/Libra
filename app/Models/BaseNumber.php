@@ -14,5 +14,8 @@ class BaseNumber extends Model
         'date',
         'case_id',
     ];
-
+    public function case()
+    {
+        return $this->belongsTo(Cases::class,'case_id');
+    }
 }

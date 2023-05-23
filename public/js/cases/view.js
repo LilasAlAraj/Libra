@@ -5,6 +5,55 @@
 
 
 })();
+
+function getLawyers() {
+    $.ajax({
+        url: "http://127.0.0.1:8000/lawyers",
+        type: "Get",
+        success: function (response) {
+            const LawyerList = document.getElementById('plaintiff_lawyer');
+            LawyerList.innerHTML = '<option disabled selected>اختر اسم الوكيل</option>'
+            for (var i = 0; i < response.lawyers.length; i++) {
+                option = document.createElement('option');
+                option.value = response.lawyers[i].id;
+                option.innerHTML = response.lawyers[i].first_name + ' ' + response.lawyers[i].last_name;
+
+                LawyerList.append(option)
+            }
+
+
+        },
+
+        error: function (response) {
+            // If the login is unsuccessful, display the error message
+            // $('#error').html(response.responseJSON.errors.phone[0]);
+            $('#error').html(response.responseJSON);
+        }
+    });
+
+}
+function getCourts() {
+    $.ajax({
+        url: "http://127.0.0.1:8000/court/all",
+        type: "Get",
+        success: function (response) {
+            courts = document.getElementById('court');
+            for (var i = 0; i < response.length; i++) {
+                option = document.createElement('option');
+                option.value = response[i].id;
+                option.innerHTML = response[i].name + '/' + response[i].place;
+                courts.append(option)
+            }
+        },
+
+        error: function (response) {
+            // If the login is unsuccessful, display the error message
+            // $('#error').html(response.responseJSON.errors.phone[0]);
+            $('#error').html(response.responseJSON);
+        }
+    });
+
+}
 function fillYears() {
     // الحصول على عنصر select عن طريق الـ class
     var yearSelect = document.getElementsByClassName("year");
@@ -13,7 +62,7 @@ function fillYears() {
     var currentYear = new Date().getFullYear();
     for (var j = 0; j < yearSelect.length; j++) {
         yearSelect[j].add(document.createElement("option"));
-        for (i = 1980; i <= currentYear + 1; i++) {
+        for (i = 1980; i <= currentYear; i++) {
             var option = document.createElement("option");
             option.text = i;
             option.value = i;
@@ -37,44 +86,61 @@ function setAuth() {
 
             + '</button>'
     }
+
+
+
+    document.getElementById('displayAllTapPaneAuth').innerHTML = '<div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel"'
+        + 'aria-labelledby="all-tab" tabindex="0">'
+        + '<br>'
+        + '</div>';
+    document.getElementById('displayAllTapAuth').innerHTML = '<li class="nav-item" role="presentation">'
+        + '<button class="nav-link tab searchBy active " id="all-tab" data-bs-toggle="tab"'
+        + 'data-bs-target="#all-tab-pane" type="button" role="tab"'
+        + 'aria-controls="all-tab-pane" aria-selected="true" onclick="displayAll()">'
+        + 'عرض الكل'
+        + '</button>'
+        + '</li>';
 }
 
 function add_cases() {
     window.location.href = "http://127.0.0.1:8000/cases/create";
 }
 
-let data;
 let currentData;
 
 $(document).ready(function () {
     fillYears()
 
     setAuth();
-    // جلب البيانات من ملف JSON
+    displayAll();
+    getCourts();
+    getLawyers();
+
+});
+
+function displayAll() {
     $.ajax({
-        url: '/cases/all',
+        url: 'http://127.0.0.1:8000/cases/all',
         type: 'get',
         success: function (response) {
+            $('#table-body').empty();
 
-            currentData = data = response.cases;
             console.log(response)
+            currentData = response.cases;
             // تحديث Pagination
-            displayAll();
+            updatePagination(currentData);
+            showPage(1, currentData)
 
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
         }
     });
-});
-
-function displayAll() {
-    updatePagination(currentData);
-    showPage(1, currentData)
 
 }
 
 function searchByTitle() {
+
     $('#searchByTitle').validate(
         {
             rules: {
@@ -83,23 +149,32 @@ function searchByTitle() {
                 }
             },
             messages: {
-                from_date: {
+                title: {
                     required: "الرجاء اختيار عنوان القضية"
                 }
             },
             submitHandler: function (form) {
                 $('.error').html()
                 var title = $('#title').val();
-                var searchResults = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].title === title) {
-                        searchResults.push(data[i]);
-                    }
-                }
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: { 'title': title, "search_key": 4 },
+                    type: 'get',
+                    success: function (response) {
+                        $('#table-body').empty();
 
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                        console.log(response)
+
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+                    }
+                });
             }
         }
     )
@@ -107,6 +182,7 @@ function searchByTitle() {
 
 function searchByBaseNumber() {
 
+    console.log(456)
     $('#searchByBaseNumber').validate(
         {
 
@@ -127,26 +203,96 @@ function searchByBaseNumber() {
             },
             submitHandler: function (form) {
                 $('.error').html()
-                var base_number = $('#base_number').val();
+                console.log(6656)
+
+                var number = $('#base_number').val();
                 var year = $('#year').val();
-                var searchResults = [];
-                for (var i = 0; i < data.length; i++) {
-                    for (var j = 0; j < data[i].case_numbers.length; j++) {
-                        if (data[i].case_numbers[j] === base_number + "/" + year) {
-                            searchResults.push(data[i]);
-                        }
+
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: {
+                        'year': year,
+                        'number': number,
+                        "search_key": 3
+                    },
+                    type: 'get',
+                    success: function (response) {
+
+                        $('#table-body').empty();
+
+                        console.log(response)
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
-                }
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                });
             }
         }
     )
 }
 
-function searchByTitle() {
 
+function searchByYears() {
+
+    console.log(456)
+    $('#searchByYears').validate(
+        {
+
+            rules: {
+                from_year: {
+                    required: true
+                },
+                to_year: {
+                    required: true
+                }
+            },
+            messages: {
+                from_year: {
+                    required: "الرجاء اختيار \"من\" عام"
+                }, to_year: {
+                    required: "الرجاء اختيار \"إلى\" عام"
+                }
+            },
+            submitHandler: function (form) {
+                $('.error').html()
+                console.log(6656)
+
+                var from_year = $('#from_year').val();
+                var to_year = $('#to_year').val();
+
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: {
+                        'to_year': to_year,
+                        'from_year': from_year,
+                        "search_key": 2
+                    },
+                    type: 'get',
+                    success: function (response) {
+
+                        $('#table-body').empty();
+                        console.log(response)
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+                    }
+                });
+            }
+        }
+    )
+}
+
+function searchByState() {
     $('#searchByState').validate(
         {
             rules: {
@@ -161,16 +307,29 @@ function searchByTitle() {
             },
             submitHandler: function (form) {
                 $('.error').html()
-                var state = $('#state').val();
-                var searchResults = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].state === state) {
-                        searchResults.push(data[i]);
+                var value_status = $('#state').val();
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: {
+                        'value_status': value_status,
+                        "search_key": 1
+                    },
+                    type: 'get',
+                    success: function (response) {
+
+                        $('#table-body').empty();
+
+                        console.log(response)
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
-                }
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                });
             }
         }
     )
@@ -191,16 +350,29 @@ function searchByCourt() {
             },
             submitHandler: function (form) {
                 $('.error').html()
-                var court_name = $('#court_name').val();
-                var searchResults = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].court_name === court_name) {
-                        searchResults.push(data[i]);
+                var court_id = $('#court').val();
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: {
+                        'court_id': court_id,
+                        "search_key": 5
+                    },
+                    type: 'get',
+                    success: function (response) {
+
+                        $('#table-body').empty();
+
+                        console.log(response)
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
-                }
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                });
             }
         }
     )
@@ -224,15 +396,28 @@ function searchByplaintiffName() {
             submitHandler: function (form) {
                 $('.error').html()
                 var plaintiff_name = $('#plaintiff_name').val();
-                var searchResults = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].plaintiff_name === plaintiff_name) {
-                        searchResults.push(data[i]);
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: {
+                        'plaintiff_name': plaintiff_name,
+                        "search_key": 7
+                    },
+                    type: 'get',
+                    success: function (response) {
+
+                        $('#table-body').empty();
+
+                        console.log(response)
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
-                }
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                });
             }
         }
     )
@@ -255,16 +440,29 @@ function searchByplaintiff_lawyer() {
             },
             submitHandler: function (form) {
                 $('.error').html()
-                var plaintiff_lawyer = $('#plaintiff_lawyer').val();
-                var searchResults = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].plaintiff_lawyer === plaintiff_lawyer) {
-                        searchResults.push(data[i]);
+                var lawyerName = $('#plaintiff_lawyer').val();
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/cases/filter',
+                    data: {
+                        'lawyerName': lawyerName,
+                        "search_key": 6
+                    },
+                    type: 'get',
+                    success: function (response) {
+
+                        $('#table-body').empty();
+
+                        console.log(response)
+                        currentData = response.cases;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
+
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
-                }
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                });
             }
         }
     )
@@ -429,6 +627,8 @@ function showPage(pageNumber, data) {
     for (var i = startIndex; i < endIndex; i++) {
         const case_ = data[i].case;
 
+        courtName = data[i].court.name + ' في ' + data[i].court.place
+        room = case_.case_room;
 
 
         var case_numbers = '';
@@ -568,7 +768,7 @@ function showPage(pageNumber, data) {
         const row = $('<tr>').append(
             $('<td>').append($('<pre>').text(case_numbers)),
             $('<td>').text(case_.title),
-            $('<td>').text(data[i].court.name + "/" + case_.case_room),
+            $('<td>').text(courtName + "/" + room),
             $('<td>').append($('<pre>').text(plaintiff_names)),
             $('<td>').append($('<pre>').text(plaintiff_lawyers)),
             $('<td>').append($('<pre>').text(defendant_names)),

@@ -18,8 +18,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -82,7 +82,8 @@
 
                                     </li>
                                     <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                        <a href="http://127.0.0.1:8000/cases"
+                                            class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="file-text" class="align-text-bottom"></span>
                                             عرض القضايا
                                         </a>
@@ -151,13 +152,10 @@
                     <hr>
                     <div class="container">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy active " id="all-tab" data-bs-toggle="tab"
-                                    data-bs-target="#all-tab-pane" type="button" role="tab" aria-controls="all-tab-pane"
-                                    aria-selected="true" onclick="displayAll()">
-                                    عرض الكل
-                                </button>
-                            </li>
+
+                            <div id="displayAllTapAuth">
+
+                            </div>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link tab searchBy" id="by-title-tab" data-bs-toggle="tab"
                                     data-bs-target="#by-title-tab-pane" type="button" role="tab"
@@ -196,9 +194,10 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-plaintiff_lawyer-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-plaintiff_lawyer-tab-pane" type="button" role="tab"
-                                    aria-controls="by-plaintiff_lawyer-tab-pane" aria-selected="false">
+                                <button class="nav-link tab searchBy" id="by-plaintiff_lawyer-tab"
+                                    data-bs-toggle="tab" data-bs-target="#by-plaintiff_lawyer-tab-pane"
+                                    type="button" role="tab" aria-controls="by-plaintiff_lawyer-tab-pane"
+                                    aria-selected="false">
                                     بحث باسم المحامي
                                 </button>
                             </li>
@@ -214,15 +213,11 @@
 
 
                         <div class="tab-content" id="myTabContent">
-
-                            <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel"
-                                aria-labelledby="all-tab" tabindex="0">
-                                <br>
-
+                            <div id="displayAllTapPaneAuth">
                             </div>
                             <div class="tab-pane fade" id="by-title-tab-pane" role="tabpanel"
                                 aria-labelledby="by-title-tab" tabindex="0">
-                                <form id="searchByTitle" class="search-options" action="get">
+                                <form id="searchByTitle" class="search-options">
 
                                     <div class="row">
                                         <div class="col-12">
@@ -233,13 +228,14 @@
 
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByTitle()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByTitle()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
 
                                         </button>
-                                        <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger">
                                             <span data-feather="x-circle" class="align-text-bottom"></span>
                                             امسح
                                         </button>
@@ -257,7 +253,7 @@
 
                             <div class="tab-pane fade" id="by-number-tab-pane" role="tabpanel"
                                 aria-labelledby="by-title-tab" tabindex="0">
-                                <form id="searchByBaseNumber" class="search-options" action="get">
+                                <form id="searchByBaseNumber" class="search-options">
 
                                     <div class="row">
                                         <div class="col-6">
@@ -277,13 +273,14 @@
 
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByBaseNumber()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByBaseNumber()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
 
                                         </button>
-                                        <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger">
                                             <span data-feather="x-circle" class="align-text-bottom"></span>
                                             امسح
                                         </button>
@@ -303,28 +300,30 @@
 
                             <div class="tab-pane fade" id="by-state-tab-pane" role="tabpanel"
                                 aria-labelledby="by-state-tab" tabindex="0">
-                                <form id="searchByState" class="search-options" action="get">
+                                <form id="searchByState" class="search-options">
 
                                     <div class="row">
                                         <div class="col-12">
                                             <label for="state"><b>الحالة</b></label>
                                             <select id="state" name="state" required>
-                                                <option>One</option>
-                                                <option>Two</option>
-                                                <option>Three</option>
+                                                <option value="3" style="color: blue">جارٍ العمل عليها</option>
+                                                <option value="1" style="color: green">رابحة</option>
+                                                <option value="2" style="color: red">خاسرة</option>
+                                                <option value="4" style="color: black">معلقة</option>
                                             </select>
                                         </div>
 
 
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByState()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByState()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
 
                                         </button>
-                                        <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger">
                                             <span data-feather="x-circle" class="align-text-bottom"></span>
                                             امسح
                                         </button>
@@ -342,23 +341,28 @@
 
                             <div class="tab-pane fade " id="by-court-tab-pane" role="tabpanel"
                                 aria-labelledby="by-court-tab" tabindex="0">
-                                <form id="searchByCourt" class="search-options" action="get">
+                                <form id="searchByCourt" class="search-options">
 
                                     <div class="row">
                                         <div class="col-12">
-                                            <label for="court_name"><b>اسم المحكمة</b></label>
-                                            <input type="text" id="court_name" name="court_name" required>
+                                            <label for="court"><b> المحكمة</b></label>
+                                            <select id="court" name="court">
+
+                                                <option disabled selected>اختر المحكمة</option>
+
+                                            </select>
                                         </div>
 
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByCourt()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByCourt()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
 
                                         </button>
-                                        <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger">
                                             <span data-feather="x-circle" class="align-text-bottom"></span>
                                             امسح
                                         </button>
@@ -370,7 +374,7 @@
                             </div>
                             <div class="tab-pane fade " id="by-plaintiff_name-tab-pane" role="tabpanel"
                                 aria-labelledby="by-plaintiff_name-tab" tabindex="0">
-                                <form id="searchByplaintiffName" class="search-options" action="get">
+                                <form id="searchByplaintiffName" class="search-options">
                                     <div class="row">
                                         <div class="col-12">
                                             <label for="court_name"><b>اسم المدعي</b></label>
@@ -378,12 +382,13 @@
                                         </div>
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByplaintiffName()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByplaintiffName()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
                                         </button>
-                                        <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger">
                                             <span data-feather="x-circle" class="align-text-bottom"></span>
                                             امسح
                                         </button>
@@ -395,20 +400,19 @@
                             </div>
                             <div class="tab-pane fade " id="by-plaintiff_lawyer-tab-pane" role="tabpanel"
                                 aria-labelledby="by-plaintiff_lawyer-tab" tabindex="0">
-                                <form id="searchByplaintiffLawyer" class="search-options" action="get">
+                                <form id="searchByplaintiffLawyer" class="search-options">
                                     <div class="row">
                                         <div class="col-12">
                                             <label for="plaintiff_lawyer"><b>اسم المحامي</b></label>
                                             <select id="plaintiff_lawyer" name="plaintiff_lawyer" required>
-                                                <option>One</option>
-                                                <option>Two</option>
-                                                <option>Three</option>
+
                                             </select>
                                         </div>
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByplaintiffLawyer()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success"
+                                            onclick="searchByplaintiff_lawyer()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
                                         </button>
@@ -426,7 +430,7 @@
 
                             <div class="tab-pane fade " id="by-years-tab-pane" role="tabpanel"
                                 aria-labelledby="by-years-tab" tabindex="0">
-                                <form id="searchByYears" class="search-options" action="get">
+                                <form id="searchByYears" class="search-options">
                                     <div class="row">
                                         <div class="col-6">
                                             <label for="from_year"><b>من عام</b></label>
@@ -440,8 +444,8 @@
                                         </div>
                                     </div>
                                     <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                            onclick="searchByYears()">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success" onclick="searchByYears()">
                                             <span data-feather="search" class="align-text-bottom"></span>
                                             ابحث
                                         </button>
@@ -503,8 +507,8 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-        crossorigin="anonymous"></script>
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    </script>
 
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>

@@ -352,7 +352,7 @@ function collectData() {
 
 function getCourts() {
     $.ajax({
-        url: "http://127.0.0.1:8000/courts/show",
+        url: "http://127.0.0.1:8000/court/all",
         type: "Get",
         success: function (response) {
             courts = document.getElementById('court');

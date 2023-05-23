@@ -10,7 +10,9 @@ use App\Models\Enemy_Clients_of_Cases;
 use App\Models\Enemy_Lawyers;
 use App\Models\Enemy_Lawyers_of_Cases;
 use App\Models\Lawyer_of_Cases;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CasesController extends Controller
 {
@@ -232,19 +234,44 @@ class CasesController extends Controller
 
             $cases = Cases::get();
             foreach ($cases as $case) {
-                $clients = $case->clients;
-                $lawyers = $case->lawyers;
                 $baseNumbers = $case->baseNumbers;
                 $enemyClients = $case->enemy_clients;
                 $enemyLawyers = $case->enemy_lawyers;
+                $court = $case->court;
                 $sessions = $case->sessions;
                 $decisions = $case->decisions;
                 $attachments = $case->attachments;
-                $court = $case->court;
-                $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
-                    'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                    'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
-                ;
+                $lawyers = $case->lawyers;
+                $clients = $case->clients;
+                if (Auth::user()->role_name === 'زبون') {
+                    foreach ($clients as $client) {
+                        if (Auth::user()->id == $client->id) {
+                            $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                                'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                                'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                            ;
+                            break;
+
+                        }
+                    }
+
+                } else if (Auth::user()->role_name === 'محامي') {
+                    foreach ($lawyers as $lawyer) {
+                        if (Auth::user()->id == $lawyer->id) {
+                            $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                                'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                                'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                            ;
+                            break;
+                        }
+                    }
+
+                } else {
+                    $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                        'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                        'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                    ;
+                }
             }
 
         } else {
@@ -254,8 +281,7 @@ class CasesController extends Controller
             if (is_null($case)) {
                 $case = $archivedCase;
             }
-            $clients = $case->clients;
-            $lawyers = $case->lawyers;
+
             $baseNumbers = $case->baseNumbers;
             $enemyClients = $case->enemy_clients;
             $enemyLawyers = $case->enemy_lawyers;
@@ -263,10 +289,38 @@ class CasesController extends Controller
             $sessions = $case->sessions;
             $decisions = $case->decisions;
             $attachments = $case->attachments;
-            $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
-                'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-                'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
-            ;
+            $lawyers = $case->lawyers;
+            $clients = $case->clients;
+            if (Auth::user()->role_name === 'زبون') {
+                foreach ($clients as $client) {
+                    if (Auth::user()->id == $client->id) {
+                        $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                            'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                            'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                        ;
+                        break;
+
+                    }
+                }
+
+            } else if (Auth::user()->role_name === 'محامي') {
+                foreach ($lawyers as $lawyer) {
+                    if (Auth::user()->id == $lawyer->id) {
+                        $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                            'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                            'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                        ;
+                        break;
+                    }
+                }
+
+            } else {
+                $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
+                    'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
+                    'court' => $court, 'sessions' => $sessions, 'decisions' => $decisions, 'attachments' => $attachments]
+                ;
+            }
+
         }
         return response()->json(['cases' => $casesArray]);
 
@@ -301,34 +355,41 @@ class CasesController extends Controller
         return back();
     }
 
+    private function deleteDirectory($directory)
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $files = array_diff(scandir($directory), array('.', '..'));
+
+        foreach ($files as $file) {
+            $path = $directory . '/' . $file;
+
+            if (is_dir($path)) {
+                $this->deleteDirectory($path);
+            } else {
+                unlink($path);
+            }
+        }
+
+        rmdir($directory);
+    }
+
     public function destroy(Request $request)
     {
         $id = $request->case_id;
         $cases = Cases::where('id', '=', $id)->first();
 
-        //    $Details = Cases_attachments::where('cases_id', $id)->first();
-
         $id_Archive = $request->id_Archive;
-
-        // اعتبرتا مثبتة  عندك برقم 2 كدليل انو الطلب جاييني كارشيف   id   ليلاس هي ال
-
-        //input type hidden انو اذا القيمه تساوي 2 معناتو ارشفة ,,,طبعا انا اعتبرت انو في
-
-        //     //<div class="modal-body">
-        //     هل انت متاكد من عملية الارشفة ؟
-        //     <input type="hidden" name="case_id" id="case_id" value="">
-        //     <input type="hidden" name="id_Archive" id="id_Archive" value="2">
-        // </div>
 
         if ($id_Archive != 2) {
 
-            //if (!empty($Details->cases_number)) {
-
-            //  Storage::disk('public_uploads')->deleteDirectory($Details->cases_number);
-            //}
-            //   يعني رح تحذفها بشكل نهائي forceDelete
-
             if ($cases->forceDelete()) {
+                //remove all attachments files from storage
+                $path = 'Attachments\Case_' . $request->case_id;
+                $this->deleteDirectory($path);
+
                 return response()->json(['status' => 'success']);
             } else {
                 return response()->json(['status' => 'failed']);
@@ -349,7 +410,7 @@ class CasesController extends Controller
         $id = $request->id;
         $case = Cases::where('id', '=', $id)->first();
         $case->update(['claim' => $request->claim, 'facts' => $request->facts]);
-        return response()->json(['status' => 'success', 'message' =>'تم تعديل تفاصيل القضية بنجاح']);
+        return response()->json(['status' => 'success', 'message' => 'تم تعديل تفاصيل القضية بنجاح']);
 
     }
 
@@ -384,7 +445,7 @@ class CasesController extends Controller
             ]);
         }
 
-        return response()->json(['status' => 'success', 'message' =>'تم تعديل حالة القضية بنجاح']);
+        return response()->json(['status' => 'success', 'message' => 'تم تعديل حالة القضية بنجاح']);
 
     }
 

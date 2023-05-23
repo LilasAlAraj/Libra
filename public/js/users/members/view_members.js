@@ -33,27 +33,28 @@ var currentData;
 
 $(document).ready(function () {
     setAuth();
+    displayAll();
 
     // جلب البيانات من ملف JSON
+
+});
+
+function displayAll() {
     $.ajax({
         url: 'http://127.0.0.1:8000/users/getmembers',
         dataType: 'json',
         success: function (response) {
+            $('#table-body').empty();
 
-            currentData = data = response.members;
+            currentData = response.members;
             // تحديث Pagination
-            displayAll();
-
+            updatePagination(currentData);
+            showPage(1, currentData)
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
         }
     });
-});
-
-function displayAll() {
-    updatePagination(currentData);
-    showPage(1, currentData)
 }
 
 function searchByName() {
@@ -72,15 +73,28 @@ function searchByName() {
             submitHandler: function (form) {
                 $('.error').html()
                 var name = $('#name').val();
-                var searchResults = [];
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/users/filter',
+                    data: {
+                        'name': name,
+                        "search_key": 2
+                    },
+                    type: 'get',
+                    success: function (response) {
 
+                        $('#table-body').empty();
 
+                        console.log(response)
+                        currentData = response.users;
+                        // تحديث Pagination
+                        updatePagination(currentData);
+                        showPage(1, currentData)
 
-                //اضافة جلب بيانات البحث
-
-                currentData = searchResults;
-                updatePagination(currentData);
-                showPage(1, currentData)
+                    },
+                    error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+                    }
+                });
             }
         }
     )
@@ -419,7 +433,7 @@ function deleteMember(memberId) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/'+memberId,
+        url: 'http://127.0.0.1:8000/users/' + memberId,
         type: 'delete',
         success: function (response) {
             console.log(response)
@@ -470,7 +484,7 @@ function editStatus(memberId) {
 }
 
 function editMember(memberId) {
-    window.location.href = 'http://127.0.0.1:8000/users/member/'+memberId+'/edit/';
+    window.location.href = 'http://127.0.0.1:8000/users/member/' + memberId + '/edit/';
 
 }
 function reverseData() {

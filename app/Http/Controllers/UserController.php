@@ -70,7 +70,8 @@ class UserController extends Controller
             return response()->json(['clients' => $clients]);
 
         } else if ($id == 'getmembers') {
-            $members = User::where('role_name', '!=', 'زبون')->get();
+            $members = User::where('role_name', '=', 'محامي')->orWhere('role_name', '=', 'سكرتاريا')
+            ->get();
             return response()->json(['members' => $members]);
 
         } else {
