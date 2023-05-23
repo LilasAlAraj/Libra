@@ -81,9 +81,16 @@ function deleteDecision() {
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
             console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
 
-            document.getElementById('decision-row' + id).remove();
+            if (response.status == "success") {
+                document.getElementById('decision-row' + id).remove();
+
+            }
             $('#deleteDecisionBackdrop').modal('hide');
             $('#viewDecicionBackdrop').modal('hide');
+
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#[messageBackdrop]').css('background', 'rgba(0,0,0,.3)');
 
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
@@ -181,9 +188,11 @@ function confirmEditDecision() {
                         decisionDetails.innerHTML = editDecisionDetails;
                         $('#editDecisionBackdrop').modal('hide');
 
-                    } else {
-                        $('.errorEditDecision').html(response.message);
+
                     }
+                    document.getElementById('message-text').innerHTML = response.message;
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                 },
                 error: function (response) {
                     console.log(response);
@@ -356,6 +365,9 @@ function addNewDecision() {
 
                     closeModal();
                     $('#addNewDecisionBackdrop').modal('hide');
+                    document.getElementById('message-text').innerHTML = response.message;
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                 },
                 error: function (response) {
                     // Handle the error

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Case_attachment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
 class CaseAttachmentController extends Controller
@@ -33,7 +32,7 @@ class CaseAttachmentController extends Controller
 
         $id = Case_attachment::latest()->first()->id;
 
-        $file->move(storage_path('Attachments/Case_' . $request->caseID), $file_name);
+        $file->move(public_path('Attachments/Case_' . $request->caseID), $file_name);
         return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id]);
 
     }
@@ -41,6 +40,7 @@ class CaseAttachmentController extends Controller
     public function destroy(Request $request)
     {
         $attachment = Case_attachment::findOrFail($request->attachment_id);
+
         $case_id = $attachment->case_id;
         $file_name = $attachment->file_name;
         $path = 'Attachments\Case_' . $case_id . '\\';
@@ -68,7 +68,7 @@ class CaseAttachmentController extends Controller
         $file = Case_attachment::findOrFail($request->attachment_id);
         $case_id = $file->case_id;
         $file_name = $file->file_name;
-        $path = 'Attachments\Case_' . $case_id.'\\'.$file_name;
+        $path = 'Attachments\Case_' . $case_id . '\\' . $file_name;
         //return Response::download(public_path($path));
         $download_link = asset($path);
 

@@ -121,6 +121,7 @@ function addNewAttachmentRow(table, attachment) {
             removeOp.classList.add('btn', 'btn-danger');
             removeOp.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
                 + " حذف";
+
             removeOp.onclick = function () {
                 deleteAttachmentOfSession(attachment.id);
             }
@@ -189,6 +190,7 @@ function viewAttachmentOfSession(attID) {
 }
 
 function deleteAttachmentOfSession(attID) {
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -199,7 +201,15 @@ function deleteAttachmentOfSession(attID) {
         method: "delete", // طريقة الإرسال POST
         data: { 'attachment_id': attID },
         success: function (response) {
-            console.log(response);
+            if (response.status == "success") {
+                document.getElementById("session-attachment-row" + attID).remove();
+                document.getElementById('message-text').innerHTML = response.message;
+                $('#messageBackdrop').modal('show');
+                $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+
+            } else
+                console.log(response);
+
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -263,7 +273,9 @@ function addNewSessionAttachment() {
                         addNewAttachmentRow(sessionAttachments, attachment)
                         closeModal();
                         $('#addNewSessionAttachmentBackdrop').modal('hide');
-
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                     }
                 },
                 error: function (response) {
@@ -296,6 +308,9 @@ function deleteSession() {
                 document.getElementById('session-row' + id).remove();
                 $('#deleteSessionBackdrop').modal('hide');
                 $('#viewSessionBackdrop').modal('hide');
+                document.getElementById('message-text').innerHTML = response.message;
+                $('#messageBackdrop').modal('show');
+                $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
@@ -398,6 +413,10 @@ function confirmEditSession() {
                         cells[2].innerHTML = editSessionDetails
                         sessionDescreption.innerHTML = editSessionDetails;
                         $('#editSessionBackdrop').modal('hide');
+                        document.getElementById('message-text').innerHTML = response.message;
+
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
 
                     } else {
                         $('.errorEditSession').html(response.message);

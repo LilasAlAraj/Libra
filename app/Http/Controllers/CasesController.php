@@ -349,7 +349,7 @@ class CasesController extends Controller
         $id = $request->id;
         $case = Cases::where('id', '=', $id)->first();
         $case->update(['claim' => $request->claim, 'facts' => $request->facts]);
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'message' =>'تم تعديل تفاصيل القضية بنجاح']);
 
     }
 
@@ -384,7 +384,7 @@ class CasesController extends Controller
             ]);
         }
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'message' =>'تم تعديل حالة القضية بنجاح']);
 
     }
 

@@ -432,7 +432,14 @@ function deleteAttachmentOfCase() {
         method: "delete",
         data: { 'attachment_id': attID },
         success: function (response) {
-            console.log(response);
+            if(response.status=='success'){
+                document.getElementById("case-attachment-row" + attID).remove();
+
+            }
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#deleteCaseAttachmentBackdrop').modal('hide');
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -615,6 +622,9 @@ function changeStateCase() {
                         }
                         closeModal();
                         $('#staticBackdrop').modal('hide');
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -772,6 +782,9 @@ function loadAdditionalDetails() {
                     } else {
                         $('.errorEditAdditionalDetails').html(response);
                     }
+                    document.getElementById('message-text').innerHTML = response.message;
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                 },
                 error: function (response) {
                     console.log(response);
@@ -873,6 +886,10 @@ function addNewSession() {
 
                         closeModal();
                         $('#addNewSessionBackdrop').modal('hide');
+
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                     }
 
                 },
@@ -886,34 +903,6 @@ function addNewSession() {
             });
         }
     });
-
-    /***************
-     *
-     * public function store(Request $request)
-{
-    $newSession = new Session();
-    $newSession->sessionNumber = $request->input('newSessionNumber');
-    $newSession->sessionDate = $request->input('newSessionDate');
-    $newSession->sessionDetails = $request->input('newSessionDetails');
-    $newSession->caseID = $request->input('caseID');
-
-    if ($request->hasFile('sessionAttachments')) {
-        $files = $request->file('sessionAttachments');
-        foreach ($files as $file) {
-            $filename = $file->getClientOriginalName();
-            $file->storeAs('attachments', $filename);
-        }
-    }
-
-    $newSession->save();
-
-    return response()->json([
-        'message' => 'Session added successfully',
-        'session' => $newSession
-    ]);
-}
-     *
-     */
 }
 
 function addNewAttachment() {
@@ -970,7 +959,9 @@ function addNewAttachment() {
                     addAttachmentRow(caseAttachments, attachment)
                     closeModal();
                     $('#addNewAttachmentBackdrop').modal('hide');
-
+                    document.getElementById('message-text').innerHTML = response.message;
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                 },
                 error: function (response) {
                     // Handle the error
