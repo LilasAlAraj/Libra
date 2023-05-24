@@ -31,9 +31,7 @@ class CasesController extends Controller
         return view('cases.view_case');
     }
 
-    public function store(Request $request)
-    {
-        $Base_Numbers = $request->Base_Numbers;
+    public function checkBaseNumbers( $Base_Numbers){
         foreach ($Base_Numbers as $Base_Number) {
             $number = $Base_Number['number'];
             $date = $Base_Number['date'];
@@ -47,23 +45,9 @@ class CasesController extends Controller
                 return response()->json(['status' => 'failed', 'message' => $message]);
             }
         }
-        Cases::create([
+    }
 
-            'court_id' => $request->court_id,
-
-            'case_room' => $request->case_room,
-
-            'title' => $request->title,
-
-            'Status' => 'جارٍ العمل عليها',
-
-            'Value_Status' => 3,
-        ]);
-
-        /******أرقام الأساس */
-
-        $case_id = Cases::latest()->first()->id;
-
+    public function addBaseNumbers($case_id ,$Base_Numbers){
         foreach ($Base_Numbers as $Base_Number) {
 
             BaseNumber::create([
@@ -76,53 +60,65 @@ class CasesController extends Controller
             ]);
 
         }
+    }
 
-        //-----المحاميين الخصم -------------------//
-        $List_Enemy_Lawyers = $request->DefendentLawyers;
+    public function addDefendentLawyers($DefendentLawyers,$case_id){
+        $List_Enemy_Lawyers = $DefendentLawyers;
 
-        if (!is_null($List_Enemy_Lawyers)) {
+            if (!is_null($List_Enemy_Lawyers)) {
 
-            foreach ($List_Enemy_Lawyers as $List_Enemy_Lawyer) {
+                foreach ($List_Enemy_Lawyers as $List_Enemy_Lawyer) {
 
-                $Enemy_Lawyers = new Enemy_Lawyers();
+                    $Enemy_Lawyers = new Enemy_Lawyers();
 
-                $Enemy_Lawyers->name = $List_Enemy_Lawyer['enemy_Lawyer_name'];
+                    $Enemy_Lawyers->name = $List_Enemy_Lawyer['enemy_Lawyer_name'];
 
-                $Enemy_Lawyers->number_phone = $List_Enemy_Lawyer['enemy_Lawyer_phone'];
+                    $Enemy_Lawyers->number_phone = $List_Enemy_Lawyer['enemy_Lawyer_phone'];
 
-                $Enemy_Lawyers->save();
+                    $Enemy_Lawyers->save();
 
-                $enemy_Lawyer_of_case = new Enemy_Lawyers_of_Cases();
-                $enemy_Lawyer_of_case->enemy_lawyer_id = Enemy_Lawyers::latest()->first()->id;
-                $enemy_Lawyer_of_case->case_id = $case_id;
-                $enemy_Lawyer_of_case->save();
+                    $enemy_Lawyer_of_case = new Enemy_Lawyers_of_Cases();
+
+                    $enemy_Lawyer_of_case->enemy_lawyer_id = Enemy_Lawyers::latest()->first()->id;
+
+                    $enemy_Lawyer_of_case->case_id = $case_id;
+
+                    $enemy_Lawyer_of_case->save();
+                }
             }
+    }
+
+
+public function addDefendentClients($DefendentClients,$case_id){
+    $List_Enemy_Clients = $DefendentClients;
+
+    if (!is_null($List_Enemy_Clients)) {
+
+        foreach ($List_Enemy_Clients as $List_Enemy_Client) {
+
+            $Enemy_Clients = new Enemy_Clients();
+
+            $Enemy_Clients->name = $List_Enemy_Client['enemy_Client_name'];
+
+            $Enemy_Clients->phone_number = $List_Enemy_Client['enemy_Client_phone'];
+
+            $Enemy_Clients->save();
+
+            $enemy_CLient_of_case = new Enemy_Clients_of_Cases();
+
+            $enemy_CLient_of_case->enemy_client_id = Enemy_Clients::latest()->first()->id;
+
+            $enemy_CLient_of_case->case_id = $case_id;
+
+            $enemy_CLient_of_case->save();
+
         }
-        //------------------الخصم-------------------//
 
-        $List_Enemy_Clients = $request->DefendentClients;
+    }
+}
 
-        if (!is_null($List_Enemy_Clients)) {
-            foreach ($List_Enemy_Clients as $List_Enemy_Client) {
-
-                $Enemy_Clients = new Enemy_Clients();
-
-                $Enemy_Clients->name = $List_Enemy_Client['enemy_Client_name'];
-
-                $Enemy_Clients->phone_number = $List_Enemy_Client['enemy_Client_phone'];
-
-                $Enemy_Clients->save();
-
-                $enemy_CLient_of_case = new Enemy_Clients_of_Cases();
-                $enemy_CLient_of_case->enemy_client_id = Enemy_Clients::latest()->first()->id;
-                $enemy_CLient_of_case->case_id = $case_id;
-                $enemy_CLient_of_case->save();
-
-            }
-
-        }
-        /*--------------العميل--------------*/
-        $List_Clients = $request->PlaintaiffClients;
+public function addPlaintaiffClients($PlaintaiffClients, $case_id){
+    $List_Clients = $PlaintaiffClients;
 
         foreach ($List_Clients as $List_Client) {
 
@@ -132,94 +128,64 @@ class CasesController extends Controller
 
                 'case_id' => $case_id,
             ]);
-        } /*--------------وكيل العميل--------------*/
-        $List_Lawyers = $request->PlaintaiffLawyers;
-
-        foreach ($List_Lawyers as $List_Lawyer) {
-
-            Lawyer_of_Cases::create([
-
-                'user_id' => $List_Lawyer,
-
-                'case_id' => $case_id,
-            ]);
         }
 
-        // //------- القضية لها اكثر من جلسة ---------//
+}
 
-        // $case_id = Cases::latest()->first()->id;
+public function addPlaintaiffLawyer($PlaintaiffLawyers, $case_id) {
+    $List_Lawyers = $PlaintaiffLawyers;
 
-        // $sessions = new Sessions();
+    foreach ($List_Lawyers as $List_Lawyer) {
 
-        // $sessions->case_id = $case_id;
+        Lawyer_of_Cases::create([
 
-        // $sessions->date = $request->date;
+            'user_id' => $List_Lawyer,
 
-        // $sessions->description = $request->description;
+            'case_id' => $case_id,
+        ]);
+    }
+}
+    public function store(Request $request)
+    {
+        $Base_Numbers=  $request->Base_Numbers;
+       $this->checkBaseNumbers( $Base_Numbers);
+        Cases::create([
 
-        // $sessions->delay_date =$request->delay_date;
+            'court_id' => $request->court_id,
 
-        // $sessions->delay_reasons =$request->delay_reasons;
+            'case_room' => $request->case_room,
 
-        // $sessions->save();
+            'title' => $request->title,
 
-        // ///-------  القضية لها اكثر من قرار ---------//
+            'Status' => 'جارٍ العمل عليها',
 
-        //   $case_id = Cases::latest()->first()->id;
+            'Value_Status' => 3,
+        ]);
+        $case_id = Cases::latest()->first()->id;
 
-        //   $desicions = new Desicions();
+        /******أرقام الأساس */
 
-        //   $desicions->number =$request->number;
 
-        //   $desicions->case_id = $case_id;
+       $this-> addBaseNumbers($case_id ,$Base_Numbers);
 
-        //   $desicions->description = $request->description;
+        //-----المحاميين الخصم -------------------//
 
-        //   $desicions->date = $request->date;
+       $this-> addDefendentLawyers($request->DefendentLawyers,$case_id);
 
-        //   $desicions->save();
+        //------------------الخصم-------------------//
 
-        //---------  تفاصيل القضية --------------//
+        $this-> addDefendentClients($request->DefendentClients,$case_id);
+        /*--------------العميل--------------*/
+$this->addPlaintaiffClients($request->PlaintaiffClients, $case_id);
 
-        //     if ($request->hasFile('pic'))
-        //    {
+         /*--------------وكيل العميل--------------*/
 
-        //         $cases_id = Cases::latest()->first()->id;
+        $this->addPlaintaiffLawyer($request->PlaintaiffLawyers, $case_id);
 
-        //         $image = $request->file('pic');
-
-        //         $file_name = $image->getClientOriginalName();
-
-        //         $cases_Number = $request->cases_Number;
-
-        //         $attachments = new Cases_attachments();
-
-        //         $attachments->file_name = $file_name;
-
-        //         $attachments->cases_Number = $cases_Number;
-
-        //         $attachments->cases_id = $cases_id;
-
-        //         $attachments->save();
-
-        //-------- move pic ----------//
-
-        //رح يحفظ فقط اسم المرفق بالداتا بيز اما رح يحفظ المرفق على السيرفر
-
-        //---------public\Attachments\اسم المرفق\ رقم القضية ------
-
-        //     $imageName = $request->pic->getClientOriginalName();
-
-        //     $request->pic->move(public_path('Attachments/' . $cases_Number), $imageName);
-        // }
 
         // ------- 📩 اشعار اضافة قضية -----------
 
-        //  $user = User::get();
 
-        //  $cases = Cases::latest()->first();
-
-        //  Notification::send($user, new \App\Notifications\AddCase($cases));
 
         return response()->json(['status' => 'success', 'message' => 'تم إضافة القضية بنجاح'], 200);
 
@@ -335,26 +301,91 @@ class CasesController extends Controller
     public function update(Request $request)
     {
 
-        $cases = Cases::findorfail($request->cases_id);
+        $case_id=$request->case_id;
+        $case = Cases::findorfail($case_id);
+        $this->checkBaseNumbers( $request->Base_Numbers);
 
-        $cases->update([
+        $case->update([
 
             'court_id' => $request->court_id,
 
             'case_room' => $request->case_room,
 
-            'title' => $request->title,
-
-            'Status' => 'جارٍ العمل عليها',
-
-            'Value_Status' => 3,
+            'title' => $request->title
 
         ]);
-        session()->flash('edit', 'تم تعديل القضية بنجاح');
 
-        return back();
+        $Base_Numbers = $case->baseNumbers;
+
+        /////base numbers
+        // هون مسحنا كل أرقام الأساس القديمة لنضمن عدم حدوث أي مشكلة بالقديم
+        foreach ($Base_Numbers as $Base_Number)
+       {
+        $Base_Number->delete();
+       }
+
+       ///هون ضفنا كل الأرقام اللي جاية من المستخدم
+
+       $this->addBaseNumbers($case_id,$request->Base_Numbers);
+
+       ////// defendent lawyers
+        // هون مسحنا كل محاميين الخصم القديمة لنضمن عدم حدوث أي مشكلة بالقديم
+
+       $enemy_lawyers = $case->enemy_lawyers;
+
+        foreach ($enemy_lawyers as $enemy_lawyer)
+       {
+        $enemy_lawyer->delete();
+       }
+       ///هون ضفنا كل المحاميين الخصم اللي جاية من المستخدم
+
+       $this->addDefendentLawyers($request->DefendentLawyers, $case_id);
+
+       ////////// defendent clients //
+
+        // هون مسحنا كل الأشخاص الخصم القديمة لنضمن عدم حدوث أي مشكلة بالقديم
+
+       $enemy_clients = $case->enemy_clients;
+
+       foreach ($enemy_clients as $enemy_client)
+      {
+       $enemy_client->delete();
+      }
+
+       ///هون ضفنا كل الأشخاص الخصم اللي جاية من المستخدم
+
+      $this->addDefendentClients($request->DefendentClients, $case_id);
+       ///////////clients
+        // هون مسحنا ربط كل الزبائن  القديمة لنضمن عدم حدوث أي مشكلة بالقديم
+
+       $Clients = $case->clients_case;
+
+       foreach ($Clients as $Client)
+      {
+       $Client->delete();
+      }
+       ///هون ضفنا كل الزبائن اللي جاية من المستخدم
+
+$this->addPlaintaiffClients($request->PlaintaiffClients, $case_id);
+
+////////// lawyers
+        // هون مسحنا ربط كل المحاميين  القديمة لنضمن عدم حدوث أي مشكلة بالقديم
+
+       $lawyers = $case->lawyers_case;
+
+       foreach ($lawyers as $lawyer)
+      {
+       $lawyer->delete();
+      }
+       ///هون ضفنا كل المحاميين اللي جاية من المستخدم
+
+      $this->addPlaintaiffLawyer($request->PlaintaiffLawyers, $case_id);
+
+
+       return response()->json(['status' => 'success', 'message' => 'تم تعديل القضية بنجاح'], 200);
+
+
     }
-
     private function deleteDirectory($directory)
     {
         if (!is_dir($directory)) {
