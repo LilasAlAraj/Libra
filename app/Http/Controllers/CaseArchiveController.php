@@ -67,24 +67,7 @@ class CaseArchiveController extends Controller
 
         return response()->json(['cases' => $casesArray]);
     }
-    /*public function show($id)
-    {
-    $casesArray = [];
-    $i = 0;
 
-    $case = Cases::withTrashed()->where('id', $id);
-    $clients = $case->clients;
-    $lawyers = $case->lawyers;
-    $baseNumbers = $case->baseNumbers;
-    $enemyClients = $case->enemy_clients;
-    $enemyLawyers = $case->enemy_lawyers;
-    $court = $case->court;
-    $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
-    'case_numbers' => $baseNumbers, 'defendant_names' => $enemyClients, 'defendant_lawyers' => $enemyLawyers,
-    'court' => $court]
-    ;
-    return response()->json(['cases' => $casesArray]);
-    }*/
 
     public function restore(Request $request)
     {
@@ -107,5 +90,12 @@ class CaseArchiveController extends Controller
             return response()->json(['status' => 'failed', 'message' => 'فشل الحذف ']);
         }
 
+    }
+
+    public function archivedCasesCount()
+    {
+        $num_arc_cases = Cases::onlyTrashed()->get()->count();
+
+        return response()->json(['num_arc_cases' => $num_arc_cases]);
     }
 }

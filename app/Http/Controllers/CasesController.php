@@ -449,33 +449,109 @@ class CasesController extends Controller
 
     }
 
-    public function Case_Winning()
+    public function unArchiveCasesCount()
     {
-        $cases = Cases::where('Value_Status', 1)->get();
+        $num_unarchived_cases = Cases::all()->count();
 
-        return view('cases.cases_winning', compact('cases'));
+        return response()->json(['num_unarchived_cases' => $num_unarchived_cases]);
+    }
+    public function totalCasesCount()
+    {
+        $unArchived_cases = Cases::all()->count();
+        $archived_cases = Cases::onlyTrashed()->count();
+
+        $num_cases = $unArchived_cases + $archived_cases;
+        return response()->json(['num_cases' => $num_cases]);
+    }public function totalCasesCountAssignedForLawyer()
+    {
+
+        $LawyerID = Auth::user()->id;
+        $unArchived_cases = Cases::whereHas('lawyers', function ($query) use ($LawyerID) {
+
+            $query->where('user_id', '=', $LawyerID);
+
+        })->count();
+
+        $archived_cases = Cases::onlyTrashed()->whereHas('lawyers', function ($query) use ($LawyerID) {
+
+            $query->where('user_id', '=', $LawyerID);
+
+        })->count();
+
+        $num_assigned_cases = $unArchived_cases + $archived_cases;
+        return response()->json(['num_assigned_cases' => $num_assigned_cases]);
     }
 
-    public function Case_Lost()
+    public function winnedCaseCount()
     {
-        $cases = Cases::where('Value_Status', 2)->get();
+        $winnedCase = Cases::where('Value_Status', 1)->count()
+         + Cases::onlyTrashed()->where('Value_Status', 1)->count();
 
-        return view('cases.cases_lost', compact('cases'));
+        return $winnedCase;
+
     }
 
-    public function Case_Partial()
+    public function lostCaseCount()
     {
-        $cases = Cases::where('Value_Status', 3)->get();
+        $lostCase = Cases::where('Value_Status', 2)->count()
+         + Cases::onlyTrashed()->where('Value_Status', 2)->count();
 
-        return view('cases.cases_Partial', compact('cases'));
-    }
-    public function Case_block()
-    {
-        $cases = Cases::where('Value_Status', 4)->get();
+        return $lostCase;
 
-        return view('cases.cases_block', compact('cases'));
     }
 
+    public function runningCaseCount()
+    {
+        $runningCase = Cases::where('Value_Status', 3)->count()
+         + Cases::onlyTrashed()->where('Value_Status', 3)->count();
+
+        return $runningCase;
+    }
+    public function blockedCaseCount()
+    {
+        $blockedCase = Cases::where('Value_Status', 4)->count()
+         + Cases::onlyTrashed()->where('Value_Status', 4)->count();
+
+        return $blockedCase;
+
+    }
+
+    public function getCasesStatistics()
+    {
+        $winnedCase = $this->winnedCaseCount();
+        $lostCase = $this->lostCaseCount();
+        $runningCase = $this->runningCaseCount();
+        $blockedCase = $this->blockedCaseCount();
+
+        return response()->json(['winnedCase' => $winnedCase, 'lostCase' => $lostCase, 'runningCase' => $runningCase, 'blockedCase' => $blockedCase]);
+    }
+
+    public function latestCases()
+    {
+        $casesArray = [];
+        $i = 0;
+        $cases = Cases::latest()->limit(4)->get();
+        foreach ($cases as $case) {
+
+            $lawyers = $case->lawyers;
+            $clients = $case->clients;
+
+            if (Auth::user()->role_name === 'محامي') {
+                foreach ($lawyers as $lawyer) {
+                    if (Auth::user()->id == $lawyer->id) {
+                        $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients];
+                        break;
+                    }
+                }
+
+            } else {
+                $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients];
+
+            }
+        }
+        return response()->json(['cases' => $casesArray]);
+
+    }
     // public function MarkAsRead_all (Request $request)
     // {
 

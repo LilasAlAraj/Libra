@@ -18,8 +18,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -81,7 +81,8 @@
 
                                     </li>
                                     <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                        <a href="http://127.0.0.1:8000/cases"
+                                            class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="file-text" class="align-text-bottom"></span>
                                             عرض القضايا
                                         </a>
@@ -120,7 +121,7 @@
                                     <li id="courtSettingsNav">
                                     </li>
                                     <li id="recommendationsNav">
-                                  </li>
+                                    </li>
                                     <li id="role_permessionSettingsNav">
                                     </li>
 
@@ -142,18 +143,18 @@
                 <div id="big-frame">
                     <div class="container  d-flex justify-content-between">
 
-                        <h1>عرض المحاكم</h1>
-                        <div id="addNewCourtBtn" style="display: flex; align-items: center;">
+                        <h1>عرض التوصيات</h1>
+                        <div id="addNewRecommendationBtn" style="display: flex; align-items: center;">
                         </div>
                     </div>
                     <hr>
                     <div class="container">
 
-                        <table class="table table-bordered  table-striped "  style="table-layout: fixed; width: 100%;">
+                        <table class="table table-bordered  table-striped">
                             <thead>
                                 <tr>
-                                    <th>اسم المحكمة</th>
-                                    <th>موقع المحكمة</th>
+                                    <th>عنوان التوصية </th>
+                                    <th> المحتوى</th>
                                     <th> العمليات</th>
 
                                 </tr>
@@ -178,53 +179,46 @@
 
 
 
-    <!--add new court Modal -->
-    <div class="modal fade" id="addCourtModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="addCourtModalLabel" aria-hidden="true">
+    <!--add new recommendation Modal -->
+    <div class="modal fade" id="addRecommendationModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="addRecommendationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="addCourtModalLabel" style=" color:white;">
-                        إضافة محكمة جديدة
+                    <h1 class="modal-title fs-5" id="addRecommendationModalLabel" style=" color:white;">
+                        إضافة توصية جديدة
                     </h1>
                 </div>
-                <form id='addCourt_form' method="post" style="background-color: transparent; border:none; margin: 0;">
+                <form id='addRecommendation_form' method="post"
+                    style="background-color: transparent; border:none; margin: 0;">
                     <div class=" modal-body">
                         <div class="container ">
-
-
-
                             <div class="row">
-
                                 <div class="col-12">
-                                    <label for="court_name"><b>اسم المحكمة</b></label>
-                                    <input type="text" id="court_name" placeholder="أدخل اسم المحكمة" name="court_name"
-                                        required>
+                                    <label for="title"><b>عنوان التوصية</b></label>
+                                    <input type="text" id="title" placeholder="أدخل عنوان التوصية"
+                                        name="title" required>
                                 </div>
 
 
                             </div>
 
-                            <div class="row">
-
+                            <div class="row ">
                                 <div class="col-12">
-                                    <label for="court_location"><b>موقع المحكمة</b></label>
-                                    <input type="text" id="court_location" placeholder="أدخل موقع المحكمة"
-                                        name="court_location" required>
+                                    <label for="content"><b>المحتوى</b></label>
+                                    <textarea class="form-control" id="content" name="content" rows="5" style="max-height:8em;" required></textarea>
                                 </div>
-
-
                             </div>
 
 
 
                         </div>
-                        <div id="addCourtError" class="error">
+                        <div id="addRecommendationError" class="error">
                         </div>
                     </div>
 
                     <div class="modal-footer " style="width:auto;">
-                        <button type="submit" class="operations-btn btn btn-success" onclick="add_court()">
+                        <button type="submit" class="operations-btn btn btn-success" onclick="add_Recommendation()">
                             <span data-feather="edit-3" class="align-text-bottom"></span>
                             أضف
                         </button>
@@ -244,23 +238,25 @@
 
 
 
-    <!--popup delete court-->
-    <div class="modal fade" id="deleteCourtBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="deleteCourtBackdropLabel" aria-hidden="true">
+
+
+    <!--popup delete Recommendation-->
+    <div class="modal fade" id="deleteRecommendationBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="deleteRecommendationBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="deleteCourtBackdropLabel" style=" color:white;">
+                    <h1 class="modal-title fs-5" id="deleteRecommendationBackdropLabel" style=" color:white;">
                         تأكيد عملية الحذف
                     </h1>
                 </div>
                 <div class=" modal-body">
                     <p>
-                        هل أنت متأكد من حذف هذه المحكمة؟
+                        هل أنت متأكد من حذف هذه التوصية؟
                     </p>
                 </div>
                 <div class="modal-footer " style="width:auto;">
-                    <button type="submit" id="deleteCourtButton" class="operations-btn btn btn-danger">
+                    <button type="submit" id="deleteRecommendationButton" class="operations-btn btn btn-danger">
                         <span data-feather="trash" class="align-text-bottom"></span>
                         احذف
                     </button>
@@ -282,7 +278,8 @@
                     <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
                         رسالة
                     </h1>
-                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
 
                 </div>
                 <div class=" modal-body">
@@ -296,14 +293,105 @@
 
 
 
+
+    <div class="modal fade" id="viewRecommendationBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="viewRecommendationBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="viewRecommendationBackdropLabel" style=" color:white;">
+                        عرض التوصية
+                    </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+
+                </div>
+                <div class=" modal-body">
+                    <div id="recommendationTitle">
+                        <b>العنوان: </b>
+                    </div>
+
+                    <div id="recommendationContent">
+                        <b>المحتوى: </b>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--popup edit decision-->
+    <div class="modal fade" id="editDecisionBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="editDecisionBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="editDecisionBackdropLabel" style=" color:white;">
+                        تعديل القرار
+                    </h1>
+                </div>
+                <form id='editDecision_form' style="background-color: transparent; border:none">
+                    <div class=" modal-body">
+                        <div class="container">
+                            <div class="row ">
+                                <div class="col-6">
+                                    <label for="editDecisionNumber"><b>رقم القرار</b></label>
+                                    <input type="number" id="editDecisionNumber" name="editDecisionNumber"
+                                        placeholder="أدخل رقم القرار" required>
+                                </div>
+
+                                <div class="col-6">
+                                    <label for="editDecisionDate"><b>تاريخ الإقرار</b></label>
+                                    <input type="date" id="editDecisionDate" name="editDecisionDate"
+                                        placeholder="أدخل تاريخ القرار" required>
+                                </div>
+
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-12">
+                                    <label for="editDecisionDetails"><b>تفاصيل القرار</b></label>
+                                    <textarea class="form-control" id="editDecisionDetails" name="editDecisionDetails" rows="5"
+                                        style="max-height:12em;" required></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer " style="width:auto;">
+                        <div id="errorEditDecision" class="error">
+                        </div>
+                        <button type="submit" class="operations-btn btn btn-secondary" data-bs-dismiss="modal"
+                            onclick="closeModal()">
+                            <span data-feather="edit-2" class="align-text-bottom"></span>
+                            تعديل القرار
+
+                        </button>
+                        <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                            <span data-feather="x" class="align-text-bottom"></span>
+                            أغلق
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-        crossorigin="anonymous"></script>
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    </script>
 
 
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>
-    <script src="../../js/courts/view.js"></script>
+    <script src="../../js/recommendations/view.js"></script>
 
 
 

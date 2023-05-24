@@ -9,7 +9,9 @@ body {
     font-size: .875rem;
     display: inline;
 }
-
+body * {
+    pointer-events: all;
+}
 h1 {
     color: rgb(87, 126, 155);
 }
@@ -22,6 +24,7 @@ form:not(.search-options) {
     margin: auto;
 
     padding: auto;
+
 }
 
 #login-form {
@@ -248,7 +251,7 @@ tr.clickable-row:hover th,
 tr.clickable-row:hover td {
     color: white
 }
-
+#add-recommendations-button,
 #add-courts-button,
 #add-members-button,
 #add-clients-button,

@@ -121,6 +121,8 @@
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
                                     <li id="courtSettingsNav">
                                     </li>
+                                    <li id="recommendationsNav">
+                                  </li>
                                     <li id="role_permessionSettingsNav">
                                     </li>
 

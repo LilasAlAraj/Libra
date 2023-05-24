@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -8,12 +8,10 @@
     content="ليبرا هو بيتك القانوني.. وأكثر! يقوم بإدارة مكتبك وعملائك.. ويقوم بتنظيم الملفات والمهام.">
   <meta name="keywords"
     content="law firms management system, law, cases management system, cases, tasks, lawyers, lawyer, court">
-
   <meta name="author" content="Lilas">
   <meta name="generator" content="Lilas">
-  <meta name="csrf-token" content="{{ csrf_token() }}" />
-
   <title>Libra</title>
+
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -24,10 +22,10 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-  <link href="../../../css/navs.css" rel="stylesheet">
-  <link href="../../../css/style.css" rel="stylesheet">
 
+  <link href="../../css/navs.css" rel="stylesheet">
 
+  <link href="../../css/dashboard.rtl.css" rel="stylesheet">
 </head>
 
 <body>
@@ -40,7 +38,7 @@
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
       <div class="imgcontainer">
 
-        <img src="../../../Img/Logo.jpg" alt="Avatar" class="avatar">
+        <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
       </div>
     </a>
 
@@ -77,17 +75,14 @@
                   <li id="addNewCaseNav">
 
                   </li>
-                  <li id="addNewPrivateCaseNav">
-
-                  </li>
                   <li id="viewCaseNav">
-                    <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                    <a href="../cases/view.html" class="nav-link d-inline-flex  collapse-items">
                       <span data-feather="file-text" class="align-text-bottom"></span>
                       عرض القضايا
                     </a>
                   </li>
                   <li id="viewPrivateCaseNav">
-
+                      
                   </li>
                   <li id="retreiveCaseNav">
 
@@ -119,12 +114,10 @@
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
                   <li id="courtSettingsNav">
                   </li>
-                  <li id="recommendationsNav">
-                </li>
                   <li id="role_permessionSettingsNav">
                   </li>
 
-                  <li><a  href="http://127.0.0.1:8000/account/setting" class="nav-link d-inline-flex  collapse-items">
+                  <li><a href="../users/account_settings.html" class="nav-link d-inline-flex  collapse-items">
                       <span data-feather="tool" class="align-text-bottom"></span>
                       إعدادات حسابي
                     </a>
@@ -136,109 +129,155 @@
         </div>
       </nav>
 
-
       <main class="col-md-9 col-lg-10 col-sm-12">
-        <form id="register-form" method="post">
-          <div class="container">
-            <div class="row ">
-              <div class="col-12">
-                <h1>إضافة فرد جديد</h1>
-              </div>
+        <div class="chartjs-size-monitor">
+          <div class="chartjs-size-monitor-expand">
+            <div class=""></div>
+          </div>
+          <div class="chartjs-size-monitor-shrink">
+            <div class=""></div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 
+          <h2>لوحة القيادة</h2>
+
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="import">تصدير</button>
             </div>
-            <hr>
-            <div class="row ">
 
-              <div class="col-3">
-                <label for="first_name"><b>الاسم الأول</b></label>
-                <input type="text" id="first_name" placeholder=" أدخل الاسم الأول" name="first_name" required>
+          </div>
 
-              </div>
-              <div class="col-3">
-                <label for="last_name"><b>الاسم الأخير</b></label>
-                <input type="text" id="last_name" placeholder="أدخل الاسم الأخير" name="last_name" required>
+        </div>
 
-              </div>
-              <div class="col-3">
-                <label for="father_name"><b>اسم الأب</b></label>
-                <input type="text" id="father_name" placeholder="أدخل اسم الأب" name="father_name" required>
-              </div>
-              <div class="col-3">
-                <label for="mother_name"><b>اسم الأم</b></label>
-                <input type="text" id="mother_name" placeholder="أدخل اسم الأم" name="mother_name" required>
+        <div class="container">
+          <div class="row ">
+            <div class="col-12 mb-2" style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
+              إحصاءات هامة </div>
+          </div>
+          <div class="row">
 
-              </div>
-            </div>
-            <div class="row ">
-              <div class="col-4">
-                <label for="date_of_birth"><b>تاريخ الولادة </b></label>
-                <input type="date" id="date_of_birth" name="date_of_birth" required>
-              </div>
-              <div class="col-8">
-                <label for="place_of_birth"><b>مكان الولادة</b></label>
-                <input type="text" id="place_of_birth" placeholder="أدخل مكان الولادة" name="place_of_birth" required>
-              </div>
-            </div>
-            <div class="row ">
-              <div class="col-4">
-                <label for="phone"><b>رقم الهاتف</b></label>
-                <input type="tel" id="phone" placeholder="أدخل رقم الهاتف" name="phone" required>
-              </div>
-              <div class="col-8">
-                <label for="current_address"><b>العنوان الحالي</b></label>
-                <input type="text" id="current_address" placeholder="أدخل العنوان" name="current_address" required>
+            <div class="col-6">
+              <div class="card text-white bg-light mb-3" style="width: 100%;">
+                <div class="card-header" id="num_assigned_cases"></div>
+                <div class="card-body">
+                  <div class="container m-3  d-flex justify-content-between">
+                    <h5 class="card-title"> <span data-feather="file-text"
+                        class="align-text-bottom card-title-img"></span>
+                    </h5>
+                    <p class="card-text">
+                      القضايا الموكلة لي
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="row ">
 
-              <div class="col-12">
-                <label for="email"><b>البريد الإلكتروني إن وُجِد</b></label>
-                <input type="text" id="email" placeholder="أدخل البريد الإلكتروني" name="email">
-
+            <div class="col-6">
+              <div class="card text-white bg-light mb-3" style="width: 100%">
+                <div class="card-header" id="num_next_tasks"></div>
+                <div class="card-body">
+                  <div class="container m-3  d-flex justify-content-between">
+                    <h5 class="card-title"> <span data-feather="file-text"
+                        class="align-text-bottom card-title-img"></span>
+                    </h5>
+                    <p class="card-text">
+                      المهام القادمة
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="row ">
-              <div class="col-6">
-                <label for="password"><b>كلمة المرور</b></label>
-                <input type="password" id="password" placeholder="أدخل كلمة المرور" name="password" required>
-              </div>
-              <div class="col-6">
-                <label for="confirm_password"><b>تأكيد كلمة المرور</b></label>
-                <input type="password" id="confirm_password" placeholder="أكّد كلمة المرور" name="confirm_password"
-                  required>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-check col-6" style="width: fit-content;">
-                <input class="form-check-input" type="radio" name="rule" id="seretaria" value="سكرتاريا">
-                <label class="form-check-label" for="seretaria">
-                  <b>سكرتاريا</b>
-                </label>
-              </div>
-              <div class="form-check col-6 " style="width: fit-content;">
-                <input class="form-check-input" type="radio" name="rule" id="lawyer" value="محامي">
-                <label class="form-check-label" for="lawyer">
-                  <b>محامي</b>
-                </label>
-              </div>
-            </div>
-            <button type="submit" id="add_btn">إضافة</button>
-            <div id="error" class="error">
             </div>
           </div>
-        </form>
+        </div>
+
+
+
+
+        <div class="container">
+          <div class="row  chart">
+
+
+            <div class="col-12">
+              <div class="col-12" style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
+                القضايا الموكلة حديثاً
+              </div>
+              <div class="col-12 ">
+
+                <div class="container ">
+                  <table class="table table-striped table-hover " id="cases-table">
+                    <thead>
+                      <tr>
+                        <th> #</th>
+                        <th>عنوان القضية</th>
+                        <th>اسم الموكل</th>
+                      </tr>
+                    </thead>
+                    <tbody style="cursor: pointer;" id="cases-body-table">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+        <hr style="width: 100%; font-weight: 300;">
+
+        <div class="container">
+
+          <div class="row ">
+            <div class="col-12 mb-2" style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
+              مهام اليوم</div>
+          </div>
+          <div class="row ">
+            <table class="table table-striped table-hover " id="tasks-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>الاسم</th>
+                  <th>التوقيت</th>
+                </tr>
+              </thead>
+              <tbody style="cursor: pointer;" id="tasks-body-table">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+
       </main>
     </div>
   </div>
 
 
+
   <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
     integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
     crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+    crossorigin="anonymous"></script>
 
-  <script src="../../../js/users/auth.js"></script>
-  <script src="../../../js/navs.js"></script>
-  <script src="../../../js/users/register.js"></script>
+  <!-- html2pdf CDN-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js">
+  </script>
+
+
+
+
+
+  <script src="../../js/users/auth.js"></script>
+  <script src="../../js/navs.js"></script>
+  <script src="../../js/dashboard/lawyer.js"></script>
+
+
+
 
 </body>
 

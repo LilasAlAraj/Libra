@@ -15,17 +15,46 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    dump(Auth::user()->first_name);
-    dump(Auth::user()->role_name);
+
 
     return view('test');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('sessions', 'App\Http\Controllers\SessionController'); // 🌷جلسات القضية
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
+
+
+//Dashboard
+Route::get('/dashboard/client', 'App\Http\Controllers\HomeController@indexDashboardClient');
+Route::get('/dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
+Route::get('/dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria');
+Route::get('/dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
+
+//Requirements For Dashboards
+Route::get('users/clients/count', 'App\Http\Controllers\UserController@clientCount');
+Route::get('cases/unarchive/count', 'App\Http\Controllers\CasesController@unArchiveCasesCount');
+Route::get('cases/archive/count', 'App\Http\Controllers\CaseArchiveController@archivedCasesCount');
+Route::get('cases/total/count', 'App\Http\Controllers\CasesController@totalCasesCount');
+Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesStatistics');
+Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
+Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
+
+
+//Recommendations
+Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
+Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
+Route::get('recommendation/{id}', 'App\Http\Controllers\RecommendationController@show');
+Route::post('recommendation', 'App\Http\Controllers\RecommendationController@store');
+Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
+
+
+
+//Role of user
+Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
+
 
 //Filters of case
 Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');

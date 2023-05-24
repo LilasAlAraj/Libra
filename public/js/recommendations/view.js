@@ -1,0 +1,294 @@
+(() => {
+    'use strict'
+    feather.replace({ 'aria-hidden': 'true' })
+})();
+/**************************** */
+
+function setAuth() {
+    addNewRecommendationBtn = document.getElementById('addNewRecommendationBtn');
+    if (role == 1 || role == 2) {
+
+
+        addNewRecommendationBtn.innerHTML =
+            '<button type="button" id="add-recommendations-button" class="operations-btn btn" data-bs-toggle="modal" data-bs-target="#addRecommendationModal">'
+            + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle align-text-bottom" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>'
+            + ' إضافة  توصية جديدة'
+            + '</button>'
+    }
+}
+
+
+function add_Recommendation() {
+    $('#addRecommendationError').css('color', 'red');
+    $('#addRecommendationError').html('');
+
+    $('#addRecommendation_form').validate({
+        rules: {
+
+            title: {
+                required: true
+
+            }, content: {
+                required: true
+            }
+        },
+        messages: {
+
+            title: {
+                required: "الرجاء إدخال عنوان التوصية",
+            }, content: {
+                required: "الرجاء إدخال محتوى التوصية",
+
+            }
+        },
+        submitHandler: function (form) {
+            $('.addRecommendationError').html("")
+
+
+            var title = $('#title').val();
+            var content = document.getElementById('content').value;
+            console.log(title, content);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "http://127.0.0.1:8000/recommendation",
+                type: "POST",
+                data: {
+                    "title": title,
+                    "content": content
+                }
+                , dataType: 'json',
+                success: function (response) {
+                    console.log(response)
+                    if (response.status == 'success') {
+                        Recommendation = [];
+                        Recommendation["title"] = title
+                        Recommendation["content"] = content
+                        Recommendation['id'] = response.id;
+                        // عرض الصفوف
+
+
+                        table = $('#table-body');
+
+                        addRecommendationRow(table, Recommendation)
+
+                        $('#addRecommendationModal').modal('hide');
+
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                        closeModal();
+
+                    } else {
+                        $('#addRecommendationError').html(response.message);
+
+                    }
+                },
+
+                error: function (response) {
+                    console.log(response)
+                    // If the login is unsuccessful, display the error message
+                    // $('#error').html(response.responseJSON.errors.phone[0]);
+                    $('#addRecommendationError').html(response.responseJSON);
+                }
+            });
+        }
+    })
+}
+
+
+
+let data;
+
+$(document).ready(function () {
+    setAuth();
+
+    // جلب البيانات من ملف JSON
+    $.ajax({
+        url: 'http://127.0.0.1:8000/recommendations/all',
+        type: 'get',
+        success: function (response) {
+
+            console.log(response)
+            data = response.recommendations;
+            // تحديث Pagination
+            displayAll();
+
+        },
+        error: function (response) {
+            console.log(response);
+
+        }
+    });
+
+});
+
+
+
+function displayAll() {
+
+    // عرض الصفوف
+    table = $('#table-body');
+    table.empty();
+    for (var i = 0; i < data.length; i++) {
+        const Recommendation = data[i];
+        addRecommendationRow(table, Recommendation)
+    }
+
+
+
+    var table = document.getElementsByClassName("table")[0];
+    if (table.rows.length == 1) {
+
+        var headerRow = table.rows[0];
+        var numColumns = headerRow.cells.length;
+        var row = table.insertRow(1);
+        var cell = row.insertCell(0);
+        cell.colSpan = numColumns;
+        cell.innerHTML = "لا يوجد بيانات";
+        cell.id = 'NoData'
+
+    }
+}
+
+
+function addRecommendationRow(table, Recommendation) {
+
+
+
+
+
+    const operations = document.createElement('div');
+    operations.classList.add('dropdown');
+    const opBtn = document.createElement('button');
+
+    opBtn.classList.add('dropdown-toggle', 'btn', 'btn-secondary')
+    opBtn.type = 'button';
+    opBtn.setAttribute("data-bs-toggle", "dropdown")
+    opBtn.setAttribute("aria-expanded", "false");
+    const operationMenu = document.createElement('ul');
+    operationMenu.id = 'operationMenu';
+    operationMenu.classList.add('dropdown-menu');
+
+
+    const view_btn = document.createElement('button')
+    view_btn.type = "button"
+    view_btn.id = "view-button"
+    view_btn.classList.add('menu-operations-btn', 'btn', 'btn-primary')
+    view_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-text-bottom" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+        + ' عرض التوصية'
+    view_btn.setAttribute("data-bs-toggle", "modal")
+    view_btn.setAttribute("data-bs-target", "#viewRecommendationBackdrop")
+    view_btn.onclick = function () {
+        viewRecommendation(Recommendation.id)
+    }
+
+    const viewOpLi = document.createElement('li');
+    viewOpLi.append(view_btn);
+    viewOpLi.classList = 'operationMenuItem'
+    operationMenu.append(viewOpLi)
+
+
+    const remove_btn = document.createElement('button')
+    remove_btn.type = "button"
+    remove_btn.id = "remove-button"
+    remove_btn.classList.add('menu-operations-btn', 'btn', 'btn-danger')
+    remove_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
+        + ' إزالة التوصية'
+    const removeOpLi = document.createElement('li');
+    removeOpLi.append(remove_btn);
+    removeOpLi.classList = 'operationMenuItem'
+    operationMenu.append(removeOpLi)
+
+    operations.append(opBtn, operationMenu);
+
+
+
+
+    content = Recommendation.content;
+    if (content.length > 50)
+        content = content.substring(0, 150) + '.. إلخ'
+    const row = $('<tr>').append(
+
+        $('<td>').append(Recommendation.title),
+        $('<td>').append(content),
+        $('<td>').append(operations),
+
+    );
+    remove_btn.onclick = function () {
+        confirmDeleteRecommendation(Recommendation.id);
+    }
+    row.attr('id', 'Recommendation-row' + Recommendation.id);
+    table.append(row);
+
+}
+
+
+function viewRecommendation(id) {
+    $.ajax({
+        url: 'http://127.0.0.1:8000/recommendation/' + id,
+        type: 'get',
+        success: function (response) {
+            recommendation = response;
+
+
+            document.getElementById('recommendationTitle').append(recommendation.title);
+            document.getElementById('recommendationContent').append(recommendation.content);
+
+
+            /// ضبط الآيدي مشان وقت بدي احذف هي الجلسة
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+}
+
+function confirmDeleteRecommendation(id) {
+    $('#deleteRecommendationBackdrop').modal('show');
+    $('#deleteRecommendationBackdrop').css('background', 'rgba(0,0,0,.3)');
+    $('#deleteRecommendationBackdrop').data('Recommendation-id', id);
+
+    document.getElementById('deleteRecommendationButton').onclick = function () {
+        deleteRecommendation()
+    }
+}
+
+
+function deleteRecommendation() {
+    id = $('#deleteRecommendationBackdrop').data('Recommendation-id');
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/recommendation",
+        method: "delete",
+        data: { id: id },
+        success: function (response) {
+            console.log(response);
+            if (response.status === 'success') {
+                document.getElementById('Recommendation-row' + id).remove();
+            }
+            $('#deleteRecommendationBackdrop').modal('hide');
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
+        }
+    });
+}
+
+
+function closeModal() {
+    // حذف المعلومات المخزنة في ذاكرة التخزين المؤقت للجلسة
+    sessionStorage.clear();
+
+}

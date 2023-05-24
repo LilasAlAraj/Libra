@@ -1,26 +1,22 @@
-let role = 3; //1->supervisor , 2->secretaria, 3->lawyer, 4->client
+let role = 1; //1->supervisor , 2->secretaria, 3->lawyer, 4->client
 
 (() => {
-    role = 2;
+    console.log(role);
 
+   /* $.ajax({
+        url: "http://127.0.0.1:8000/user/role",
+        type: "get",
 
-    /*
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "http://127.0.0.1:8000/login",
-            type: "get",
+        success: function (response) {
+            console.log(response)
+            rule = response.role;
+        },
 
-            success: function (response) {
-                rule = response.data.role;
-            },
+        error: function (response) {
+            console.log(response.responseJSON);
+        }
+    });
+*/
+role = 2;
 
-            error: function (response) {
-                console.log(response.responseJSON);
-            }
-        });
-    */
 })();

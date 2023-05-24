@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -71,7 +72,7 @@ class UserController extends Controller
 
         } else if ($id == 'getmembers') {
             $members = User::where('role_name', '=', 'محامي')->orWhere('role_name', '=', 'سكرتاريا')
-            ->get();
+                ->get();
             return response()->json(['members' => $members]);
 
         } else {
@@ -155,8 +156,38 @@ class UserController extends Controller
     {
         if (User::find($id)->forceDelete()) {
             return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح']);
-        }else
-        return response()->json(['status' => 'failed', 'message' => 'لم يتم الحذف ']);
+        } else {
+            return response()->json(['status' => 'failed', 'message' => 'لم يتم الحذف ']);
+        }
 
     }
+
+    public function roleName()
+    {
+
+        $roleName = Auth::user()->role_name;
+        $roleID = 0;
+        if ($roleName === 'مدير') {
+            $roleID = 1;
+        } else if ($roleName === 'سكرتاريا') {
+            $roleID = 2;
+        } else if ($roleName === 'محامي') {
+            $roleID = 3;
+        } else if ($roleName === 'زبون') {
+            $roleID = 4;
+        }
+
+        return response()->json(['rold' => $roleID]);
+    }
+
+
+
+
+
+    public function clientCount(){
+        $num_clients = User::where('role_name', '=', 'زبون')->count();
+
+         return response()->json(['num_clients'=>$num_clients]);
+    }
+
 }

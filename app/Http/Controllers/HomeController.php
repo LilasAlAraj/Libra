@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class HomeController extends Controller
 {
     /**
@@ -25,4 +23,22 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function indexDashboardClient()
+    {
+        return view('dashboard.client');
+    }
+    public function indexDashboardLawyer()
+    {
+        return view('dashboard.lawyer');
+    }
+    public function indexDashboardSecretaria()
+    {
+        return view('dashboard.secretaria');
+    }
+    public function indexDashboardSupervisor()
+    {
+        return view('dashboard.supervisor');
+    }
+
 }

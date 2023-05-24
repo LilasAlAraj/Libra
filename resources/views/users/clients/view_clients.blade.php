@@ -81,7 +81,8 @@
 
                                     </li>
                                     <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                        <a href="http://127.0.0.1:8000/cases"
+                                            class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="file-text" class="align-text-bottom"></span>
                                             عرض القضايا
                                         </a>
@@ -118,6 +119,8 @@
                             <div class="collapse" id="settings-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
                                     <li id="courtSettingsNav">
+                                    </li>
+                                    <li id="recommendationsNav">
                                     </li>
                                     <li id="role_permessionSettingsNav">
                                     </li>

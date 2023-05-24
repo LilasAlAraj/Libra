@@ -5,8 +5,8 @@
 /**************************** */
 
 function setAuth() {
-    addNewCourtBtn = document.getElementById('addNewCourtBtn');
-    if (role == 2) {
+    if (role === 2) {
+        addNewCourtBtn = document.getElementById('addNewCourtBtn');
 
         addNewCourtBtn.innerHTML =
             '<button type="button" id="add-courts-button" class="operations-btn btn" data-bs-toggle="modal" data-bs-target="#addCourtModal">'
