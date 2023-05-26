@@ -415,16 +415,16 @@ class CasesController extends Controller
                 $path = 'Attachments\Case_' . $request->case_id;
                 $this->deleteDirectory($path);
 
-                return response()->json(['status' => 'success']);
+                return response()->json(['status' => 'success', 'message'=>'تم حذف القضية بنجاح.']);
             } else {
-                return response()->json(['status' => 'failed']);
+                return response()->json(['status' => 'failed', 'message'=>'حدث خطأ أثناء الحذف. الرجاء إعادة المحاولة']);
             }
         } else {
 
             if ($cases->delete()) {
-                return response()->json(['status' => 'success']);
+                return response()->json(['status' => 'success', 'message'=>'تم أرشفة القضية بنجاح.']);
             } else {
-                return response()->json(['status' => 'failed']);
+                return response()->json(['status' => 'failed', 'message'=>'حدث خطأ أثناء الأرشفة. الرجاء إعادة المحاولة']);
             }
 
         }

@@ -6,6 +6,7 @@ use App\Models\Cases;
 use App\Models\Enemy_Clients;
 use App\Models\Enemy_Lawyers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CaseArchiveController extends Controller
 {

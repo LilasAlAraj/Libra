@@ -17,7 +17,7 @@ h2 {
 }
 
 #big-frame,
-form:not(.search-options) {
+form:not(.search-options,#logout-form) {
     border: 2px solid rgb(7, 48, 78);
     background-color: #fff;
     width: auto;

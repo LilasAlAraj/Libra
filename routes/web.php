@@ -16,19 +16,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-
     return view('test');
 });
+if (Auth::check()) {
+    dump(Auth::user()->id);
+}
 
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('sessions', 'App\Http\Controllers\SessionController'); // 🌷جلسات القضية
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
-
 //Dashboard
-Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient');
+//Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient');
 Route::get('/dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
 Route::get('/dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria');
 Route::get('/dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
@@ -42,7 +43,6 @@ Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesSta
 Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
 Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
 
-
 //Recommendations
 Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
 Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
@@ -51,11 +51,8 @@ Route::post('recommendation', 'App\Http\Controllers\RecommendationController@sto
 Route::put('recommendation', 'App\Http\Controllers\RecommendationController@update');
 Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
 
-
-
 //Role of user
 Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
-
 
 //Filters of case
 Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');

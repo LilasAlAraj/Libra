@@ -705,31 +705,40 @@ function showPage(pageNumber, data) {
             + ' نقل القضية إلى الأرشيف'
         archiveBtn.setAttribute('title', 'نقل القضية إلى الأرشيف');
         archiveBtn.classList.add('btn', 'btn-warning', 'menu-operations-btn');
-        archiveBtn.onclick = function () {
+        archiveBtn.setAttribute("data-bs-target", "#archiveCaseBackdrop");
+        archiveBtn.setAttribute("data-bs-toggle", "modal")
+
+        archiveBtnBackdrop.onclick = function () {
             ArhiveCase(case_.id)
         }
         const archOpLi = document.createElement('li');
         archOpLi.append(archiveBtn);
         archOpLi.classList = 'operationMenuItem'
 
-        const changeStateBtn = document.createElement('button');
-        changeStateBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 align-text-bottom" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'
-            + ' تغيير حالة القضية'
-        changeStateBtn.setAttribute('title', 'تغيير حالة القضية');
-        changeStateBtn.classList.add('btn', 'btn-secondary', 'menu-operations-btn');
-        changeStateBtn.onclick = function () {
-            changeStateCase(case_.id)
+        const edit_btn = document.createElement('button');
+        edit_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 align-text-bottom" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'
+            + ' تعديل معلومات القضية'
+        edit_btn.setAttribute('title', 'تغيير حالة القضية');
+        edit_btn.classList.add('btn', 'btn-secondary', 'menu-operations-btn');
+        editBtnBackdrop.onclick = function () {
+            editCase(case_.id)
         }
-        const ChngStOpLi = document.createElement('li');
-        ChngStOpLi.append(changeStateBtn);
-        ChngStOpLi.classList = 'operationMenuItem'
+
+        edit_btn.setAttribute("data-bs-toggle", "modal")
+        edit_btn.setAttribute("data-bs-target", "#editCaseBackdrop")
+
+        const edit_btnOpLi = document.createElement('li');
+        edit_btnOpLi.append(edit_btn);
+        edit_btnOpLi.classList = 'operationMenuItem'
 
         const deleteBtn = document.createElement('button');
         deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
             + 'مسح القضية'
         deleteBtn.setAttribute('title', 'مسح القضية');
         deleteBtn.classList.add('btn', 'btn-danger', 'menu-operations-btn');
-        deleteBtn.onclick = function () {
+        deleteBtn.setAttribute("data-bs-target", "#deleteCaseBackdrop");
+        deleteBtn.setAttribute("data-bs-toggle", "modal")
+        deleteBtnBackdrop.onclick = function () {
             deleteCase(case_.id)
         }
         const delOpLi = document.createElement('li');
@@ -737,7 +746,7 @@ function showPage(pageNumber, data) {
         delOpLi.classList = 'operationMenuItem'
 
         if (role == 1 || role == 2)
-            operationMenu.append(viewOpLi, archOpLi, ChngStOpLi, delOpLi);
+            operationMenu.append(viewOpLi, archOpLi, edit_btnOpLi, delOpLi);
         else
             operationMenu.append(viewOpLi);
 
@@ -804,68 +813,66 @@ function viewCase(caseId) {
 }
 
 function deleteCase(caseId) {
-    var confirmation = confirm("هل أنت متأكد من حذف هذا العنصر؟");
-    if (confirmation) {
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
+        method: "Delete", // طريقة الإرسال POST
+        data: { id_Archive: 1, case_id: caseId },
+        success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
+            $('#deleteCaseBackdrop').modal('hide');
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            document.getElementById('closeModal').onclick = function () {
+                window.location.href = 'http://127.0.0.1:8000/cases';
             }
-        });
-        $.ajax({
-            url: "http://127.0.0.1:8000/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
-            method: "Delete", // طريقة الإرسال POST
-            data: { id_Archive: 1, case_id: caseId },
-            success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
 
-                //console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 
-                if (response.status === 'success')
-                    window.location.href = "http://127.0.0.1:8000/cases/"
-            },
-            error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-                console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
-            }
-        });
-
-
-
-    }
 
 }
 function ArhiveCase(caseId) {
-    var confirmation = confirm("هل أنت متأكد من أرشفة هذه القضية؟");
-    if (confirmation) {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: "http://127.0.0.1:8000/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
+        method: "Delete", // طريقة الإرسال POST
+        data: { id_Archive: 2, case_id: caseId },
+        success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
+            $('#archiveCaseBackdrop').modal('hide');
+
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            document.getElementById('closeModal').onclick = function () {
+                window.location.href = 'http://127.0.0.1:8000/cases';
             }
-        });
-        $.ajax({
-            url: "http://127.0.0.1:8000/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
-            method: "Delete", // طريقة الإرسال POST
-            data: { id_Archive: 2, case_id: caseId },
-            success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
 
-                console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        },
+        error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+            console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+        }
+    });
 
-                if (response.status === 'success')
-                    window.location.href = "http://127.0.0.1:8000/cases/"
-            },
-            error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-                console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
-            }
-        });
-    }
+
 }
-function changeStateCase(caseId) {
-    var confirmation = confirm("هل أنت متأكد من حذف هذه القضية؟");
+function editCase(caseId) {
+    window.location.href = 'http://127.0.0.1:8000/cases/' + caseId + '/edit'
 
-    if (confirmation) {
-        // احذف الصف من الجدول هنا، ويمكن استخدام المعرف المحدد لهذا الصف
-    }
 }
 
 

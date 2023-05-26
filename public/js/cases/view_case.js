@@ -574,7 +574,7 @@ function setCaseAuth() {
     }
 }
 
-function changeStateCase() {
+function editCase() {
     $('#chang_state_form').validate(
         {
             rules: {

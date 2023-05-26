@@ -43,15 +43,25 @@
                 <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
             </div>
         </a>
-
-        <div class="navbar-nav col-md-1 col-lg-1">
-            <div class="nav-item text-nowrap ">
-                <p class=" px-3 m-2" id="time">time</p>
+        <div class="d-flex justify-content-between w-100">
+            <div class="navbar-nav">
+                <div class="nav-item text-nowrap ">
+                    <p class=" px-3 m-2" id="time">time</p>
+                </div>
             </div>
-        </div>
-        <div class="navbar-nav col-md-8 col-lg-9" style=" text-align:left;">
-            <div class="nav-item text-nowrap ">
-                <a class="nav-link  px-3" href="#">تسجيل الخروج</a>
+            <div class="navbar-nav" style="">
+                <div class="nav-item text-nowrap ">
+
+                    <a class="nav-link px-3"href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                        تسجيل الخروج
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
             </div>
         </div>
     </header>
@@ -125,7 +135,7 @@
                                     <li id="courtSettingsNav">
                                     </li>
                                     <li id="recommendationsNav">
-                                  </li>
+                                    </li>
                                     <li id="role_permessionSettingsNav">
                                     </li>
 
@@ -503,6 +513,123 @@
             </main>
         </div>
     </div>
+
+
+    <!--popup archive case-->
+    <div class="modal fade" id="archiveCaseBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="archiveCaseBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="archiveCaseBackdropLabel" style=" color:white;">
+                        تأكيد عملية الأرشفة
+                    </h1>
+                </div>
+                <div class=" modal-body">
+                    <p>
+                        هل أنت متأكد من أرشفة هذه القضية؟
+                    </p>
+                </div>
+                <div class="modal-footer " style="width:auto;">
+                    <button type="submit" class="operations-btn btn btn-warning" id="archiveBtnBackdrop">
+                        <span data-feather="archive" class="align-text-bottom"></span>
+                        أرشف
+                    </button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                        <span data-feather="x" class="align-text-bottom"></span>
+                        أغلق
+                    </button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--popup delete case-->
+    <div class="modal fade" id="deleteCaseBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="deleteCaseBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="deleteCaseBackdropLabel" style=" color:white;">
+                        تأكيد عملية الحذف
+                    </h1>
+                </div>
+                <div class=" modal-body">
+                    <p>
+                        هل أنت متأكد من حذف هذه القضية؟
+                    </p>
+                </div>
+                <div class="modal-footer " style="width:auto;">
+                    <button type="submit" class="operations-btn btn btn-danger" id="deleteBtnBackdrop">
+                        <span data-feather="trash" class="align-text-bottom"></span>
+                        احذف
+                    </button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                        <span data-feather="x" class="align-text-bottom"></span>
+                        أغلق
+                    </button>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--popup edit case-->
+    <div class="modal fade" id="editCaseBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="editCaseBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="editCaseBackdropLabel" style=" color:white;">
+                        تأكيد عملية التعديل
+                    </h1>
+                </div>
+                <div class=" modal-body">
+                    <p>
+                        هل أنت متأكد من تعديل هذه القضية؟
+                    </p>
+                </div>
+                <div class="modal-footer " style="width:auto;">
+                    <button type="submit" class="operations-btn btn btn-secondary" id="editBtnBackdrop">
+                        <span data-feather="edit-2" class="align-text-bottom"></span>
+                        انتقل للتعديل
+                    </button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
+                        <span data-feather="x" class="align-text-bottom"></span>
+                        أغلق
+                    </button>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="messageBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="messageBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
+                        رسالة
+                    </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
+                        aria-label="Close"></button>
+
+                </div>
+                <div class=" modal-body">
+                    <p id="message-text">
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
 
 

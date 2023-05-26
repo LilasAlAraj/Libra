@@ -43,16 +43,26 @@
         <img src="../../../Img/Logo.jpg" alt="Avatar" class="avatar">
       </div>
     </a>
+    <div class="d-flex justify-content-between w-100">
+        <div class="navbar-nav">
+            <div class="nav-item text-nowrap ">
+                <p class=" px-3 m-2" id="time">time</p>
+            </div>
+        </div>
+        <div class="navbar-nav" style="">
+            <div class="nav-item text-nowrap ">
 
-    <div class="navbar-nav col-md-1 col-lg-1">
-      <div class="nav-item text-nowrap ">
-        <p class=" px-3 m-2" id="time">time</p>
-      </div>
-    </div>
-    <div class="navbar-nav col-md-8 col-lg-9" style=" text-align:left;">
-      <div class="nav-item text-nowrap ">
-        <a class="nav-link  px-3" href="#">تسجيل الخروج</a>
-      </div>
+                <a class="nav-link px-3"href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                             document.getElementById('logout-form').submit();">
+                    تسجيل الخروج
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </div>
     </div>
   </header>
 
@@ -235,6 +245,7 @@
   <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
     integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
     crossorigin="anonymous"></script>
+
 
   <script src="../../../js/users/auth.js"></script>
   <script src="../../../js/navs.js"></script>

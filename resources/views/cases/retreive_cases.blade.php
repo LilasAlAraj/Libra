@@ -11,7 +11,7 @@
 
     <meta name="author" content="Lilas">
     <meta name="generator" content="Lilas">
-    <meta name="csrf-token" content="{{csrf_token()}}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>Libra</title>
 
@@ -19,8 +19,8 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -44,15 +44,25 @@
                 <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
             </div>
         </a>
-
-        <div class="navbar-nav col-md-1 col-lg-1">
-            <div class="nav-item text-nowrap ">
-                <p class=" px-3 m-2" id="time">time</p>
+        <div class="d-flex justify-content-between w-100">
+            <div class="navbar-nav">
+                <div class="nav-item text-nowrap ">
+                    <p class=" px-3 m-2" id="time">time</p>
+                </div>
             </div>
-        </div>
-        <div class="navbar-nav col-md-8 col-lg-9" style=" text-align:left;">
-            <div class="nav-item text-nowrap ">
-                <a class="nav-link  px-3" href="#">تسجيل الخروج</a>
+            <div class="navbar-nav" style="">
+                <div class="nav-item text-nowrap ">
+
+                    <a class="nav-link px-3"href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                        تسجيل الخروج
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
             </div>
         </div>
     </header>
@@ -83,7 +93,8 @@
 
                                     </li>
                                     <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                        <a href="http://127.0.0.1:8000/cases"
+                                            class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="file-text" class="align-text-bottom"></span>
                                             عرض القضايا
                                         </a>
@@ -122,7 +133,7 @@
                                     <li id="courtSettingsNav">
                                     </li>
                                     <li id="recommendationsNav">
-                                  </li>
+                                    </li>
                                     <li id="role_permessionSettingsNav">
                                     </li>
 
@@ -229,8 +240,8 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-        crossorigin="anonymous"></script>
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    </script>
 
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>

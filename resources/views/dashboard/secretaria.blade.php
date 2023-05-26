@@ -42,15 +42,25 @@
                 <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
             </div>
         </a>
-
-        <div class="navbar-nav col-md-1 col-lg-1">
-            <div class="nav-item text-nowrap ">
-                <p class=" px-3 m-2" id="time">time</p>
+        <div class="d-flex justify-content-between w-100">
+            <div class="navbar-nav">
+                <div class="nav-item text-nowrap ">
+                    <p class=" px-3 m-2" id="time">time</p>
+                </div>
             </div>
-        </div>
-        <div class="navbar-nav col-md-8 col-lg-9" style=" text-align:left;">
-            <div class="nav-item text-nowrap ">
-                <a class="nav-link  px-3" href="#">تسجيل الخروج</a>
+            <div class="navbar-nav" style="">
+                <div class="nav-item text-nowrap ">
+
+                    <a class="nav-link px-3"href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                        تسجيل الخروج
+                    </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </div>
             </div>
         </div>
     </header>
@@ -78,7 +88,8 @@
                                     </li>
 
                                     <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                        <a href="http://127.0.0.1:8000/cases"
+                                            class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="file-text" class="align-text-bottom"></span>
                                             عرض القضايا
                                         </a>
@@ -307,6 +318,7 @@
 
     <!-- html2pdf CDN-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
 
 
 
