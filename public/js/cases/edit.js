@@ -87,7 +87,6 @@ function setCaseData() {
         document.getElementById('enemy_name-' + i).value = data.defendant_names[i].name;
         if (data.defendant_names[i].phone_number != null) {
             document.getElementById('enemy_phone-' + i).value = data.defendant_names[i].phone_number;
-
         }
     }
 
@@ -170,10 +169,10 @@ function edit() {
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/edit_case",
-                type: "POST",
+                url: "http://127.0.0.1:8000/cases/" + caseID,
+                type: "put",
                 data: {
-                    'id':caseID,
+                    'case_id': caseID,
                     'court_id': case_.court_id,
                     'case_room': case_.case_room,
                     'title': case_.title,
@@ -184,19 +183,32 @@ function edit() {
                     'PlaintaiffLawyers': case_.PlaintaiffLawyers
                 },
                 success: function (response) {
-                    if (response.status == 'success') {
-                        console.log(response);
 
-                        // redirect user to appropriate page
-                        window.location.href = response.data.page;
+                    console.log(response)
+                    console.log(response.status)
+                    console.log(response.message)
+                    if (response.status === 'success') {
+
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                        document.getElementById('closeModal').onclick = function () {
+                            window.location.href = 'http://127.0.0.1:8000/cases/view/' + caseID;
+                        }
                     } else {
-                        $('.error').html(response.message);
+
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+
                     }
                 },
 
                 error: function (response) {
-                    // $('#error').html(response.responseJSON.errors.phone[0]);
-                    $('#error').html(response.responseJSON);
+                    console.log(response)
+
+                    $('.error').html(response.message);
+
                 }
             });
 

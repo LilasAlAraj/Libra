@@ -28,7 +28,7 @@ Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
 
 //Dashboard
-Route::get('/dashboard/client', 'App\Http\Controllers\HomeController@indexDashboardClient');
+Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient');
 Route::get('/dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
 Route::get('/dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria');
 Route::get('/dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
@@ -48,6 +48,7 @@ Route::get('recommendations', 'App\Http\Controllers\RecommendationController@ind
 Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
 Route::get('recommendation/{id}', 'App\Http\Controllers\RecommendationController@show');
 Route::post('recommendation', 'App\Http\Controllers\RecommendationController@store');
+Route::put('recommendation', 'App\Http\Controllers\RecommendationController@update');
 Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
 
 

@@ -306,6 +306,8 @@ function collectData() {
             DefendentClients[k++] = { 'enemy_Client_name': Defendent_Clients[i].value, 'enemy_Client_phone': Defendent_Clients_Phones[i].value };
         }
     }
+    console.log(DefendentClients)
+
     DefendentLawyers = [];
     for (var i = 0, k = 0; i < Defendent_Lawyers.length; i++) {
         if (Defendent_Lawyers[i].value != '') {

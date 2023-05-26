@@ -181,7 +181,7 @@ function addRecommendationRow(table, Recommendation) {
     view_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-text-bottom" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
         + ' عرض التوصية'
     view_btn.setAttribute("data-bs-toggle", "modal")
-    view_btn.setAttribute("data-bs-target", "#viewRecommendationBackdrop")
+    view_btn.setAttribute("data-bs-target", "#editRecommendationModal")
     view_btn.onclick = function () {
         viewRecommendation(Recommendation.id)
     }
@@ -190,6 +190,27 @@ function addRecommendationRow(table, Recommendation) {
     viewOpLi.append(view_btn);
     viewOpLi.classList = 'operationMenuItem'
     operationMenu.append(viewOpLi)
+
+
+
+
+
+    const edit_btn = document.createElement('button')
+    edit_btn.type = "button"
+    edit_btn.id = "edit-button"
+    edit_btn.classList.add('menu-operations-btn', 'btn', 'btn-warning')
+    edit_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" editBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-text-bottom" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+        + ' تعديل التوصية'
+    edit_btn.setAttribute("data-bs-toggle", "modal")
+    edit_btn.setAttribute("data-bs-target", "#editRecommendationModal")
+     edit_btn.onclick = function () {
+         editRecommendation(Recommendation.id, Recommendation.title, Recommendation.content )
+     }
+
+    const editOpLi = document.createElement('li');
+    editOpLi.append(edit_btn);
+    editOpLi.classList = 'operationMenuItem'
+    operationMenu.append(editOpLi)
 
 
     const remove_btn = document.createElement('button')
@@ -208,7 +229,7 @@ function addRecommendationRow(table, Recommendation) {
 
 
 
-    content = Recommendation.content;
+    content=Recommendation.content;
     if (content.length > 50)
         content = content.substring(0, 150) + '.. إلخ'
     const row = $('<tr>').append(
@@ -286,7 +307,84 @@ function deleteRecommendation() {
     });
 }
 
+function editRecommendation(id, title, content){
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editContent').value = content;
 
+
+
+    $('#editRecommendation_form').validate({
+        rules: {
+            editeTitle: {
+                required: true
+
+            }, editTitle: {
+                required: true
+
+            }
+        },
+        messages: {
+            editeTitle: {
+                required: "الرجاء إدخال عنوان التوصية",
+
+            },
+            editTitle: {
+                required: "الرجاء إدخال محتوى التوصية",
+
+            }
+        },
+        submitHandler: function (form) {
+            var editTitle = $('#editTitle').val();
+            var editContent = document.getElementById("editContent").value;
+
+
+
+            $('#errorEditDecision').html('');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "http://127.0.0.1:8000/recommendation",
+                type: "Put",
+                data: {
+                    "title": editTitle,
+                    "content": editContent,
+                    "id": id
+                },
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.status == 'success') {
+
+                        Rec_row = document.getElementById('Recommendation-row' + id);
+                        recTitle = document.getElementById('editTitle');
+                        recContent = document.getElementById('editContent');
+                        cells = Rec_row.getElementsByTagName('td');
+                        cells[0].innerHTML = editTitle
+                        recTitle.innerHTML = editTitle;
+                        cells[1].innerHTML = editContent
+                        recContent.innerHTML = editContent;
+                        $('#editRecommendationModal').modal('hide');
+
+
+                    }
+                    document.getElementById('message-text').innerHTML = response.message;
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                },
+                error: function (response) {
+                    console.log(response);
+                    $('#editRecommendationError').html(response.responseJSON);
+                }
+            });
+
+
+        }
+    });
+}
 function closeModal() {
     // حذف المعلومات المخزنة في ذاكرة التخزين المؤقت للجلسة
     sessionStorage.clear();

@@ -99,12 +99,17 @@ function add() {
                     console.log(response.status)
                     console.log(response.message)
                     if (response.status === 'success') {
-                        $('.error').css('color', 'green');
-                        $('#error').html(response.message);
-                        window.location.href = 'http://127.0.0.1:8000/cases';
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                        document.getElementById('closeModal').onclick = function () {
+                            window.location.href = 'http://127.0.0.1:8000/cases';
+                        }
                     } else {
 
-                        $('.error').html(response.message);
+                        document.getElementById('message-text').innerHTML = response.message;
+                        $('#messageBackdrop').modal('show');
+                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
 
                     }
                 },

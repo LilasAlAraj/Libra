@@ -299,7 +299,26 @@
     </div>
   </div>
 
+  <div class="modal fade" id="messageBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="messageBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+      <div class="modal-content">
+          <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+              <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
+                  رسالة
+              </h1>
+              <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
+                  aria-label="Close"></button>
 
+          </div>
+          <div class=" modal-body">
+              <p id="message-text">
+              </p>
+          </div>
+
+      </div>
+  </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
     integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"

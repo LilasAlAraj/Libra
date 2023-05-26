@@ -155,3 +155,28 @@ main {
   color: white;
 }
 
+
+
+/* لون الشريط */
+::-webkit-scrollbar {
+    width: 10px;    background-color: rgb(7, 48, 78);
+
+}
+
+/* لون المسار */
+::-webkit-scrollbar-track {
+
+    background-color: #f1f1f1;
+}
+
+/* لون القاطع (الحاجز) بين الشريط والمسار */
+::-webkit-scrollbar-thumb {
+    background-color: rgb(7, 48, 78);
+    border-radius: 5px;
+
+}
+
+/* لون الشريط عندما يتم تحريكه */
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(7, 48, 78);
+}

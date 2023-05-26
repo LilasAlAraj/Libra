@@ -635,7 +635,7 @@ function showPage(pageNumber, data) {
         for (var j = 0; j < data[i].case_numbers.length; j++) {
             case_numbers += data[i].case_numbers[j].date + '/' + data[i].case_numbers[j].number;
             if (j !== data[i].case_numbers.length - 1)
-                case_numbers += "\n____________\n";
+                case_numbers += "<hr>";
         }
 
 
@@ -643,7 +643,7 @@ function showPage(pageNumber, data) {
         for (var j = 0; j < data[i].plaintiff_names.length; j++) {
             plaintiff_names += data[i].plaintiff_names[j].first_name + ' ' + data[i].plaintiff_names[j].father_name + ' ' + data[i].plaintiff_names[j].last_name;
             if (j !== data[i].plaintiff_names.length - 1)
-                plaintiff_names += "\n____________\n";
+                plaintiff_names += "<hr>";
         }
 
 
@@ -652,13 +652,13 @@ function showPage(pageNumber, data) {
         for (var j = 0; j < data[i].plaintiff_lawyers.length; j++) {
             plaintiff_lawyers += data[i].plaintiff_lawyers[j].first_name + ' ' + data[i].plaintiff_lawyers[j].father_name + ' ' + data[i].plaintiff_lawyers[j].last_name;
             if (j !== data[i].plaintiff_lawyers.length - 1)
-                plaintiff_lawyers += "\n____________\n";
+                plaintiff_lawyers += "<hr>";
         }
         var defendant_names = '';
         for (var j = 0; j < data[i].defendant_names.length; j++) {
             defendant_names += data[i].defendant_names[j].name;
             if (j !== data[i].defendant_names.length - 1)
-                defendant_names += "\n____________\n";
+                defendant_names += "<hr>";
         }
 
 
@@ -667,7 +667,7 @@ function showPage(pageNumber, data) {
             defendant_lawyers += data[i].defendant_lawyers[j].name;
 
             if (j !== data[i].defendant_lawyers.length - 1)
-                defendant_lawyers += "\n____________\n";
+                defendant_lawyers += "<hr>";
         }
 
 
@@ -766,13 +766,13 @@ function showPage(pageNumber, data) {
         }
 
         const row = $('<tr>').append(
-            $('<td>').append($('<pre>').text(case_numbers)),
+            $('<td>').append((case_numbers)),
             $('<td>').text(case_.title),
             $('<td>').text(courtName + "/" + room),
-            $('<td>').append($('<pre>').text(plaintiff_names)),
-            $('<td>').append($('<pre>').text(plaintiff_lawyers)),
-            $('<td>').append($('<pre>').text(defendant_names)),
-            $('<td>').append($('<pre>').text(defendant_lawyers)),
+            $('<td>').append((plaintiff_names)),
+            $('<td>').append((plaintiff_lawyers)),
+            $('<td>').append((defendant_names)),
+            $('<td>').append((defendant_lawyers)),
             $('<td>').append(status),
             $('<td>').append(operations)
 

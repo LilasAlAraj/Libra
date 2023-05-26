@@ -9,10 +9,10 @@ body {
     font-size: .875rem;
     display: inline;
 }
-body * {
-    pointer-events: all;
-}
-h1 {
+
+
+h1,
+h2 {
     color: rgb(87, 126, 155);
 }
 
@@ -251,6 +251,7 @@ tr.clickable-row:hover th,
 tr.clickable-row:hover td {
     color: white
 }
+
 #add-recommendations-button,
 #add-courts-button,
 #add-members-button,
@@ -335,4 +336,23 @@ tr.clickable-row:hover td {
 
 .btn-warning:hover {
     color: white;
+}
+
+
+.card-header {
+    font-size: 1em;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: rgb(87, 126, 155);
+    ;
+}
+
+.show_more {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.show_more:hover{
+    text-decoration:underline;
+    color: rgb(87, 126, 155);
 }

@@ -322,57 +322,54 @@
 
 
 
-    <!--popup edit decision-->
-    <div class="modal fade" id="editDecisionBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="editDecisionBackdropLabel" aria-hidden="true">
+    <!--popup edit recommendation-->
+    <div class="modal fade" id="editRecommendationModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="editRecommendationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="editDecisionBackdropLabel" style=" color:white;">
-                        تعديل القرار
+                    <h1 class="modal-title fs-5" id="editRecommendationModalLabel" style=" color:white;">
+                        إضافة توصية جديدة
                     </h1>
                 </div>
-                <form id='editDecision_form' style="background-color: transparent; border:none">
+                <form id='editRecommendation_form' method="post"
+                    style="background-color: transparent; border:none; margin: 0;">
                     <div class=" modal-body">
-                        <div class="container">
-                            <div class="row ">
-                                <div class="col-6">
-                                    <label for="editDecisionNumber"><b>رقم القرار</b></label>
-                                    <input type="number" id="editDecisionNumber" name="editDecisionNumber"
-                                        placeholder="أدخل رقم القرار" required>
+                        <div class="container ">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="editTitle"><b>عنوان التوصية</b></label>
+                                    <input type="text" id="editTitle" placeholder="أدخل عنوان التوصية"
+                                        name="editTitle" required>
                                 </div>
 
-                                <div class="col-6">
-                                    <label for="editDecisionDate"><b>تاريخ الإقرار</b></label>
-                                    <input type="date" id="editDecisionDate" name="editDecisionDate"
-                                        placeholder="أدخل تاريخ القرار" required>
-                                </div>
 
                             </div>
 
                             <div class="row ">
                                 <div class="col-12">
-                                    <label for="editDecisionDetails"><b>تفاصيل القرار</b></label>
-                                    <textarea class="form-control" id="editDecisionDetails" name="editDecisionDetails" rows="5"
-                                        style="max-height:12em;" required></textarea>
+                                    <label for="editContent"><b>المحتوى</b></label>
+                                    <textarea class="form-control" id="editContent" name="editContent" rows="5" style="max-height:8em;" required></textarea>
                                 </div>
                             </div>
 
+
+
+                        </div>
+                        <div id="editRecommendationError" class="error">
                         </div>
                     </div>
-                    <div class="modal-footer " style="width:auto;">
-                        <div id="errorEditDecision" class="error">
-                        </div>
-                        <button type="submit" class="operations-btn btn btn-secondary" data-bs-dismiss="modal"
-                            onclick="closeModal()">
-                            <span data-feather="edit-2" class="align-text-bottom"></span>
-                            تعديل القرار
 
+                    <div class="modal-footer " style="width:auto;">
+                        <button type="submit" class="operations-btn btn btn-success">
+                            <span data-feather="edit-3" class="align-text-bottom"></span>
+                            عدِّل
                         </button>
                         <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
                             <span data-feather="x" class="align-text-bottom"></span>
                             أغلق
                         </button>
+
 
                     </div>
                 </form>
