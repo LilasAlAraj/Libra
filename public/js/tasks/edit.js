@@ -8,14 +8,50 @@
 
 
 /********************* */
-
+let taskID;
 
 $(document).ready(function () {
-    addLawyerField();
-    addNewTask();
+    taskID = window.location.href.split('/');
+    taskID = taskID[taskID.length - 2];
+    // جلب البيانات من ملف JSON
+    $.ajax({
+        url: 'http://127.0.0.1:8000/tasks/' + taskID,
+        type: 'get',
+        success: function (response) {
+            console.log(response)
+            data = response;
+
+            setTaskData(data);
+
+        },
+        error: function (response) {
+            console.log(response)
+
+        }
+    });
 });
 
-function addNewTask() {
+
+function setTaskData(data) {
+
+    task = data.task;
+    document.getElementById('name').value = task.name;
+    document.getElementById('priority').value = task.priority;
+    document.getElementById('description').value = task.description;
+    document.getElementById('end_date').value = task.end_date;
+    document.getElementById('start_date').value = task.start_date;
+
+
+    totalLawyerName = data.lawyers.length;
+    for (var i = 0; i < totalLawyerName; i++) {
+        addLawyerField(data.lawyers[i].id);
+    }
+
+
+}
+
+
+function editTask() {
 
     $('#task-form').validate(
         {
@@ -59,18 +95,15 @@ function addNewTask() {
             submitHandler: function (form) {
 
                 task = collectData();
-
-
                 // Perform adding
-
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/task",
-                    type: "post",
+                    url: "http://127.0.0.1:8000/tasks/"+taskID,
+                    type: "put",
                     data: {
                         "lawyers": task.lawyers,
                         "name": task.name,
@@ -78,7 +111,6 @@ function addNewTask() {
                         "start_date": task.start_date,
                         "end_date": task.end_date,
                         "priority": task.priority,
-
                     },
                     success: function (response) {
                         console.log(response)

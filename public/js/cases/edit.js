@@ -18,7 +18,6 @@ $(document).ready(function () {
     getCourts();
     caseID = window.location.href.split('/');
     caseID = caseID[caseID.length - 2];
-    console.log(caseID)
     // جلب البيانات من ملف JSON
     $.ajax({
         url: 'http://127.0.0.1:8000/cases/' + caseID,
@@ -26,7 +25,6 @@ $(document).ready(function () {
         success: function (response) {
             console.log(response)
             data = response.cases[0];
-            console.log(data)
 
             setCaseData();
 

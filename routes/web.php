@@ -23,13 +23,12 @@ if (Auth::check()) {
 }
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('sessions', 'App\Http\Controllers\SessionController'); // 🌷جلسات القضية
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
 //Dashboard
-//Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient');
 Route::get('/dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
 Route::get('/dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria');
 Route::get('/dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
@@ -128,3 +127,16 @@ Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->na
 
 Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update'); // 🌷تغيير حالة القضية
 Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails'); // 🌷تغيير حالة القضية
+
+
+
+
+//tasks
+Route::get('task/create','App\Http\Controllers\TaskController@create' );
+Route::post('task','App\Http\Controllers\TaskController@store' );
+Route::delete('task/{id}','App\Http\Controllers\TaskController@destroy' );
+Route::get('tasks','App\Http\Controllers\TaskController@index' );
+Route::put('tasks/{id}','App\Http\Controllers\TaskController@update' );
+Route::get('tasks/{id}','App\Http\Controllers\TaskController@show' );
+Route::get('tasks/{id}/edit','App\Http\Controllers\TaskController@edit' );
+Route::put('tasks/{id}/status/edit','App\Http\Controllers\TaskController@updateStatus' );

@@ -74,9 +74,15 @@
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 col-sm-12 d-md-block  sidebar collapse">
         <div class="position-sticky pt-3  sidebar-sticky ">
           <ul class=" nav nav-pills flex-column mb-auto ">
-            <li class="mb-1 nav-item" id="dashboardNav">
-
+            <li class="mb-1 nav-item" id="homeNav">
+                <a href="http://127.0.0.1:8000/home" class="nav-link d-inline-flex  collapse-items">
+                    <span data-feather="home" class="align-text-bottom"></span>
+                    الصفحة الرئيسية
+                </a>
             </li>
+            <div id="dashboardNav">
+
+            </div>
             <li class="mb-1 nav-item ">
               <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
                 data-bs-toggle="collapse" data-bs-target="#cases-collapse" aria-expanded="false">

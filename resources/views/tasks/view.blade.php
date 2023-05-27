@@ -8,6 +8,7 @@
         content="ليبرا هو بيتك القانوني.. وأكثر! يقوم بإدارة مكتبك وعملائك.. ويقوم بتنظيم الملفات والمهام.">
     <meta name="keywords"
         content="law firms management system, law, cases management system, cases, tasks, lawyers, lawyer, court">
+
     <meta name="author" content="Lilas">
     <meta name="generator" content="Lilas">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -23,8 +24,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-
-     <link href="../../css/navs.css" rel="stylesheet">
+    <link href="../../css/navs.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
 
 
@@ -69,6 +69,7 @@
 
     <div class="container-fluid">
         <div class="row">
+
 
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 col-sm-12 d-md-block  sidebar collapse">
                 <div class="position-sticky pt-3  sidebar-sticky ">
@@ -160,120 +161,145 @@
                 <div id="big-frame">
                     <div class="container  d-flex justify-content-between">
 
-                        <h1>عرض التوصيات</h1>
-                        <div id="addNewRecommendationBtn" style="display: flex; align-items: center;">
+
+                        <h1>عرض المهام</h1>
+
+                        <div id="addNewTaskBtn" style="display: flex; align-items: center;">
                         </div>
+
                     </div>
                     <hr>
-                    <div class="container">
-
-                        <table class="table table-bordered  table-striped">
-                            <thead>
-                                <tr>
-                                    <th>عنوان التوصية </th>
-                                    <th> المحتوى</th>
-                                    <th> العمليات</th>
-
-                                </tr>
-
-                            </thead>
-                            <tbody id="table-body">
 
 
+                    <form class="search-options" action="get">
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="from_date"><b>من تاريخ</b></label>
+                                <input type="date" id="from_date" name="from_date" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label for="to_date"><b>إلى تاريخ</b></label>
+                                <input type="date" id="to_date" name="to_date" required>
+                            </div>
+
+                        </div>
+                        <div class="container" style="padding: 0;">
+                            <button type="submit" id="search-button" class="operations-btn btn btn-success"
+                                onclick="search()">
+                                <span data-feather="search" class="align-text-bottom"></span>
+                                ابحث
+
+                            </button>
+                            <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                <span data-feather="x-circle" class="align-text-bottom"></span>
+                                امسح
+                            </button>
 
 
-                            </tbody>
-                        </table>
+                            <span id="error" class="error">
+                            </span>
+                        </div>
+                        <hr>
 
-                    </div>
+
+                    </form>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الأولوية</th>
+                                <th>تاريخ البدء</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>اسم المسؤول</th>
+                                <th> الوصف</th>
+                                <th> الحالة</th>
+                                <th> العمليات</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul id="pagination" class="pagination"></ul>
+                    </nav>
+
 
 
                 </div>
-
-            </main>
         </div>
+
+        </main>
+    </div>
     </div>
 
 
-
-    <!--add new recommendation Modal -->
-    <div class="modal fade" id="addRecommendationModal" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="addRecommendationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewTaskBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="viewTaskBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="addRecommendationModalLabel" style=" color:white;">
-                        إضافة توصية جديدة
+                    <h1 class="modal-title fs-5" id="viewTaskBackdropLabel" style=" color:white;">
+                        عرض المهمة
                     </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+
                 </div>
-                <form id='addRecommendation_form' method="post"
-                    style="background-color: transparent; border:none; margin: 0;">
-                    <div class=" modal-body">
-                        <div class="container ">
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="title"><b>عنوان التوصية</b></label>
-                                    <input type="text" id="title" placeholder="أدخل عنوان التوصية"
-                                        name="title" required>
-                                </div>
-
-
-                            </div>
-
-                            <div class="row ">
-                                <div class="col-12">
-                                    <label for="content"><b>المحتوى</b></label>
-                                    <textarea class="form-control" id="content" name="content" rows="5" style="max-height:8em;" required></textarea>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div id="addRecommendationError" class="error">
-                        </div>
+                <div class=" modal-body">
+                    <div class="d-flex">
+                        <b>العنوان: </b>
+                        <div id="TaskName"></div>
+                    </div>
+                    <div class="d-flex">
+                        <b>الأولوية: </b>
+                        <div id="TaskPriority"></div>
+                    </div>
+                    <div class="d-flex">
+                        <b>تاريخ البدء: </b>
+                        <div id="TaskStartDate"></div>
+                    </div>
+                    <div class="d-flex">
+                        <b>تاريخ الانتهاء: </b>
+                        <div id="TaskEndDate"></div>
+                    </div>
+                    <div class="d-flex">
+                        <b>المسؤولين: </b>
+                        <div id="TaskLawyers"></div>
+                    </div>
+                    <div class="d-flex">
+                        <b>الوصف: </b>
+                        <div id="TaskDescription"></div>
                     </div>
 
-                    <div class="modal-footer " style="width:auto;">
-                        <button type="submit" class="operations-btn btn btn-success" onclick="add_Recommendation()">
-                            <span data-feather="edit-3" class="align-text-bottom"></span>
-                            أضف
-                        </button>
-                        <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
-                            <span data-feather="x" class="align-text-bottom"></span>
-                            أغلق
-                        </button>
-
-
+                    <div class="d-flex">
+                        <b>الحالة: </b>
+                        <div id="TaskStatus"></div>
                     </div>
-                </form>
+                </div>
+
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-    <!--popup delete Recommendation-->
-    <div class="modal fade" id="deleteRecommendationBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="deleteRecommendationBackdropLabel" aria-hidden="true">
+    <!--popup delete task-->
+    <div class="modal fade" id="deleteTaskBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="deleteTaskBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="deleteRecommendationBackdropLabel" style=" color:white;">
+                    <h1 class="modal-title fs-5" id="deleteTaskBackdropLabel" style=" color:white;">
                         تأكيد عملية الحذف
                     </h1>
                 </div>
                 <div class=" modal-body">
                     <p>
-                        هل أنت متأكد من حذف هذه التوصية؟
+                        هل أنت متأكد من حذف هذه المهمة
                     </p>
                 </div>
                 <div class="modal-footer " style="width:auto;">
-                    <button type="submit" id="deleteRecommendationButton" class="operations-btn btn btn-danger">
+                    <button type="submit" id="deleteTaskButton" class="operations-btn btn btn-danger">
                         <span data-feather="trash" class="align-text-bottom"></span>
                         احذف
                     </button>
@@ -295,7 +321,7 @@
                     <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
                         رسالة
                     </h1>
-                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
                         aria-label="Close"></button>
 
                 </div>
@@ -309,85 +335,40 @@
     </div>
 
 
-
-
-    <div class="modal fade" id="viewRecommendationBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="viewRecommendationBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+    <!-- Modal popup change state-->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="viewRecommendationBackdropLabel" style=" color:white;">
-                        عرض التوصية
-                    </h1>
-                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-
-                </div>
-                <div class=" modal-body">
-                    <div id="recommendationTitle">
-                        <b>العنوان: </b>
-                    </div>
-
-                    <div id="recommendationContent">
-                        <b>المحتوى: </b>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-
-    <!--popup edit recommendation-->
-    <div class="modal fade" id="editRecommendationModal" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="editRecommendationModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
-            <div class="modal-content">
-                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title fs-5" id="editRecommendationModalLabel" style=" color:white;">
-                        إضافة توصية جديدة
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel" style=" color:white;">تغيير حالة المهمة
                     </h1>
                 </div>
-                <form id='editRecommendation_form' method="post"
-                    style="background-color: transparent; border:none; margin: 0;">
+
+
+
+                <form id='chang_status_form' style="background-color: transparent; border:none;width: 100%;">
                     <div class=" modal-body">
-                        <div class="container ">
-                            <div class="row">
-                                <div class="col-12">
-                                    <label for="editTitle"><b>عنوان التوصية</b></label>
-                                    <input type="text" id="editTitle" placeholder="أدخل عنوان التوصية"
-                                        name="editTitle" required>
-                                </div>
+                        <label for="selected_status"><b>الحالة الجديدة: </b></label>
+                        <select id="selected_status" name="selected_status" required>
 
-
-                            </div>
-
-                            <div class="row ">
-                                <div class="col-12">
-                                    <label for="editContent"><b>المحتوى</b></label>
-                                    <textarea class="form-control" id="editContent" name="editContent" rows="5" style="max-height:8em;" required></textarea>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div id="editRecommendationError" class="error">
-                        </div>
+                            <option value="1" style="color: blue">قيد التنفيذ</option>
+                            <option value="2" style="color: red">ملغاة</option>
+                            <option value="3" style="color: green">مكتملة</option>
+                            <option value="4" style="color: black">مؤجلة</option>
+                        </select>
                     </div>
+                    <br>
+                    <div class="modal-footer" style="width:auto;">
+                        <button type="submit" id="change-button" class="operations-btn btn btn-secondary"   >
+                            <span data-feather="edit-2" class="align-text-bottom"></span>
+                            عدّل الحالة
 
-                    <div class="modal-footer " style="width:auto;">
-                        <button type="submit" class="operations-btn btn btn-success">
-                            <span data-feather="edit-3" class="align-text-bottom"></span>
-                            عدِّل
                         </button>
                         <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" onclick="closeModal()">
                             <span data-feather="x" class="align-text-bottom"></span>
                             أغلق
                         </button>
-
-
                     </div>
                 </form>
             </div>
@@ -395,19 +376,13 @@
     </div>
 
 
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
         integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
     </script>
 
-
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>
-    <script src="../../js/recommendations/view.js"></script>
-
-
+    <script src="../../js/tasks/view.js"></script>
 
 
 </body>

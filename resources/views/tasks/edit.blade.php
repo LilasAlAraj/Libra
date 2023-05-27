@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
@@ -8,10 +8,12 @@
         content="ليبرا هو بيتك القانوني.. وأكثر! يقوم بإدارة مكتبك وعملائك.. ويقوم بتنظيم الملفات والمهام.">
     <meta name="keywords"
         content="law firms management system, law, cases management system, cases, tasks, lawyers, lawyer, court">
+
     <meta name="author" content="Lilas">
     <meta name="generator" content="Lilas">
-    <title>Libra</title>
+    <meta name="csrf-token" content="{{csrf_token()}}" />
 
+    <title>Libra</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -22,10 +24,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-
     <link href="../../css/navs.css" rel="stylesheet">
+    <link href="../../css/style.css" rel="stylesheet">
 
-    <link href="../../css/dashboard.rtl.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -68,6 +70,7 @@
     <div class="container-fluid">
         <div class="row">
 
+
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 col-sm-12 d-md-block  sidebar collapse">
                 <div class="position-sticky pt-3  sidebar-sticky ">
                     <ul class=" nav nav-pills flex-column mb-auto ">
@@ -90,6 +93,9 @@
                             <div class="collapse collapse-items" id="cases-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
                                     <li id="addNewCaseNav">
+
+                                    </li>
+                                    <li id="addNewPrivateCaseNav">
 
                                     </li>
                                     <li id="viewCaseNav">
@@ -137,7 +143,7 @@
                                     <li id="role_permessionSettingsNav">
                                     </li>
 
-                                    <li><a href="../users/account_settings.html"
+                                    <li><a href="http://127.0.0.1:8000/account/setting"
                                             class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="tool" class="align-text-bottom"></span>
                                             إعدادات حسابي
@@ -150,132 +156,110 @@
                 </div>
             </nav>
 
+
             <main class="col-md-9 col-lg-10 col-sm-12">
-                <div class="chartjs-size-monitor">
-                    <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
-                    </div>
-                    <div class="chartjs-size-monitor-shrink">
-                        <div class=""></div>
-                    </div>
-                </div>
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <form id="task-form">
 
-                    <h2>لوحة القيادة</h2>
+                    <div class="container">
 
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                id="import">تصدير</button>
+                        <div class="row ">
+                            <div class="col-12">
+                                <h1>تعديل مهمة </h1>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="container">
+                        <div class="row ">
+                            <div class="col-6">
+                                <label for="name"><b>اسم المهمة</b></label>
+                                <input type="text" id="name" placeholder="اسم مختصر يشرح طبيعة المهمة"
+                                    name="name" required>
+                            </div>
+
+                            <div class="col-6">
+                                <label for="priority"><b>الأولوية</b></label>
+                                <select id="priority" name="priority">
+                                    <option disabled selected hidden>اختر الأولوية</option>
+                                    <option value='عالية'> عالية</option>
+                                    <option value='متوسطة'> متوسطة</option>
+                                    <option value='منخفضة'> منخفضة</option>
+                                </select>
+
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-12">
+                                <label for="description"><b>الوصف</b></label>
+
+                                <textarea class="form-control" placeholder="وصف مفصل لتفاصيل المهمة ومتطلباتها وأهدافها" id="description"
+                                    name="description" rows="5" style="max-height:8em;" required></textarea>
+
+                            </div>
                         </div>
 
-                    </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="start_date"><b>تاريخ البدء</b></label>
+                                <input type="date" id="start_date" name="start_date" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="end_date"><b>تاريخ الانتهاء</b> </label>
+                                <input type="date" id="end_date" name="end_date" required>
+                            </div>
+                        </div>
 
-                </div>
+                        <div class=" col-12 frame">
+                            <div class="lawyers" id="lawyers">
+                            </div>
+                            <hr>
 
-                <div class="container">
-                    <div class="row ">
-                        <div class="col-12 mb-2"
-                            style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
-                            إحصاءات هامة </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-6">
-                            <div class="card text-white bg-light mb-3" style="width: 100%;">
-                                <div class="card-header" id="num_assigned_cases"></div>
-                                <div class="card-body">
-                                    <div class="container m-3  d-flex justify-content-between">
-                                        <h5 class="card-title"> <span data-feather="file-text"
-                                                class="align-text-bottom card-title-img"></span>
-                                        </h5>
-                                        <p class="card-text">
-                                            القضايا الموكلة لي
-                                        </p>
-                                    </div>
+                            <div class="container">
+                                <div class="row d-flex  justify-content-evenly">
+                                    <button id="lawyer-pls-vs1" onclick="addLawyerField()" type="button">
+                                        <span data-feather="plus" class="align-text-bottom "></span>
+                                    </button>
+                                    <button id="lawyer-delete-vs1" onclick="deleteLawyerField()" type="button">
+                                        <span data-feather="minus" class="align-text-bottom "></span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-6">
-                            <div class="card text-white bg-light mb-3" style="width: 100%">
-                                <div class="card-header" id="num_next_tasks"></div>
-                                <div class="card-body">
-                                    <div class="container m-3  d-flex justify-content-between">
-                                        <h5 class="card-title"> <span data-feather="file-text"
-                                                class="align-text-bottom card-title-img"></span>
-                                        </h5>
-                                        <p class="card-text">
-                                            المهام القادمة
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-                <div class="container">
-                    <div class="row  chart">
-
-
-                        <div class="col-12">
-                            <div class="col-12" style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
-                                القضايا الموكلة حديثاً
-                            </div>
-                            <div class="col-12 ">
-
-                                <div class="container ">
-                                    <table class="table table-striped table-hover " id="cases-table">
-                                        <thead>
-                                            <tr>
-                                                <th> #</th>
-                                                <th>عنوان القضية</th>
-                                                <th>اسم الموكل</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody style="cursor: pointer;" id="cases-body-table">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div>
-
+                        <button type="submit" id="add_btn" onclick="editTask()">تعديل</button>
 
                     </div>
-                </div>
-                <hr style="width: 100%; font-weight: 300;">
 
-                <div class="container">
 
-                    <div class="row ">
-                        <div class="col-12 mb-2"
-                            style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
-                            مهام اليوم</div>
-                    </div>
-                    <div class="row ">
-                        <table class="table table-striped table-hover " id="tasks-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>الاسم</th>
-                                    <th>التوقيت</th>
-                                </tr>
-                            </thead>
-                            <tbody style="cursor: pointer;" id="tasks-body-table">
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
+                    <!--<div id="error" class="error"></div>-->
+                </form>
 
             </main>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="messageBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="messageBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
+                        رسالة
+                    </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
+                        aria-label="Close"></button>
+
+                </div>
+                <div class=" modal-body">
+                    <p id="message-text">
+                    </p>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -284,22 +268,11 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
         integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
-        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
-    </script>
-
-    <!-- html2pdf CDN-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
-
-
-
-
-
+    <script src="../../js/tasks/edit.js"></script>
 
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>
-    <script src="../../js/dashboard/lawyer.js"></script>
-
+    <script src="../../js/tasks/taskSet.js"></script>
 
 
 

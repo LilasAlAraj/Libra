@@ -37,16 +37,18 @@ function setDashboardNavAuth(dots) {
         location = 'http://127.0.0.1:8000/dashboard/secretaria';
     } else if (role == 3) {
         location = 'http://127.0.0.1:8000/dashboard/lawyer';
-    } else if (role == 4) {
-        location = 'http://127.0.0.1:8000/dashboard/client';
     }
 
 
-
-    document.getElementById('dashboardNav').innerHTML = '<a href="' + location + '" class="nav-link d-inline-flex  collapse-items">'
-        + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-text-bottom" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>'
-        + 'لوحة القيادة'
-        + '</a>'
+    if (role != 4) {
+        document.getElementById('dashboardNav').innerHTML =
+            '<li class="mb-1 nav-item">'
+            + '<a href="' + location + '" class="nav-link d-inline-flex  collapse-items">'
+            + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor align-text-bottom" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>'
+            + 'لوحة القيادة'
+            + '</a>'
+            + '</li>'
+    }
 }
 
 
@@ -137,7 +139,7 @@ function setTaskNavAuth(dots) {
     addNewTask = '';
     if (role == 1 || role == 2)
         addNewTask = '<li>'
-            + '<a href="' + dots + 'tasks/add.html" class="nav-link d-inline-flex  collapse-items">'
+            + '<a href="http://127.0.0.1:8000/task/create" class="nav-link d-inline-flex  collapse-items">'
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle align-text-bottom" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>'
             + 'إضافة مهمة جديدة'
             + '</a>'
@@ -154,7 +156,7 @@ function setTaskNavAuth(dots) {
             + '<div class="collapse" id="task-collapse">'
             + '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">'
             + addNewTask
-            + '<li><a href="' + dots + 'tasks/view.html" class="nav-link d-inline-flex  collapse-items">'
+            + '<li><a href="http://127.0.0.1:8000/tasks" class="nav-link d-inline-flex  collapse-items">'
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-watch align-text-bottom" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><polyline points="12 9 12 12 13.5 13.5"></polyline><path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path></svg>'
             + 'عرض المهام'
             + '</a></li>'

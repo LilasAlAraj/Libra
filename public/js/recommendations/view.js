@@ -199,13 +199,13 @@ function addRecommendationRow(table, Recommendation) {
     edit_btn.type = "button"
     edit_btn.id = "edit-button"
     edit_btn.classList.add('menu-operations-btn', 'btn', 'btn-warning')
-    edit_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" editBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-text-bottom" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+    edit_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3 align-text-bottom" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'
         + ' تعديل التوصية'
     edit_btn.setAttribute("data-bs-toggle", "modal")
     edit_btn.setAttribute("data-bs-target", "#editRecommendationModal")
-     edit_btn.onclick = function () {
-         editRecommendation(Recommendation.id, Recommendation.title, Recommendation.content )
-     }
+    edit_btn.onclick = function () {
+        editRecommendation(Recommendation.id, Recommendation.title, Recommendation.content)
+    }
 
     const editOpLi = document.createElement('li');
     editOpLi.append(edit_btn);
@@ -219,6 +219,9 @@ function addRecommendationRow(table, Recommendation) {
     remove_btn.classList.add('menu-operations-btn', 'btn', 'btn-danger')
     remove_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
         + ' إزالة التوصية'
+    remove_btn.onclick = function () {
+        confirmDeleteRecommendation(Recommendation.id);
+    }
     const removeOpLi = document.createElement('li');
     removeOpLi.append(remove_btn);
     removeOpLi.classList = 'operationMenuItem'
@@ -229,7 +232,7 @@ function addRecommendationRow(table, Recommendation) {
 
 
 
-    content=Recommendation.content;
+    content = Recommendation.content;
     if (content.length > 50)
         content = content.substring(0, 150) + '.. إلخ'
     const row = $('<tr>').append(
@@ -239,9 +242,7 @@ function addRecommendationRow(table, Recommendation) {
         $('<td>').append(operations),
 
     );
-    remove_btn.onclick = function () {
-        confirmDeleteRecommendation(Recommendation.id);
-    }
+
     row.attr('id', 'Recommendation-row' + Recommendation.id);
     table.append(row);
 
@@ -307,7 +308,7 @@ function deleteRecommendation() {
     });
 }
 
-function editRecommendation(id, title, content){
+function editRecommendation(id, title, content) {
     document.getElementById('editTitle').value = title;
     document.getElementById('editContent').value = content;
 
