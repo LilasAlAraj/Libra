@@ -304,7 +304,8 @@
                                 <input type="date" name="date" id="date" class="h-100"
                                     style="border-radius: 5px;">
                                 <button type="submit" class="btn"
-                                    style="background-color:  rgb(7, 48, 78); color:#fff;">بحث</button>
+                                    style="background-color:  rgb(7, 48, 78); color:#fff;"
+                                    onclick="nextTasksSearch()">بحث</button>
                             </form>
                         </div>
                     </div>

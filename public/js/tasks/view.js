@@ -386,7 +386,7 @@ function showPage(pageNumber, data) {
         const lawyers = data[i].lawyers;
         var lawyersString = '';
         for (var j = 0; j < lawyers.length; j++) {
-            console.log(lawyers[j])
+
 
             lawyersString += lawyers[j].first_name + ' ' + lawyers[j].last_name;
             if (j < lawyers.length - 1)

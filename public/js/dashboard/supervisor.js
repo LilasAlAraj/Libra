@@ -163,6 +163,7 @@ function set_Cases_Chart() {
 }
 
 
+
 function fillCasesTable() {
     let data;
     $.ajax({
@@ -232,6 +233,66 @@ function addCaseRow(table, case_, num) {
 
 
 
+function nextTasksSearch() {
+    $('#getTasksForDate').validate(
+        {
+            submitHandler: function (form) {
+
+                $('#errorNextTask').html()
+
+                var date = $('#date').val();
+
+
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/tasks/filter',
+                    type: 'get',
+                    data: {
+                        'search_key': '3',
+                        'date': date,
+                    },
+                    success: function (response) {
+
+                        console.log(response)
+                        data = response;
+                        // عرض الصفوف
+                        var table = document.getElementById("tasks-table");
+                        if (table.rows.length === 2)
+                            table.rows[1].remove();
+                        body = $('#tasks-body-table');
+                        body.text('');
+                        for (var i = 0; i < data.length; i++) {
+                            addTaskRow(data[i], body, i + 1)
+                        }
+
+
+
+                        if (table.rows.length === 1) {
+
+                            var headerRow = table.rows[0];
+                            var numColumns = headerRow.cells.length;
+                            var row = table.insertRow(1);
+                            var cell = row.insertCell(0);
+                            cell.colSpan = numColumns;
+                            cell.innerHTML = "لا يوجد أي مهام لليوم ";
+                            cell.style.textAlign = 'center'
+
+                        }
+
+                    },
+                    error: function (response) {
+                        console.log(response);
+
+                    }
+                });
+
+
+
+            }
+        }
+    )
+}
+
+
 function fillTasksTable() {
     let data;
     $.ajax({
@@ -280,7 +341,7 @@ function addTaskRow(data, table, num) {
     const lawyers = data.lawyers;
     var lawyersString = '';
     for (var j = 0; j < lawyers.length; j++) {
-        console.log(lawyers[j])
+
 
         lawyersString += lawyers[j].first_name + ' ' + lawyers[j].last_name;
         if (j < lawyers.length - 1)
@@ -364,3 +425,4 @@ button.addEventListener("click", function () {
     html2pdf().from(makepdf).save();
 
 });
+

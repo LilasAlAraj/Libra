@@ -251,9 +251,10 @@ class TaskController extends Controller
             }
 
         } else if ($request->search_key == 3) { //search for specific date tasks
-            $date = $request->date;
-            $tasks = Task::whereDate('start_date', '=', $date)->
-                orWhereDate('end_date', '==', $date)->get();
+            $date = explode('-',$request->date);
+            $compareDate = Carbon::createFromDate($date[0], $date[1], $date[2]);
+            $tasks = Task::whereDate('start_date', '=', $compareDate)->
+                orWhereDate('end_date', '=', $date)->get();
         } else if ($request->search_key == 4) { // search for tasks that have  start or end date that equal to today date
             $tasks = Task::whereDate('start_date', '=', Carbon::today())->
                 orWhereDate('end_date', '=', Carbon::today())->get();
