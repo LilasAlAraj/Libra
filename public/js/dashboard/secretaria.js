@@ -69,26 +69,21 @@ function setNumArchivedCases() {
 }
 
 
-
-function setTotalNumAssignedCases() {
-
-    let num_cases = 0;
+function setNumNextTasks() {
+    let num_next_tasks = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/total/count",
+        url: "http://127.0.0.1:8000/tasks/all/count",
         type: "get",
-
         success: function (response) {
-            num_cases = response.num_cases;
-            document.getElementById('num_cases').innerHTML = num_cases;
-
+            num_next_tasks = response.num_next_tasks;
+            document.getElementById('next_tasks').innerHTML = num_next_tasks;
         },
-
         error: function (response) {
             console.log(response.responseJSON);
         }
     });
-
 }
+
 
 
 
@@ -232,11 +227,16 @@ function addCaseRow(table, case_, num) {
 
 
 
+
+
 function fillTasksTable() {
     let data;
     $.ajax({
-        url: '../tasks/test.json',
-        dataType: 'json',
+        url: 'http://127.0.0.1:8000/tasks/filter',
+        type: 'get',
+        data: {
+            'search_key': '4'
+        },
         success: function (response) {
 
             data = response;
@@ -244,8 +244,7 @@ function fillTasksTable() {
             table = $('#tasks-body-table');
             table.empty();
             for (var i = 0; i < data.length; i++) {
-                const task = data[i];
-                addTaskRow(table, task, i + 1)
+                addTaskRow(data[i], table,i + 1)
             }
 
 
@@ -272,19 +271,50 @@ function fillTasksTable() {
 }
 
 
-function addTaskRow(table, task, num) {
+function addTaskRow(data,table, num) {
+
+    const task = data.task;
+    const lawyers = data.lawyers;
+    var lawyersString = '';
+    for (var j = 0; j < lawyers.length; j++) {
+        console.log(lawyers[j])
+
+        lawyersString += lawyers[j].first_name + ' ' + lawyers[j].last_name;
+        if (j < lawyers.length - 1)
+            lawyersString += '<hr>';
+    }
 
 
-    const row = $('<tr>').append(
-        $('<td>').append($('<b>').append(num)),
-        $('<td>').append(task.name),
-        $('<td>').append(task.description)
+
+    const status = document.createElement('span');
+    status.id = 'status-' + task.id;
+    status.classList.add('badge', 'state');
+
+    if (task.Value_Status === 1) {
+        status.classList.add('text-bg-info');
+        status.innerHTML = 'قيد التنفيذ'
+    } else if (task.Value_Status === 2) {
+        status.innerHTML = 'ملغاة'
+        status.classList.add('text-bg-danger');
+    } else if (task.Value_Status === 3) {
+        status.innerHTML = 'مكتملة'
+        status.classList.add('text-bg-success');
+    } else if (task.Value_Status === 4) {
+        status.innerHTML = 'مؤجلة'
+        status.classList.add('text-bg-dark');
+    }
+
+    var row = $('<tr>').append(
+
+        $('<td>').text(num),
+        $('<td>').text(task.name),
+        $('<td>').text(task.priority),
+        $('<td>').text(task.start_date),
+        $('<td>').text(task.end_date),
+        $('<td>').append(lawyersString),
+        $('<td>').append(status)
+
     );
-    row.addClass('clickable-row')
-    row.click(function () {
-        window.location = "../tasks/view_task.html?id=" + task.id
-    });
-    row.attr('title', 'اضغط لعرض تفاصيل هذه المهمة كاملة');
 
     table.append(row);
 
@@ -292,12 +322,13 @@ function addTaskRow(table, task, num) {
 
 
 
+
 $(document).ready(function () {
 
     setNumUnarchivedCases();
     setNumArchivedCases();
-    setTotalNumAssignedCases();
     setNumClients();
+    setNumNextTasks();
     set_Cases_Chart()
     fillCasesTable();
     fillTasksTable();

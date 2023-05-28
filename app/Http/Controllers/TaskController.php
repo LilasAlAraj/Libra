@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User_Of_Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -220,11 +221,11 @@ class TaskController extends Controller
     {
         $taskList = [];
         $i = 0;
+        $tasks = [];
 
-        $status = $request->status;
-        $priority = $request->priority;
         if ($request->search_key == 1) { //search for next tasks
-
+            $status = $request->status;
+            $priority = $request->priority;
             if (is_null($status) || is_null($priority)) {
                 $tasks = Task::whereDate('start_date', '>', Carbon::today())
                     ->where(function ($query) use ($priority, $status) {
@@ -236,34 +237,55 @@ class TaskController extends Controller
                     ->where('Value_Status', $status)
                     ->where('priority', $priority)->get();
             }
-            foreach ($tasks as $task) {
 
-                $lawyers = $task->lawyers;
-                $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
-
-            }
-        } else { //search for specific tasks
+        } else if ($request->search_key == 2) { //search for specific tasks
+            $status = $request->status;
+            $priority = $request->priority;
             if (is_null($status) || is_null($priority)) {
 
                 $tasks = Task::where('Value_Status', $status)
-                    ->orWhere('priority', $priority)->get();} else {
+                    ->orWhere('priority', $priority)->get();
+            } else {
                 $tasks = Task::where('Value_Status', $status)
                     ->where('priority', $priority)->get();
             }
-            foreach ($tasks as $task) {
 
-                $lawyers = $task->lawyers;
-                $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+        } else if ($request->search_key == 3) { //search for specific date tasks
+            $date = $request->date;
+            $tasks = Task::whereDate('start_date', '=', $date)->
+                orWhereDate('end_date', '==', $date)->get();
+        } else if ($request->search_key == 4) { // search for tasks that have  start or end date that equal to today date
+            $tasks = Task::whereDate('start_date', '=', Carbon::today())->
+                orWhereDate('end_date', '=', Carbon::today())->get();
+        }
 
-            }
+        foreach ($tasks as $task) {
+
+            $lawyers = $task->lawyers;
+            $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+
         }
         return response()->json($taskList);
 
     }
-    public function nextTasksCount()
+    public function num_next_tasks()
     {
-        $nextTasksCount = Task::whereDate('start_date', '>', Carbon::today())->get()->count();
-        return response()->json(['nextTasksCount' => $nextTasksCount]);
+        $num_next_tasks = 0;
+
+        $tasks = Task::whereDate('start_date', '>', Carbon::today())->get();
+        if (Auth::user()->role_name === 'محامي') {
+            foreach ($tasks as $task) {
+                $lawyers = $task->lawyers;
+                foreach ($lawyers as $lawyer) {
+                    if ($lawyer->id === Auth::user()->id) {
+                        $num_next_tasks++;
+                    }
+                }
+            }
+        } else {
+            $num_next_tasks = $tasks->count();
+        }
+        return response()->json(['num_next_tasks' => $num_next_tasks]);
     }
 
 }

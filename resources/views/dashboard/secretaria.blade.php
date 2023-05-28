@@ -290,22 +290,41 @@
 
                 <div class="container">
 
-                    <div class="row ">
-                        <div class="col-12 mb-2"
-                            style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
-                            مهام اليوم</div>
+                    <div class="row">
+                        <div class="d-flex justify-content-between">
+                            <div style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
+                                مهام اليوم
+                            </div>
+                            <form id='getTasksForDate' class="d-inline">
+
+                                <label for="date"
+                                    style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
+                                    تاريخ اليوم
+                                </label>
+                                <input type="date" name="date" id="date" class="h-100"
+                                    style="border-radius: 5px;">
+                                <button type="submit" class="btn"
+                                    style="background-color:  rgb(7, 48, 78); color:#fff;">بحث</button>
+                            </form>
+                        </div>
                     </div>
+                    <br>
                     <div class="row ">
-                        <table class="table table-striped table-hover " id="tasks-table">
+
+                        <table class="table  table-striped table-hover" id="tasks-table">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>الاسم</th>
-                                    <th>التوقيت</th>
+                                    <th>الأولوية</th>
+                                    <th>تاريخ البدء</th>
+                                    <th>تاريخ الانتهاء</th>
+                                    <th>اسم المسؤول</th>
+                                    <th> الحالة</th>
+
                                 </tr>
                             </thead>
-                            <tbody style="cursor: pointer;" id="tasks-body-table">
-                            </tbody>
+                            <tbody id="tasks-body-table"></tbody>
                         </table>
                     </div>
                 </div>

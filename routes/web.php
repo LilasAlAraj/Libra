@@ -41,6 +41,8 @@ Route::get('cases/total/count', 'App\Http\Controllers\CasesController@totalCases
 Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesStatistics');
 Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
 Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
+Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_tasks');
+
 
 //Recommendations
 Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
