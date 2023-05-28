@@ -16,20 +16,16 @@ function logout() {
 
 function setNavAuth() {
 
-    x = window.location.pathname.split('/').length - 3;
-    dots = '';
-    for (var i = 1; i < x; i++) {
-        dots += '../'
-    }
-    setCaseNavAuth(dots);
-    setTaskNavAuth(dots);
-    setClientNavAuth(dots);
-    setMemberNavAuth(dots);
-    setSettingsAuth(dots);
-    setDashboardNavAuth(dots);
+
+    setCaseNavAuth();
+    setTaskNavAuth();
+    setClientNavAuth();
+    setMemberNavAuth();
+    setSettingsAuth();
+    setDashboardNavAuth();
 }
 
-function setDashboardNavAuth(dots) {
+function setDashboardNavAuth() {
     let location;
     if (role == 1) {
         location = 'http://127.0.0.1:8000/dashboard/supervisor';
@@ -52,7 +48,7 @@ function setDashboardNavAuth(dots) {
 }
 
 
-function setSettingsAuth(dots) {
+function setSettingsAuth() {
     if (role == 2) {
         document.getElementById('courtSettingsNav').innerHTML = '<a href="http://127.0.0.1:8000/courts" class="nav-link d-inline-flex  collapse-items">'
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers align-text-bottom" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>'
@@ -61,7 +57,7 @@ function setSettingsAuth(dots) {
     }
 
     else if (role == 1) {
-        document.getElementById('role_permessionSettingsNav').innerHTML = '<a href="' + dots + 'roles_permesions/view.html" class="nav-link d-inline-flex  collapse-items">'
+        document.getElementById('role_permessionSettingsNav').innerHTML = '<a href="(هون منحط الرابط لما بدنا)" class="nav-link d-inline-flex  collapse-items">'
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders align-text-bottom" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>'
             + 'أدوار المستخدمين وصلاحياتهم'
             + '</a>'
@@ -75,7 +71,7 @@ function setSettingsAuth(dots) {
             + '</a>'
     }
 }
-function setMemberNavAuth(dots) {
+function setMemberNavAuth() {
     if (role == 1 || role == 2) {
         document.getElementById('membersLi').innerHTML = '<li class="mb-1 nav-item ">'
             + '<button '
@@ -104,7 +100,7 @@ function setMemberNavAuth(dots) {
 }
 
 
-function setClientNavAuth(dots) {
+function setClientNavAuth() {
     if (role == 1 || role == 2) {
 
         document.getElementById('clientsLi').innerHTML = '<li class="mb-1 nav-item ">'
@@ -133,7 +129,7 @@ function setClientNavAuth(dots) {
 }
 
 
-function setTaskNavAuth(dots) {
+function setTaskNavAuth() {
 
 
     addNewTask = '';
@@ -166,7 +162,7 @@ function setTaskNavAuth(dots) {
 
     }
 }
-function setCaseNavAuth(dots) {
+function setCaseNavAuth() {
 
     if (role == 1) {
         document.getElementById('retreiveCaseNav').innerHTML = '<a href="" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">'

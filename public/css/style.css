@@ -17,8 +17,8 @@ h2 {
 }
 
 #big-frame,
-form{
-     /* border: 2px solid rgb(7, 48, 78);
+form {
+    /* border: 2px solid rgb(7, 48, 78);
     background-color: #fff; */
     width: auto;
     margin: auto;
@@ -308,11 +308,17 @@ tr.clickable-row:hover td {
 /***********************لون ازرار البحث الخاصة بعرض القضايا********/
 .searchBy {
     color: rgb(87, 126, 155);
+    font-weight:bold ;
+}
 
+.nav-link.searchBy.active {
+    background-color: rgb(87, 126, 155);
+    color: #fff;
 }
 
 .searchBy:hover {
-    background-color: rgb(87, 126, 155);
+    background-color: rgba(87, 126, 155, 0.541);
+
     color: white;
 }
 

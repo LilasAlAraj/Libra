@@ -53,6 +53,7 @@ class UserController extends Controller
         $user->mother_name = $request->input('mother_name');
         $user->father_name = $request->input('father_name');
         $user->phone = $request->input('phone');
+        $user->email = $request->input('email');
         $user->place_of_birth = $request->input('place_of_birth');
         $user->current_address = $request->input('current_address');
         $user->date_of_birth = $request->input('date_of_birth');

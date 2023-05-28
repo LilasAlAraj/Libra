@@ -97,7 +97,7 @@ $(document).ready(function () {
             var current_address = $('#current_address').val();
             var place_of_birth = $('#place_of_birth').val();
             var date_of_birth = $('#date_of_birth').val();
-            var email = $('email').val();
+            var email = $('#email').val();
             var password = $('#password').val();
             var confirm_password = $('#confirm_password').val();
             var role = $('input[name="rule"]:checked').val();
@@ -105,6 +105,7 @@ $(document).ready(function () {
             if (role == undefined) {
                 role = 'زبون'
             }
+
 
 
             $('.error').html("")

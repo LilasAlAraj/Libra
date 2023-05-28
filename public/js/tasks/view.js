@@ -32,6 +32,10 @@ let data;
 $(document).ready(function () {
 
     setAuth();
+    displayAll()
+});
+
+function displayAll() {
     // جلب البيانات من ملف JSON
     $.ajax({
         url: 'http://127.0.0.1:8000/tasks/all',
@@ -51,8 +55,114 @@ $(document).ready(function () {
 
         }
     });
-});
+}
 
+function nextTasksSearch() {
+    $('#searchByNextDates').validate(
+        {
+            submitHandler: function (form) {
+
+                $('#errorNextTask').html()
+
+                var statusSearch = $('#statusSearch').val();
+                var prioritySearch = $('#prioritySearch').val();
+                if (prioritySearch === null && statusSearch === null) {
+                    $('#errorNextTask').html('الرجاء اختيار مفاتيح البحث')
+                    return;
+                } else {
+
+                    $.ajax({
+                        url: 'http://127.0.0.1:8000/tasks/filter',
+                        type: 'get',
+                        data: {
+                            'search_key': '1',
+                            'status': statusSearch,
+                            'priority':prioritySearch
+                        },
+                        success: function (response) {
+
+                            data = response;
+                            // تحديث Pagination
+                            updatePagination(data);
+                            showPage(1, data)
+
+                        },
+                        error: function (response) {
+                            console.log(response);
+
+                        }
+                    });
+
+                }
+
+            }
+        }
+    )
+}
+
+
+
+function specificSearch() {
+    $('#searchBySpecific').validate(
+        {
+            submitHandler: function (form) {
+
+                $('#errorSpecificTasks').html()
+
+                var statusSearch = $('#specificStatusSearch').val();
+                var prioritySearch = $('#specificPrioritySearch').val();
+                if (prioritySearch === null && statusSearch === null) {
+                    $('#errorSpecificTasks').html('الرجاء اختيار مفاتيح البحث')
+                    return;
+                } else {
+
+                    $.ajax({
+                        url: 'http://127.0.0.1:8000/tasks/filter',
+                        type: 'get',
+                        data: {
+                            'search_key': '2',
+                            'status': statusSearch,
+                            'priority':prioritySearch
+                        },
+                        success: function (response) {
+
+                            data = response;
+                            // تحديث Pagination
+                            updatePagination(data);
+                            showPage(1, data)
+
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    });
+                }
+            }
+        }
+    )
+}
+
+function nextTasks() {
+    // جلب البيانات من ملف JSON
+    $.ajax({
+        url: 'http://127.0.0.1:8000/tasks/next',
+        type: 'get',
+        success: function (response) {
+
+            data = response;
+            console.log(response);
+
+            // تحديث Pagination
+            updatePagination(data);
+            showPage(1, data)
+
+        },
+        error: function (response) {
+            console.log(response);
+
+        }
+    });
+}
 
 
 function search() {
@@ -290,7 +400,7 @@ function showPage(pageNumber, data) {
 
 
         const status = document.createElement('span');
-        status.id = 'status-'+task.id;
+        status.id = 'status-' + task.id;
         status.classList.add('badge', 'state');
 
         if (task.Value_Status === 1) {
@@ -448,13 +558,13 @@ function changeStatus(id) {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/tasks/"+id+"/status/edit", // اسم ملف php الذي يقوم بالحذف
+                    url: "http://127.0.0.1:8000/tasks/" + id + "/status/edit", // اسم ملف php الذي يقوم بالحذف
                     method: "put", // طريقة الإرسال POST
                     data: { 'Value_Status': statusID },
                     success: function (response) {
                         console.log(response); // عرض الاستجابة في وحدة التحكم بالمتصفح
 
-                       const status = document.getElementById("status-"+id);
+                        const status = document.getElementById("status-" + id);
                         status.classList = [];
 
                         if (statusID == 1) {

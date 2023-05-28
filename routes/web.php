@@ -136,6 +136,7 @@ Route::get('task/create','App\Http\Controllers\TaskController@create' );
 Route::post('task','App\Http\Controllers\TaskController@store' );
 Route::delete('task/{id}','App\Http\Controllers\TaskController@destroy' );
 Route::get('tasks','App\Http\Controllers\TaskController@index' );
+Route::get('tasks/filter','App\Http\Controllers\TaskController@filter' );
 Route::put('tasks/{id}','App\Http\Controllers\TaskController@update' );
 Route::get('tasks/{id}','App\Http\Controllers\TaskController@show' );
 Route::get('tasks/{id}/edit','App\Http\Controllers\TaskController@edit' );

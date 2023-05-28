@@ -170,41 +170,147 @@
                     </div>
                     <hr>
 
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
 
-                    <form class="search-options" action="get">
 
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="from_date"><b>من تاريخ</b></label>
-                                <input type="date" id="from_date" name="from_date" required>
-                            </div>
-
-                            <div class="col-6">
-                                <label for="to_date"><b>إلى تاريخ</b></label>
-                                <input type="date" id="to_date" name="to_date" required>
-                            </div>
-
-                        </div>
-                        <div class="container" style="padding: 0;">
-                            <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                onclick="search()">
-                                <span data-feather="search" class="align-text-bottom"></span>
-                                ابحث
-
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab searchBy active " id="all-tab" data-bs-toggle="tab"
+                                data-bs-target="#all-tab-pane" type="button" role="tab"
+                                aria-controls="all-tab-pane" aria-selected="true" onclick="displayAll()">
+                                عرض الكل
                             </button>
-                            <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
-                                <span data-feather="x-circle" class="align-text-bottom"></span>
-                                امسح
+                        </li>
+
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab searchBy" id="by-nextDate-tab" data-bs-toggle="tab"
+                                data-bs-target="#by-nextDate-tab-pane" type="button" role="tab"
+                                aria-controls="by-nextDate-tab-pane" aria-selected="false" onclick="nextTasks()">
+                                عرض المهام القادمة والبحث بها
                             </button>
+                        </li>
 
 
-                            <span id="error" class="error">
-                            </span>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab searchBy" id="by-specific-tab" data-bs-toggle="tab"
+                                data-bs-target="#by-specific-tab-pane" type="button" role="tab"
+                                aria-controls="by-specific-tab-pane" aria-selected="false">
+                                بحث مخصص
+                            </button>
+                        </li>
+
+                    </ul>
+
+
+                    <div class="tab-content" id="myTabContent">
+                        <div id="displayAllTapPaneAuth">
+                            <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel"
+                                aria-labelledby="all-tab" tabindex="0">
+                                <br>
+                            </div>
                         </div>
-                        <hr>
 
 
-                    </form>
+                        <div class="tab-pane fade " id="by-nextDate-tab-pane" role="tabpanel"
+                            aria-labelledby="by-nextDate-tab" tabindex="0">
+                            <form class="search-options" id='searchByNextDates'>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="statusSearch"><b>الحالة</b></label>
+                                        <select id="statusSearch" name="statusSearch" >
+                                            <option selected disabled> اختر الحالة</option>
+                                            <option value="1" style="color: blue">قيد التنفيذ</option>
+                                            <option value="2" style="color: red">ملغاة</option>
+                                            <option value="3" style="color: green">مكتملة</option>
+                                            <option value="4" style="color: black">مؤجلة</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="prioritySearch"><b>الأولوية</b></label>
+                                        <select id="prioritySearch" name="prioritySearch">
+                                            <option disabled selected >اختر الأولوية</option>
+                                            <option value='عالية'> عالية</option>
+                                            <option value='متوسطة'> متوسطة</option>
+                                            <option value='منخفضة'> منخفضة</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="container" style="padding: 0;">
+                                    <button type="submit" id="search-button" class="operations-btn btn btn-success"
+                                        onclick="nextTasksSearch()">
+                                        <span data-feather="search" class="align-text-bottom"></span>
+                                        ابحث
+
+                                    </button>
+                                    <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <span data-feather="x-circle" class="align-text-bottom"></span>
+                                        امسح
+                                    </button>
+
+
+                                    <span id="errorNextTask" class="error">
+
+                                    </span>
+                                </div>
+                                <hr>
+
+
+                            </form>
+                        </div>
+
+
+
+                        <div class="tab-pane fade " id="by-specific-tab-pane" role="tabpanel"
+                            aria-labelledby="by-specific-tab" tabindex="0">
+                            <form class="search-options" id='searchBySpecific'>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="specificStatusSearch"><b>الحالة</b></label>
+                                        <select id="specificStatusSearch" name="specificStatusSearch" >
+                                            <option selected disabled> اختر الحالة</option>
+                                            <option value="1" style="color: blue">قيد التنفيذ</option>
+                                            <option value="2" style="color: red">ملغاة</option>
+                                            <option value="3" style="color: green">مكتملة</option>
+                                            <option value="4" style="color: black">مؤجلة</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="specificPrioritySearch"><b>الأولوية</b></label>
+                                        <select id="specificPrioritySearch" name="specificPrioritySearch">
+                                            <option disabled selected>اختر الأولوية</option>
+                                            <option value='عالية'> عالية</option>
+                                            <option value='متوسطة'> متوسطة</option>
+                                            <option value='منخفضة'> منخفضة</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="container" style="padding: 0;">
+                                    <button type="submit" id="search-button" class="operations-btn btn btn-success"
+                                        onclick="specificSearch()">
+                                        <span data-feather="search" class="align-text-bottom"></span>
+                                        ابحث
+
+                                    </button>
+                                    <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                        <span data-feather="x-circle" class="align-text-bottom"></span>
+                                        امسح
+                                    </button>
+
+
+                                    <span id="errorSpecificTasks" class="error">
+                                    </span>
+                                </div>
+                                <hr>
+
+
+                            </form>
+                        </div>
+                    </div>
+
+
+
 
                     <table class="table table-bordered">
                         <thead>
@@ -360,7 +466,7 @@
                     </div>
                     <br>
                     <div class="modal-footer" style="width:auto;">
-                        <button type="submit" id="change-button" class="operations-btn btn btn-secondary"   >
+                        <button type="submit" id="change-button" class="operations-btn btn btn-secondary">
                             <span data-feather="edit-2" class="align-text-bottom"></span>
                             عدّل الحالة
 

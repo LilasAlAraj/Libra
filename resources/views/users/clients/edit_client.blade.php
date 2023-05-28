@@ -25,8 +25,8 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-  <link href="../../../css/navs.css" rel="stylesheet">
-  <link href="../../../css/style.css" rel="stylesheet">
+  <link href="../../../../css/navs.css" rel="stylesheet">
+  <link href="../../../../css/style.css" rel="stylesheet">
 
 
 </head>
@@ -40,7 +40,7 @@
 
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
       <div class="imgcontainer">
-        <img src="../../../Img/Logo.jpg" alt="Avatar" class="avatar">
+        <img src="../../../../Img/Logo.jpg" alt="Avatar" class="avatar">
       </div>
     </a>
     <div class="d-flex justify-content-between w-100">
@@ -238,9 +238,9 @@
     crossorigin="anonymous"></script>
 
 
-  <script src="../../../js/users/auth.js"></script>
-  <script src="../../../js/navs.js"></script>
-  <script src="../../../js/users/edit.js"></script>
+  <script src="../../../../js/users/auth.js"></script>
+  <script src="../../../../js/navs.js"></script>
+  <script src="../../../../js/users/edit.js"></script>
 
 
 
