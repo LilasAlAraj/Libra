@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sessions;
 use App\Models\session_attachment;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -12,13 +13,17 @@ class SessionAttachmentController extends Controller
 
     public function store(Request $request)
     {
-        // $this->validate($request, [
-
-        //     'file_name' => 'mimes:pdf,jpeg,png,jpg',
-
-        // ], [
-        //     'file_name.mimes' => 'صيغة المرفق يجب ان تكون   pdf, jpeg , png , jpg',
-        // ]);
+    
+        $validator = Validator::make($request->all(),
+       [
+            'file_name' => 'mimes:pdf,jpeg,png,jpg',
+    
+        ]);
+    
+        if ($validator->fails()) 
+        {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        }
 
         $file = $request->file('attachment');
 
@@ -37,7 +42,9 @@ class SessionAttachmentController extends Controller
         $id = session_attachment::latest()->first()->id;
 
         $case_id = Sessions::where('id', $attachment->session_id)->first()->case_id;
+
         $file->move(public_path('Attachments/Case_' . $case_id . '/Session_' . $request->session_id), $file_name);
+
         return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id]);
 
     }
@@ -45,15 +52,22 @@ class SessionAttachmentController extends Controller
     public function destroy(Request $request)
     {
         $attachment = session_attachment::findOrFail($request->attachment_id);
+
         $session_id = $attachment->session_id;
+
         $case_id = $attachment->session->case->id;
+
         $file_name = $attachment->file_name;
+
         $path = 'Attachments\Case_' . $case_id . '\Session_' . $session_id . '\\';
 
-        if ($attachment->delete()) {
-            if (unlink(public_path($path . $file_name))) {
+        if ($attachment->delete())
+         {
+            if (unlink(public_path($path . $file_name)))
+             {
 
-                if (count(scandir($path)) == 2) {
+                if (count(scandir($path)) == 2)
+               {
                     rmdir($path);
                 }
 
@@ -70,11 +84,15 @@ class SessionAttachmentController extends Controller
     {
 
         $file = session_attachment::findOrFail($request->attachment_id);
+
         $session_id = $file->session_id;
+
         $case_id = $file->session->case->id;
+
         $file_name = $file->file_name;
+        
         $path = 'Attachments\Case_' . $case_id . '\Session_' . $session_id . '\\' . $file_name;
-        //return Response::download(public_path($path));
+        
         $download_link = asset($path);
 
         return Response::json(['download_link' => $download_link]);

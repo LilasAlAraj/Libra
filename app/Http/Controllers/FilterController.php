@@ -35,35 +35,58 @@ class FilterController extends Controller
 
             }
 
-        } else if ($search_key == 2) { // ------في حالة البحث بتاريخ القضية -----//
+        } else if ($search_key == 2) 
+        { // ------في حالة البحث بتاريخ القضية -----//
 
             //  $cases = Cases::where('date', '=', $request->date)->get();
             $from_year = $request->from_year;
+
             $to_year = $request->to_year;
 
-            $cases = Cases::whereHas('baseNumbers', function ($query) use ($from_year, $to_year) {
+            $cases = Cases::whereHas('baseNumbers', function ($query) use ($from_year, $to_year) 
+            {
                 $query->whereBetween('date', [$from_year, $to_year]);
+
             })->get();
-        } else if ($search_key == 3) { // -------في حالة البحث برقم القضية---------//
+
+        } 
+        else if ($search_key == 3)
+         { // -------في حالة البحث برقم القضية---------//
 
             $year = $request->year;
+
             $number = $request->number;
 
-            $cases = Cases::whereHas('baseNumbers', function ($query) use ($number, $year) {
+            $cases = Cases::whereHas('baseNumbers', function ($query) use ($number, $year)
+
+            {
                 $query->where('date', $year)->where('number', $number);
+
             })->get();
 
-        } else if ($search_key == 4) { //------ (موضوع الدعوى )البحث حسب العنوان ---------//
+        }
+         else if ($search_key == 4)
+          { 
+            //------ (موضوع الدعوى )البحث حسب العنوان ---------//
+
             $cases = Cases::select('*')->where('title', '=', $request->title)->get();
 
-        } else if ($search_key == 5) { //--------البحث حسب  اسم المحكمة --------//
+        } 
+        else if ($search_key == 5)
+         { 
+            //--------البحث حسب  اسم المحكمة --------//
 
             $cases = Cases::select('*')->where('court_id', '=', $request->court_id)->get();
 
-        } else if ($search_key == 6) { //-------------في حالة البحث عن جميع القضايا حسب اسم محامي موكل --------
+        } 
+        else if ($search_key == 6)
+         { 
+            //-------------في حالة البحث عن جميع القضايا حسب اسم محامي موكل --------
+
             $lawyerName = $request->lawyerName;
 
-            $cases = Cases::whereHas('lawyers', function ($query) use ($lawyerName) {
+            $cases = Cases::whereHas('lawyers', function ($query) use ($lawyerName)
+             {
 
                 $query->where('user_id', '=', $lawyerName);
 
@@ -71,18 +94,28 @@ class FilterController extends Controller
 
                 ->get();
 
-        } else if ($search_key == 7) { //-------في حالة البحث عن جميع القضايا حسب اسم موكل معين ----------
+        }
+         else if ($search_key == 7) 
+         { 
+            //-------في حالة البحث عن جميع القضايا حسب اسم موكل معين ----------
+
             $plaintiff_name = $request->plaintiff_name;
 
             $names = explode(" ", $plaintiff_name); // تقسيم اسم المستخدم إلى أجزاء
 
-            $cases = Cases::select('*')->whereHas('clients', function ($query) use ($names) {
+            $cases = Cases::select('*')->whereHas('clients', function ($query) use ($names)
+             {
 
-                if (count($names) == 3) {
+                if (count($names) == 3)
+                 {
                     $query->where('first_name', '=', $names[0])
+
                         ->where('father_name', '=', $names[1])
+
                         ->where('last_name', '=', $names[2]);
-                } else if (count($names) == 2) {
+
+                } 
+                else if (count($names) == 2) {
                     $query->where('first_name', '=', $names[0])
                         ->where('father_name', '=', $names[1])
                         ->orWhere('last_name', '=', $names[1]);
