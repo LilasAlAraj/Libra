@@ -583,6 +583,36 @@ class CasesController extends Controller
         return response()->json(['cases' => $casesArray]);
 
     }
+
+    public function getCountCases()
+    {
+        if (Auth::check())
+        
+         {
+            if (Auth::user()->role_name === 'محامي') 
+            {
+                $cases = Cases::whereHas('lawyers_case')->count();
+
+                return response()->json(['cases' => $cases]);
+
+            }
+
+            elseif (Auth::user()->role_name === 'زبون')
+            {
+                $cases = Cases::whereHas('clients_case')->count();
+
+                return response()->json(['cases' => $cases]);
+            }
+
+            elseif (Auth::user()->role_name === 'مشرف' || Auth::user()->role_name === 'سكرتاريا') 
+            {
+                $cases=Cases::all()->Count();
+
+                return response()->json(['cases' => $cases]);
+            }
+    
+        }
+    }
     // public function MarkAsRead_all (Request $request)
     // {
 

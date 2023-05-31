@@ -3,6 +3,7 @@
 use App\Models\User;
 use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +55,9 @@ Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesSta
 Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
 Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
 Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_tasks');
+//Count Of caes For member Or Client
 
+Route::get('cases/count', 'App\Http\Controllers\CasesController@getCountCases');
 //Recommendations
 Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
 Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
@@ -65,6 +68,13 @@ Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@d
 
 //Role of user
 Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
+
+
+//membershipRequest
+Route::get('user/membershipRequest', 'App\Http\Controllers\UserController@membershipRequest');
+//approveMembershipRequest
+Route::post('user/approveMembershipRequest/{userId}/{approvalStatus}', 'App\Http\Controllers\UserController@approveMembershipRequest');
+
 
 //Filters of case
 Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');
@@ -153,3 +163,5 @@ Route::put('tasks/{id}', 'App\Http\Controllers\TaskController@update');
 Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
 Route::get('tasks/{id}/edit', 'App\Http\Controllers\TaskController@edit');
 Route::put('tasks/{id}/status/edit', 'App\Http\Controllers\TaskController@updateStatus');
+Route::get('/tasks/{userId}', 'App\Http\Controllers\TaskController@taskDisplay');
+

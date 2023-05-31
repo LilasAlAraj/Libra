@@ -42,6 +42,38 @@ class UserController extends Controller
 
     }
 
+    public function membershipRequest()
+    {
+        $user=User::where('status','=','قيد الانتظار')->get();
+
+        return response()->json(['message'=>'طلبات قيد النتظار للموافقة عليها !' , 'user' => $user]);
+    }
+
+    public function approveMembershipRequest($userId,$approvalStatus)
+    {
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'لم يتم العثور على المستخدم'], 404);
+        }
+        
+        if ($approvalStatus == 'approve')
+        {
+            $user->status = 'مفعل';
+
+        } 
+
+        elseif ($approvalStatus == 'reject') 
+
+        {
+            $user->status = 'غير مفعل';
+        }
+    
+        $user->save();  
+    
+        return response()->json(['message' => 'تمت المعالجة بنجاح']);
+    }
+
     public function store(Request $request)
     {
 
@@ -59,7 +91,7 @@ class UserController extends Controller
         $user->date_of_birth = $request->input('date_of_birth');
         $user->status = $request->input('status');
         $user->role_name = $request->input('role_name');
-        $user->password = $password; // حفظ كلمة المرور المشفرة
+        $user->password = $password; 
         $user->save();
         return response()->json(['status' => 'success', 'message' => 'تم الإضافة بنجاح'], 200);
     }
@@ -181,11 +213,7 @@ class UserController extends Controller
         return response()->json(['rold' => $roleID]);
     }
 
-
-
-
-
-    public function clientCount(){
+  public function clientCount(){
         $num_clients = User::where('role_name', '=', 'زبون')->count();
 
          return response()->json(['num_clients'=>$num_clients]);
