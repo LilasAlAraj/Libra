@@ -116,6 +116,7 @@ function add() {
 
                 error: function (response) {
 
+                    console.log(response);
                     $('.error').html(response.message);
 
                 }

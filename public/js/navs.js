@@ -165,7 +165,7 @@ function setTaskNavAuth() {
 function setCaseNavAuth() {
 
     if (role == 1) {
-        document.getElementById('retreiveCaseNav').innerHTML = '<a href="" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">'
+        document.getElementById('retreiveCaseNav').innerHTML = '<a href="http://127.0.0.1:8000/cases/ir" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">'
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-text-bottom" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>'
             + 'استرجاع القضايا المشابهة'
             + '</a>'

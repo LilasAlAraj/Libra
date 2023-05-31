@@ -389,11 +389,13 @@ function saveFile(fileUrl) {
     document.body.removeChild(link);
 }
 function downloadAttachmentOfCase(attID) {
+    console.log('سيتم تنزيل هذا الملف'+attID)
     $.ajax({
         url: "http://127.0.0.1:8000/case/attachment/download",
         method: "get",
         data: { 'attachment_id': attID },
         success: function (response) {
+            console.log('تم التنزيل'); // ��ر�� الخط�� في
             saveFile(response.download_link);
 
         },
@@ -574,7 +576,7 @@ function setCaseAuth() {
     }
 }
 
-function editCase() {
+function changeStateCase() {
     $('#chang_state_form').validate(
         {
             rules: {

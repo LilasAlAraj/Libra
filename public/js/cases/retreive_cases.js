@@ -57,26 +57,26 @@ function retreive() {
                 var toSearch = $('#toSearch').val();
 
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+
                 $.ajax({
-                    url: 'test.json',
+                    url: 'http://127.0.0.1:8000/cases/ir/search',
                     type: 'get',
                     data: {
                         'toSearch': toSearch
                     },
                     success: function (response) {
+                        console.log(toSearch);
+                        console.log(response);
+
 
                         currentData = data = response;
                         // تحديث Pagination
                         displayAll();
 
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+                    error: function (response) {
+
+                        console.log(response);
                     }
                 });
             }

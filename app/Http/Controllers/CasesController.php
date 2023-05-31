@@ -109,7 +109,6 @@ class CasesController extends Controller
                 $Enemy_Clients->save();
                 $enemy_CLient_of_case = new Enemy_Clients_of_Cases();
 
-
                 $enemy_CLient_of_case->enemy_client_id = $Enemy_Clients->id;
 
                 $enemy_CLient_of_case->case_id = $case_id;
@@ -155,18 +154,24 @@ class CasesController extends Controller
     {
         $Base_Numbers = $request->Base_Numbers;
         $this->checkBaseNumbers($Base_Numbers);
-        Cases::create([
 
-            'court_id' => $request->court_id,
+        $case = new Cases;
 
-            'case_room' => $request->case_room,
+        $case->court_id = $request['court_id'];
 
-            'title' => $request->title,
+        $case->case_room = $request['case_room'];
 
-            'Status' => 'جارٍ العمل عليها',
+        $case->title = $request['title'];
 
-            'Value_Status' => 3,
-        ]);
+        $case->Status = 'جارٍ العمل عليها';
+
+        $case->Value_Status = '3';
+
+        $case->save();
+
+        $case->index();
+
+
         $case_id = Cases::latest()->first()->id;
 
         /******أرقام الأساس */
@@ -404,27 +409,27 @@ class CasesController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->case_id;
-        $cases = Cases::where('id', '=', $id)->first();
+        $case = Cases::where('id', '=', $id)->first();
 
         $id_Archive = $request->id_Archive;
 
         if ($id_Archive != 2) {
 
-            if ($cases->forceDelete()) {
+            if ($case->deleteIndex() && $case->forceDelete()) {
                 //remove all attachments files from storage
                 $path = 'Attachments\Case_' . $request->case_id;
                 $this->deleteDirectory($path);
 
-                return response()->json(['status' => 'success', 'message'=>'تم حذف القضية بنجاح.']);
+                return response()->json(['status' => 'success', 'message' => 'تم حذف القضية بنجاح.']);
             } else {
-                return response()->json(['status' => 'failed', 'message'=>'حدث خطأ أثناء الحذف. الرجاء إعادة المحاولة']);
+                return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف. الرجاء إعادة المحاولة']);
             }
         } else {
 
-            if ($cases->delete()) {
-                return response()->json(['status' => 'success', 'message'=>'تم أرشفة القضية بنجاح.']);
+            if ($case->delete()) {
+                return response()->json(['status' => 'success', 'message' => 'تم أرشفة القضية بنجاح.']);
             } else {
-                return response()->json(['status' => 'failed', 'message'=>'حدث خطأ أثناء الأرشفة. الرجاء إعادة المحاولة']);
+                return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الأرشفة. الرجاء إعادة المحاولة']);
             }
 
         }
@@ -435,6 +440,7 @@ class CasesController extends Controller
         $id = $request->id;
         $case = Cases::where('id', '=', $id)->first();
         $case->update(['claim' => $request->claim, 'facts' => $request->facts]);
+        $case->updateIndex();
         return response()->json(['status' => 'success', 'message' => 'تم تعديل تفاصيل القضية بنجاح']);
 
     }

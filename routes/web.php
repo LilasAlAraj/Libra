@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
+//     $client = ClientBuilder::create()->build();
+//         var_dump($client);
+// //     $client = ClientBuilder::create()
+// //         ->setHosts(['localhost:9200'])
+// //         ->setBasicAuthentication('Lilas', '123456789')
+// //         ->build();
+
+// // // Info API
+// //     $response = $client->info();
+// //     dump($response->tagline);
     return view('test');
 });
 if (Auth::check()) {
@@ -23,6 +34,7 @@ if (Auth::check()) {
 }
 
 Auth::routes();
+
 Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('home');
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('sessions', 'App\Http\Controllers\SessionController'); // 🌷جلسات القضية
@@ -42,7 +54,6 @@ Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesSta
 Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
 Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
 Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_tasks');
-
 
 //Recommendations
 Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
@@ -100,6 +111,8 @@ Route::get('account/setting', 'App\Http\Controllers\SettingAccountController@ind
 Route::post('account/change_password', 'App\Http\Controllers\SettingAccountController@update');
 Route::get('account', 'App\Http\Controllers\SettingAccountController@show');
 
+Route::get('cases/ir', 'App\Http\Controllers\IRController@index');
+Route::get('cases/ir/search', 'App\Http\Controllers\IRController@search');
 Route::resource('cases', 'App\Http\Controllers\CasesController'); // 🌷القضية
 
 Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
@@ -130,16 +143,13 @@ Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->na
 Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update'); // 🌷تغيير حالة القضية
 Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails'); // 🌷تغيير حالة القضية
 
-
-
-
 //tasks
-Route::get('task/create','App\Http\Controllers\TaskController@create' );
-Route::post('task','App\Http\Controllers\TaskController@store' );
-Route::delete('task/{id}','App\Http\Controllers\TaskController@destroy' );
-Route::get('tasks','App\Http\Controllers\TaskController@index' );
-Route::get('tasks/filter','App\Http\Controllers\TaskController@filter' );
-Route::put('tasks/{id}','App\Http\Controllers\TaskController@update' );
-Route::get('tasks/{id}','App\Http\Controllers\TaskController@show' );
-Route::get('tasks/{id}/edit','App\Http\Controllers\TaskController@edit' );
-Route::put('tasks/{id}/status/edit','App\Http\Controllers\TaskController@updateStatus' );
+Route::get('task/create', 'App\Http\Controllers\TaskController@create');
+Route::post('task', 'App\Http\Controllers\TaskController@store');
+Route::delete('task/{id}', 'App\Http\Controllers\TaskController@destroy');
+Route::get('tasks', 'App\Http\Controllers\TaskController@index');
+Route::get('tasks/filter', 'App\Http\Controllers\TaskController@filter');
+Route::put('tasks/{id}', 'App\Http\Controllers\TaskController@update');
+Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
+Route::get('tasks/{id}/edit', 'App\Http\Controllers\TaskController@edit');
+Route::put('tasks/{id}/status/edit', 'App\Http\Controllers\TaskController@updateStatus');

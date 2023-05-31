@@ -16,8 +16,7 @@ return new class extends Migration
             $table->integer('number')->unique();
             $table->date('date');
             $table->string('description');
-            $table->date('delay_date')->nullabe();
-            $table->date('delay_reasons')->nullabe();
+
             $table->unsignedBigInteger('case_id');
             $table->foreign('case_id')->references('id')->on('cases')->onDelete('cascade');
             $table->timestamps();

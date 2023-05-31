@@ -39,17 +39,15 @@ class DecisionController extends Controller
         // 'number.required'=>'please fill the number',
 
         // ]);
-        Decision::create
+        $decision = new Decision;
+        $decision->number = $request->number;
+        $decision->date = $request->date;
+        $decision->description = $request->description;
+        $decision->case_id = $request->case_id;
+        $decision->save();
+        $decision->index();
 
-            ([
-            'number' => $request->number,
-            'date' => $request->date,
-            'description' => $request->description,
-            'case_id' => $request->case_id,
-        ]);
-        $id = Decision::latest()->first()->id;
-
-        return response()->json(['status' => 'success', 'message' => 'تم إضافة قرار جديد بنجاح', 'id' => $id]);
+        return response()->json(['status' => 'success', 'message' => 'تم إضافة قرار جديد بنجاح', 'id' => $decision->id]);
 
     }
     public function update(Request $request)
@@ -76,6 +74,7 @@ class DecisionController extends Controller
             'description' => $request->description,
             'number' => $request->number,
         ]);
+        $desicion->updateIndex();
 
         return response()->json(['status' => 'success', 'message' => 'تم تعديل القرار بنجاح', 'case_id' => $desicion->case->id]);
     }
@@ -84,11 +83,11 @@ class DecisionController extends Controller
     {
 
         $id = $request->id;
-
-        if (Decision::find($id)->delete()) {
-            return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'],200);
+        $desicion = Decision::find($id);
+        if ($desicion->deleteIndex() && $desicion->delete()) {
+            return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'], 200);
         } else {
-            return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف! أعد المحاولة'],500);
+            return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف! أعد المحاولة'], 500);
         }
 
     }

@@ -69,7 +69,6 @@ class CaseArchiveController extends Controller
         return response()->json(['cases' => $casesArray]);
     }
 
-
     public function restore(Request $request)
     {
         $id = $request->case_id;
@@ -83,9 +82,9 @@ class CaseArchiveController extends Controller
 
     public function destroy(Request $request)
     {
-        $cases = Cases::withTrashed()->where('id', $request->case_id)->first();
+        $case = Cases::withTrashed()->where('id', $request->case_id)->first();
 
-        if ($cases->forceDelete()) {
+        if ($case->deleteIndex() && $case->forceDelete()) {
             return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح']);
         } else {
             return response()->json(['status' => 'failed', 'message' => 'فشل الحذف ']);

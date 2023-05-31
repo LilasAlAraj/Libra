@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,6 +13,217 @@ class Cases extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    private static $index = 'cases_index';
+    public static function destroyIndex()
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+        $params = [
+            'index' => Cases::$index, // اسم الفهرس الذي ترغب في حذفه
+        ];
+
+        $response = $client->indices()->delete($params);
+        return $response;
+
+    }
+    public static function createIndex()
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+
+        $params = [
+            'index' => Cases::$index,
+            'body' => [
+                'settings' => [
+                    'analysis' => [
+                        'analyzer' => [
+                            'my_analyzer' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => ['lowercase', 'arabic_normalization', 'arabic_stop', 'arabic_stemmer'],
+                            ],
+                        ],
+                        'filter' => [
+                            'arabic_normalization' => [
+                                'type' => 'arabic_normalization',
+                            ],
+                            'arabic_stop' => [
+                                'type' => 'stop',
+                                'stopwords' => '_arabic_',
+                            ],
+                            'arabic_stemmer' => [
+                                'type' => 'stemmer',
+                                'language' => 'arabic',
+                            ],
+
+                        ],
+                    ],
+                ],
+                'mappings' => [
+                    'properties' => [
+                        'facts' => [
+                            'type' => 'text',
+                            'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
+                        ],
+                        'claim' => [
+                            'type' => 'text',
+                            'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
+                        ],
+                        'title' => [
+                            'type' => 'text',
+                            'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
+                        ],
+                        'decisions' => [
+                            'type' => 'nested',
+                            'properties' => [
+                                'id' => [
+                                    'type' => 'text', // تعديل النوع إلى keyword
+                                    'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
+
+                                ],
+                                'description' => [
+                                    'type' => 'text',
+                                    'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
+                                ],
+
+                            ],
+                        ],
+
+                    ],
+                ],
+            ],
+        ];
+
+        $response = $client->indices()->create($params);
+    }
+    public static function indexAll()
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+        $cases = Cases::all();
+        foreach ($cases as $case) {
+
+            $params = [
+                'index' => Cases::$index,
+                'id' => $case->id,
+                'body' => [
+                    'claim' => $case->claim,
+                    'facts' => $case->facts,
+                    'title' => $case->title,
+                    'id' => $case->id,
+                    // 'decisions.id' => $case->decisions->pluck('id'),
+                    'decisions' => $case->decisions->pluck('description','id'),
+                    // أضف المزيد من الحقول اللازمة
+                ],
+            ];
+
+            $client->index($params);
+        }
+    }
+    public function index()
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+
+        $params = [
+            'index' => Cases::$index,
+            'id' => $this->id,
+            'body' => [
+                'claim' => $this->claim,
+                'facts' => $this->facts,
+                'title' => $this->title,
+                'id' => $this->id,
+                'decisions' => $this->decisions->pluck('description'),
+
+                // أضف المزيد من الحقول اللازمة
+            ],
+        ];
+
+        $client->index($params);
+    }
+
+    public function updateIndex()
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+
+        $params = [
+            'index' => Cases::$index,
+            'id' => $this->id,
+            'body' => [
+                'doc' => [
+                    'claim' => $this->claim,
+                    'facts' => $this->facts,
+
+                ],
+            ],
+        ];
+
+        $response = $client->update($params);
+    }
+
+    public function deleteIndex()
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+        // حذف وثيقة محددة من الفهرس
+        $params = [
+            'index' => Cases::$index,
+            'id' => $this->id,
+        ];
+
+        return $client->delete($params);
+    }
+    public static function search($query)
+    {
+        $client = ClientBuilder::create()
+            ->setHosts(['localhost:9200'])
+            ->setBasicAuthentication('Lilas', '123456789')
+            ->build();
+        $params = [
+            'index' => Cases::$index,
+            'body' => [
+                'query' => [
+                    'multi_match' => [
+                        'query' => $query,
+                        'fields' => ['facts', 'claim', 'title', 'decisions.description'],
+                    ],
+                ],
+            ],
+        ];
+        $response = $client->search($params);
+
+        $hits = $response['hits']['hits'];
+
+        $results = [];
+
+        // foreach ($hits as $hit) {
+        //     $result = $hit['_source'];
+        //     $result['type'] = $hit['_type'];
+        //     $result['score'] = $hit['_score'];
+        //     $results[] = $result;
+        // }
+
+        foreach ($hits as $hit) {
+            $results[] = $hit['_source'];
+        }
+
+        return $results;
+    }
+
     protected $fillable = [
         'title',
         'court_id',
@@ -21,12 +233,10 @@ class Cases extends Model
         'facts',
         'claim',
 
-        //'task_id'
     ];
-
     public function attachments(): HasMany
     {
-        return $this->hasMany(Case_attachment::class,'case_id');
+        return $this->hasMany(Case_attachment::class, 'case_id');
     }
     public function tasks()
     {
@@ -35,12 +245,12 @@ class Cases extends Model
     }
     public function sessions(): HasMany
     {
-        return $this->hasMany(Sessions::class,'case_id');
+        return $this->hasMany(Sessions::class, 'case_id');
     }
     public function decisions()
     {
         return $this->hasMany(Decision::class, 'case_id');
-    } public function clients_case()
+    }public function clients_case()
     {
         return $this->hasMany(Client_of_Cases::class, 'case_id');
     }public function lawyers_case()
@@ -51,7 +261,7 @@ class Cases extends Model
     {
         return $this->belongsToMany(Enemy_Lawyers::class, 'enemy_lawyer_of_cases', 'case_id', 'enemy_lawyer_id');
     }
-    public function enemy_clients():BelongsToMany
+    public function enemy_clients(): BelongsToMany
     {
         return $this->belongsToMany(Enemy_Clients::class, 'enemy_client_of_cases', 'case_id', 'enemy_client_id');
     }
