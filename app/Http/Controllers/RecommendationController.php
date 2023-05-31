@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 class RecommendationController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         return view('recommendations.view');
     }
     public function store(Request $request)
