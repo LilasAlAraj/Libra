@@ -1,50 +1,58 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Validator;
 use App\Models\Decision;
 use Illuminate\Http\Request;
 
 class DecisionController extends Controller
 {
 
-    // public function index()
-    // {
-
-    //     $desicion = Decision::all();
-
-    //     return view('Decision.desicion.index', compact('desicion'));
-
-    // }
-
     public function show($id)
     {
         $decision = Decision::where('id', $id)->first();
+        
         return response()->json($decision);
 
     }
 
     public function store(Request $request)
-    {
+    {   
+        $validator = Validator::make($request->all(), 
+        [
+            'number' => 'required|string',
 
-        // $request->validate([
-        //     'number' => 'required',
-        //     'date' => 'required',
-        //     'description'=>'required',
-        //     'case_id'=>'required',
-        // ],[
+            'date' => 'required|date',
 
-        // 'date.required'=>'please fill the desicion date',
-        // 'description.required'=>'please fill the description',
-        // 'number.required'=>'please fill the number',
+            'description' => 'required|string',
 
-        // ]);
+            'case_id' => 'required|integer|exists:cases,id',
+        ]);
+    
+        if ($validator->fails()) 
+        {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        }
+    
+        $decision = Decision::find($request->id);
+    
+        if (!$decision)
+       {
+            return response()->json(['status' => 'error', 'message' => 'Decision not found'], 404);
+        }
+
         $decision = new Decision;
+
         $decision->number = $request->number;
+
         $decision->date = $request->date;
+
         $decision->description = $request->description;
+
         $decision->case_id = $request->case_id;
+
         $decision->save();
+
         $decision->index();
 
         return response()->json(['status' => 'success', 'message' => 'تم إضافة قرار جديد بنجاح', 'id' => $decision->id]);
@@ -55,36 +63,53 @@ class DecisionController extends Controller
 
         $id = $request->id;
 
-        $this->validate($request, [
-            'date' => 'required',
-            'description' => 'required',
-            'number' => 'required',
-        ], [
+        $validator = Validator::make($request->all(), 
+        [
+        'date' => 'required|date',
 
-            'date.required' => 'please fill the desicion date',
-            'description.required' => 'please fill the description',
-            'number.required' => 'please fill the number',
-            'delay_reasons.required' => 'please fill the delay_reasons',
+        'description' => 'required|string',
 
-        ]);
-        $desicion = Decision::find($id);
+        'number' => 'required|string',
+       ]);
 
-        $desicion->update([
+    if ($validator->fails()) 
+
+    {
+        return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+    }
+
+    $decision = Decision::find($id);
+
+    if (!$decision)
+
+    {
+        return response()->json(['status' => 'error', 'message' => 'Decision not found'], 404);
+    }
+
+        $decision->update
+        ([
+
             'date' => $request->date,
+
             'description' => $request->description,
+
             'number' => $request->number,
         ]);
-        $desicion->updateIndex();
 
-        return response()->json(['status' => 'success', 'message' => 'تم تعديل القرار بنجاح', 'case_id' => $desicion->case->id]);
+        $decision->updateIndex();
+
+        return response()->json(['status' => 'success', 'message' => 'تم تعديل القرار بنجاح', 'case_id' => $decision->case->id]);
     }
 
     public function destroy(Request $request)
     {
 
         $id = $request->id;
-        $desicion = Decision::find($id);
-        if ($desicion->deleteIndex() && $desicion->delete()) {
+
+        $decision = Decision::find($id);
+
+        if ($decision->deleteIndex() && $decision->delete())
+        {
             return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'], 200);
         } else {
             return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف! أعد المحاولة'], 500);

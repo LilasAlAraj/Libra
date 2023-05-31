@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User_Of_Task;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -70,22 +72,28 @@ class TaskController extends Controller
     }
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
+        $validator = Validator::make($request->all(),
+         [
+            'name' => 'required|string|max:255',
 
-        //     'name' => 'required|max:255',
+            'description' => 'required|string',
 
-        //     'description' => 'required',
+            'start_date' => 'required|date',
 
-        //     'start_date' => 'required|date',
+            'end_date' => 'required|date',
 
-        //     'end_date' => 'required|date|after_or_equal:start_date',
+            'priority' => 'required|integer|min:1|max:10',
 
-        //     'Value_Status' => 'required|numeric',
+            'lawyers' => 'required|array',
 
-        //     'Status' => 'required',
-
-        //     'priority' => 'required',
-        // ]);
+            'lawyers.*' => 'integer|exists:lawyers,id',
+        ]);
+    
+        if ($validator->fails()) 
+        {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        }
+    
 
         $task = new Task;
 
@@ -110,29 +118,32 @@ class TaskController extends Controller
         return response()->json(['status' => 'success', 'message' => 'تم إنشاء المهمة بنجاح', 'data' => $task]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        // $validatedData = $request->validate([
-
-        //     'name' => 'required|max:255',
-
-        //     'description' => 'required',
-
-        //     'start_date' => 'required|date',
-
-        //     'end_date' => 'required|date|after_or_equal:start_date',
-
-        //     'Value_Status' => 'required|numeric',
-
-        //     'Status' => 'required',
-
-        //     'type_name' => 'required',
-        // ]);
+        $id=$request->id;
 
         $task = Task::find($id);
 
+        $validator = Validator::make($request->all(), 
+        [
+            'name' => 'required|string|max:255',
+
+            'description' => 'required|string',
+
+            'start_date' => 'required|date',
+
+            'end_date' => 'required|date',
+
+            'priority' => 'required|integer|min:1|max:10',
+        ]);
+    
+        if ($validator->fails()) 
+        {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        }
+    
         if (!$task) {
-            return response()->json(['status' => 'error', 'message' => 'Task not found']);
+            return response()->json(['status' => 'error', 'message' => 'Task not found'], 404);
         }
 
         $task->name = $request['name'];
@@ -146,9 +157,11 @@ class TaskController extends Controller
         $task->priority = $request['priority'];
 
         $task->save();
+
         $lawyers = $task->lawyers_task;
 
-        foreach ($lawyers as $lawyer) {
+        foreach ($lawyers as $lawyer)
+        {
             $lawyer->delete();
         }
         $this->addLawyer($request->lawyers, $task->id);
@@ -169,9 +182,14 @@ class TaskController extends Controller
 
         $task = Task::find($id);
 
-        if ($task->delete()) {
+        if ($task->delete())
+        {
             return response()->json(['status' => 'success', 'message' => 'تم حذف المهمة بنجاح']);
-        } else {
+        }
+
+        else
+
+        {
             return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف! الرجاء المحاولة مرة أخرى']);
         }
 
@@ -288,5 +306,51 @@ class TaskController extends Controller
         }
         return response()->json(['num_next_tasks' => $num_next_tasks]);
     }
+
+    public function taskDisplay($userId)
+    {
+        $user = User::find($userId);
+
+        if ($user->role_name === 'مشرف' || $user->role_name === 'سكرتاريا')
+        {
+          $tasks = Task::all();
+        }
+        else 
+        {
+           $tasks = $user->tasks;
+        }
+        $taskDetails = [];
+
+       foreach ($tasks as $task) 
+    {
+       $name= $task->name;
+
+       $description= $task->description;
+
+       $start_date= $task->start_date;
+
+       $end_date= $task->end_date;
+
+       $Status=$task->Status;
+
+       $priority=$task->priority;
+
+       $taskDetails[] = 
+       [
+        'name' => $name,
+
+        'description' => $description,
+
+        'start_date' => $start_date,
+
+        'end_date' => $end_date,
+
+        'Status' => $Status,
+        
+        'priority' => $priority
+    ];
+    return response()->json($taskDetails);
+    }
+  }   
 
 }

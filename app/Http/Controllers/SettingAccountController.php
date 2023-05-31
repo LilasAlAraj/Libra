@@ -21,10 +21,6 @@ class SettingAccountController extends Controller
 
     public function update(Request $request)
     {
-        // $request->validate([
-        //     'current_password' => ['required', 'string'],
-        //     'new_password' => ['required', 'string', 'confirmed'],
-        // ]);
 
         $user = Auth::user();
 
