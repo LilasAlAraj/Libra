@@ -6,8 +6,9 @@
 /*
    * Sidebar
    */
-
-
+.navbar-toggler {
+    z-index: 1;
+}
 .sidebar {
     position: fixed;
     top: 0;

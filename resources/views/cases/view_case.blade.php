@@ -400,7 +400,7 @@
                     <br>
                     <div class="modal-footer" style="width:auto;">
                         <button type="submit" id="change-button" class="operations-btn btn btn-secondary"
-                            onclick="changeStateCase()">
+                            onclick="changeStateCase();closeModal()">
                             <span data-feather="edit-2" class="align-text-bottom"></span>
                             عدّل الحالة
 
@@ -527,7 +527,7 @@
                         </div>
                     </div>
                     <div class="modal-footer " style="width:auto;">
-                        <button type="submit" class="operations-btn btn btn-success" onclick="addNewSession()">
+                        <button type="submit" class="operations-btn btn btn-success" onclick="addNewSession();closeModal()">
                             <span data-feather="plus" class="align-text-bottom"></span>
                             إضافة الجلسة
 
@@ -1173,7 +1173,7 @@
                     <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
                         رسالة
                     </h1>
-                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
                         aria-label="Close"></button>
 
                 </div>

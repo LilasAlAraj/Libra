@@ -389,7 +389,7 @@ function saveFile(fileUrl) {
     document.body.removeChild(link);
 }
 function downloadAttachmentOfCase(attID) {
-    console.log('سيتم تنزيل هذا الملف'+attID)
+    console.log('سيتم تنزيل هذا الملف' + attID)
     $.ajax({
         url: "http://127.0.0.1:8000/case/attachment/download",
         method: "get",
@@ -434,7 +434,7 @@ function deleteAttachmentOfCase() {
         method: "delete",
         data: { 'attachment_id': attID },
         success: function (response) {
-            if(response.status=='success'){
+            if (response.status == 'success') {
                 document.getElementById("case-attachment-row" + attID).remove();
 
             }
@@ -653,8 +653,13 @@ function cancelArchiveCase() {
 
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
 
-            if (response.status === 'success')
-                window.location.href = "http://127.0.0.1:8000/cases/view/" + caseID
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#cancelArchiveCaseBackdrop').modal('hide');
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            document.getElementById('closeModal').onclick = function () {
+                window.location.href = "http://127.0.0.1:8000/cases"
+            }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -673,9 +678,13 @@ function archiveCase() {
         method: "Delete", // طريقة الإرسال POST
         data: { id_Archive: 2, case_id: caseID },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
-
-            if (response.status === 'success')
-                window.location.href = "http://127.0.0.1:8000/cases/view/" + caseID
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#archiveCaseBackdrop').modal('hide');
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            document.getElementById('closeModal').onclick = function () {
+                window.location.href = "http://127.0.0.1:8000/cases"
+            }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -877,6 +886,9 @@ function addNewSession() {
                     console.log(response);
 
                     if (response.status === 'success') {
+                        $("#newSessionNumber").val('');
+                        $("#newSessionDate").val('');
+                        $("#newSessionDetails").val('');
                         sessions_table = document.getElementById('sessions-table-body');
                         session = {
                             'number': SessionNumber,
@@ -886,7 +898,6 @@ function addNewSession() {
                         };
                         addSessionRow(sessions_table, session);
 
-                        closeModal();
                         $('#addNewSessionBackdrop').modal('hide');
 
                         document.getElementById('message-text').innerHTML = response.message;

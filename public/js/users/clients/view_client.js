@@ -61,6 +61,11 @@ function setClientData() {
     // ضبط العنوان الحالي
     document.getElementById('current_address').append(client.current_address)
     document.getElementById('status').append(client.status)
+    if (client.status === 'مفعل')
+        document.getElementById('status').classList.add('text-bg-success')
+    else
+        document.getElementById('status').classList.add('text-bg-danger')
+
 
 
     if (client.email != null) {

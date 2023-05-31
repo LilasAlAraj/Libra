@@ -572,15 +572,21 @@ function deleteCase(caseId) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive" , // اسم ملف php الذي يقوم بالحذف
+        url: "http://127.0.0.1:8000/cases/archive", // اسم ملف php الذي يقوم بالحذف
         method: "Delete",
-        data: {  case_id: caseId },
+        data: { case_id: caseId },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
 
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
 
-            if (response.status === 'success')
+
+            $('#deleteCaseBackdrop').modal('hide');
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            document.getElementById('closeModal').onclick = function () {
                 window.location.href = "http://127.0.0.1:8000/cases/archive"
+            }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -604,15 +610,21 @@ function cancelArhiveCase(caseId) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive/restore" , // اسم ملف php الذي يقوم بالحذف
+        url: "http://127.0.0.1:8000/cases/archive/restore", // اسم ملف php الذي يقوم بالحذف
         method: "post",
-        data: {  case_id: caseId },
+        data: { case_id: caseId },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
 
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
 
-            if (response.status === 'success')
+
+            $('#archiveCaseBackdrop').modal('hide');
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            document.getElementById('closeModal').onclick = function () {
                 window.location.href = "http://127.0.0.1:8000/cases/archive"
+            }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح

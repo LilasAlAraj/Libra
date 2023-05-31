@@ -217,7 +217,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="statusSearch"><b>الحالة</b></label>
-                                        <select id="statusSearch" name="statusSearch" >
+                                        <select id="statusSearch" class="searchInput" name="statusSearch">
                                             <option selected disabled> اختر الحالة</option>
                                             <option value="1" style="color: blue">قيد التنفيذ</option>
                                             <option value="2" style="color: red">ملغاة</option>
@@ -227,8 +227,8 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="prioritySearch"><b>الأولوية</b></label>
-                                        <select id="prioritySearch" name="prioritySearch">
-                                            <option disabled selected >اختر الأولوية</option>
+                                        <select id="prioritySearch" class="searchInput" name="prioritySearch">
+                                            <option disabled selected>اختر الأولوية</option>
                                             <option value='عالية'> عالية</option>
                                             <option value='متوسطة'> متوسطة</option>
                                             <option value='منخفضة'> منخفضة</option>
@@ -267,7 +267,8 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="specificStatusSearch"><b>الحالة</b></label>
-                                        <select id="specificStatusSearch" name="specificStatusSearch" >
+                                        <select id="specificStatusSearch" class="searchInput"
+                                            name="specificStatusSearch">
                                             <option selected disabled> اختر الحالة</option>
                                             <option value="1" style="color: blue">قيد التنفيذ</option>
                                             <option value="2" style="color: red">ملغاة</option>
@@ -277,7 +278,8 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="specificPrioritySearch"><b>الأولوية</b></label>
-                                        <select id="specificPrioritySearch" name="specificPrioritySearch">
+                                        <select id="specificPrioritySearch"
+                                            class="searchInput"name="specificPrioritySearch">
                                             <option disabled selected>اختر الأولوية</option>
                                             <option value='عالية'> عالية</option>
                                             <option value='متوسطة'> متوسطة</option>
