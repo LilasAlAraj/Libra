@@ -174,11 +174,17 @@ function confirmEditDecision() {
 
                     if (response.status == 'success') {
 
+
                         decision_row = document.getElementById('decision-row' + decision.id);
                         decisionNumber = document.getElementById('decisionNumber');
                         decisionDate = document.getElementById('decisionDate');
                         decisionDetails = document.getElementById('decisionDetails');
-                        console.log(decisionNumber, decisionDate, decisionDetails)
+
+
+
+                        decision.number = editDecisionNumber;
+                        decision.date = editDecisionDate;
+                        decision.description = editDecisionDetails;
                         cells = decision_row.getElementsByTagName('td');
                         cells[0].innerHTML = editDecisionNumber
                         decisionNumber.innerHTML = editDecisionNumber;

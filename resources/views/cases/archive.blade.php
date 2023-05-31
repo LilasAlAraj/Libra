@@ -164,299 +164,45 @@
                     <hr>
                     <div class="container">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy active " id="all-tab" data-bs-toggle="tab"
-                                    data-bs-target="#all-tab-pane" type="button" role="tab"
-                                    aria-controls="all-tab-pane" aria-selected="true" onclick="displayAll()">
-                                    عرض الكل
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-title-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-title-tab-pane" type="button" role="tab"
-                                    aria-controls="by-title-tab-pane" aria-selected="false" onclick="displayAll()">
-                                    بحث بموضوع الدعوى
-                                </button>
-                            </li>
+                            <div id="displayAllTapAuth">
+
+                            </div>
+                            <div id="searchByTitleTabAuth">
+
+                            </div>
 
 
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-number-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-number-tab-pane" type="button" role="tab"
-                                    aria-controls="by-number-tab-pane" aria-selected="false">
-                                    بحث برقم القضية
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-state-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-state-tab-pane" type="button" role="tab"
-                                    aria-controls="by-state-tab-pane" aria-selected="false">
-                                    بحث بحالة القضية
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-court-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-court-tab-pane" type="button" role="tab"
-                                    aria-controls="by-court-tab-pane" aria-selected="false">
-                                    بحث باسم المحكمة
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-plaintiff_name-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-plaintiff_name-tab-pane" type="button" role="tab"
-                                    aria-controls="by-plaintiff_name-tab-pane" aria-selected="false">
-                                    بحث باسم الموكل
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-plaintiff_lawyer-tab"
-                                    data-bs-toggle="tab" data-bs-target="#by-plaintiff_lawyer-tab-pane"
-                                    type="button" role="tab" aria-controls="by-plaintiff_lawyer-tab-pane"
-                                    aria-selected="false">
-                                    بحث باسم المحامي
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link tab searchBy" id="by-years-tab" data-bs-toggle="tab"
-                                    data-bs-target="#by-years-tab-pane" type="button" role="tab"
-                                    aria-controls="by-years-tab-pane" aria-selected="false">
-                                    بحث بالعام
-                                </button>
-                            </li>
+                            <div id="searchByBaseNumberTabAuth">
+
+                            </div>
+
+                            <div id="searchByStatusTabAuth">
+
+                            </div>
+
+                            <div id="searchByCourtTabAuth">
+
+                            </div>
+
+
+                            <div id="searchByPlaintaiffNameTabAuth">
+
+                            </div>
+
+
+                            <div id="searchByLawyerNameTabAuth">
+
+                            </div>
+
+                            <div id="searchByYearsTabAuth">
+
+                            </div>
 
                         </ul>
 
 
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel"
-                                aria-labelledby="all-tab" tabindex="0">
-                                <br>
-                            </div>
-                            <div class="tab-pane fade" id="by-title-tab-pane" role="tabpanel"
-                                aria-labelledby="by-title-tab" tabindex="0">
-                                <form id="searchByTitle" class="search-options" action="get">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label for="title"><b>موضوع الدعوى</b></label>
-                                            <input type="text" id="title" name="title" required>
-                                        </div>
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success" onclick="searchByTitle()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-                                        </button>
-                                        <button type="reset" id="remove-button"
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-                                        <span id="error" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-                                </form>
-                            </div>
 
-
-                            <div class="tab-pane fade" id="by-number-tab-pane" role="tabpanel"
-                                aria-labelledby="by-title-tab" tabindex="0">
-                                <form id="searchByBaseNumber" class="search-options" action="get">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="base_number"><b>رقم الأساس</b></label>
-                                            <input type="number" id="base_number" placeholder="أدخل رقم الأساس"
-                                                name="base_number">
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="year"><b>العام</b></label>
-                                            <select id="year" class='year' name="year">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success" onclick="searchByBaseNumber()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-                                        </button>
-                                        <button type="reset" id="remove-button"
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-                                        <span id="error" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-
-
-                                </form>
-                            </div>
-
-
-
-
-                            <div class="tab-pane fade" id="by-state-tab-pane" role="tabpanel"
-                                aria-labelledby="by-state-tab" tabindex="0">
-                                <form id="searchByState" class="search-options" action="get">
-
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label for="state"><b>الحالة</b></label>
-                                            <select id="state" name="state" required>
-                                                <option>One</option>
-                                                <option>Two</option>
-                                                <option>Three</option>
-                                            </select>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success" onclick="searchByState()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-
-                                        </button>
-                                        <button type="reset" id="remove-button"
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-
-
-                                        <span id="error" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-
-
-                                </form>
-                            </div>
-
-
-                            <div class="tab-pane fade " id="by-court-tab-pane" role="tabpanel"
-                                aria-labelledby="by-court-tab" tabindex="0">
-                                <form id="searchByCourt" class="search-options" action="get">
-
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label for="court_name"><b>اسم المحكمة</b></label>
-                                            <input type="text" id="court_name" name="court_name" required>
-                                        </div>
-
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success" onclick="searchByCourt()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-
-                                        </button>
-                                        <button type="reset" id="remove-button"
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-                                        <span id="error" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-                                </form>
-                            </div>
-                            <div class="tab-pane fade " id="by-plaintiff_name-tab-pane" role="tabpanel"
-                                aria-labelledby="by-plaintiff_name-tab" tabindex="0">
-                                <form id="searchByplaintiffName" class="search-options" action="get">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label for="court_name"><b>اسم المدعي</b></label>
-                                            <input type="text" id="plaintiff_name" name="plaintiff_name" required>
-                                        </div>
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success" onclick="searchByplaintiffName()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-                                        </button>
-                                        <button type="reset" id="remove-button"
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-                                        <span id="error" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-                                </form>
-                            </div>
-                            <div class="tab-pane fade " id="by-plaintiff_lawyer-tab-pane" role="tabpanel"
-                                aria-labelledby="by-plaintiff_lawyer-tab" tabindex="0">
-                                <form id="searchByplaintiffLawyer" class="search-options" action="get">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label for="plaintiff_lawyer"><b>اسم المحامي</b></label>
-                                            <select id="plaintiff_lawyer" name="plaintiff_lawyer" required>
-                                                <option>One</option>
-                                                <option>Two</option>
-                                                <option>Three</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success"
-                                            onclick="searchByplaintiffLawyer()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-                                        </button>
-                                        <button type="reset" id="remove-button" onmouseenter=""
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-                                        <span id="error" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-                                </form>
-                            </div>
-
-                            <div class="tab-pane fade " id="by-years-tab-pane" role="tabpanel"
-                                aria-labelledby="by-years-tab" tabindex="0">
-                                <form id="searchByYears" class="search-options" action="get">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="from_year"><b>من عام</b></label>
-                                            <select id="from_year" class='year' name="from_year">
-                                            </select>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="to_year"><b>إلى عام</b></label>
-                                            <select id="to_year" class='year' name="to_year">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="container" style="padding: 0;">
-                                        <button type="submit" id="search-button"
-                                            class="operations-btn btn btn-success" onclick="searchByYears()">
-                                            <span data-feather="search" class="align-text-bottom"></span>
-                                            ابحث
-                                        </button>
-                                        <button type="reset" id="remove-button" onmouseenter=""
-                                            class="operations-btn btn btn-danger">
-                                            <span data-feather="x-circle" class="align-text-bottom"></span>
-                                            امسح
-                                        </button>
-                                        <span id="errorSearchByYear" class="error">
-                                        </span>
-                                    </div>
-                                    <hr>
-                                </form>
-                            </div>
                         </div>
                         <table class="table table-bordered  table-striped ">
                             <thead>
@@ -558,6 +304,26 @@
 
 
 
+    <div class="modal fade" id="messageBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="messageBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
+                        رسالة
+                    </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
+                        aria-label="Close"></button>
+
+                </div>
+                <div class=" modal-body">
+                    <p id="message-text">
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
@@ -568,6 +334,7 @@
     <script src="../../js/users/auth.js"></script>
     <script src="../../js/navs.js"></script>
     <script src="../../js/cases/archive.js"></script>
+    <script src="../../js/cases/filter.js"></script>
 
 
 
