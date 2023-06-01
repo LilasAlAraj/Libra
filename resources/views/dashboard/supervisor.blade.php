@@ -11,6 +11,7 @@
     <meta name="author" content="Lilas">
     <meta name="generator" content="Lilas">
     <title>Libra</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -94,7 +95,8 @@
                                     </li>
 
                                     <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
+                                        <a href="http://127.0.0.1:8000/cases"
+                                            class="nav-link d-inline-flex  collapse-items">
                                             <span data-feather="file-text" class="align-text-bottom"></span>
                                             عرض القضايا
                                         </a>
@@ -331,29 +333,66 @@
 
                 <div class="container">
 
+
                     <div class="row ">
-                        <div class="col-12 mb-2"
-                            style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
-                            طلبات العضوية قيد الانتظار</div>
+
+
+                        <div class="d-flex justify-content-between">
+                            <div style="font-size: small; font-weight: bolder; color: rgb(7, 48, 78);">
+                                طلبات العضوية قيد الانتظار
+                            </div>
+
+                            <button class="btn" style="background-color:  rgb(7, 48, 78); color:#fff;"
+                                onclick="fillMembershipRequestTable()">
+                                <span data-feather="rotate-cw" class="align-text-bottom"></span>
+
+                            </button>
+
+                        </div>
+                        <div class="row ">
+                            <table class="table table-striped table-hover " id="membership-request-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>الاسم</th>
+                                        <th>الدور</th>
+                                        <th>العمليات</th>
+                                    </tr>
+                                </thead>
+                                <tbody  id="membership-request-body-table">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="row ">
-                        <table class="table table-striped table-hover " id="tasks-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>الاسم</th>
-                                    <th>الدور</th>
-                                </tr>
-                            </thead>
-                            <tbody style="cursor: pointer;" id="membership-request-body-table">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </main>
         </div>
     </div>
 
+    <!--popup message-->
+
+
+
+
+    <div class="modal fade" id="messageBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="messageBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="height: fit-content; ">
+            <div class="modal-content">
+                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                    <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
+                        رسالة
+                    </h1>
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id="closeModal"
+                        aria-label="Close"></button>
+
+                </div>
+                <div class=" modal-body">
+                    <p id="message-text">
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"

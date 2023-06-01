@@ -71,9 +71,9 @@ Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
 
 
 //membershipRequest
-Route::get('user/membershipRequest', 'App\Http\Controllers\UserController@membershipRequest');
-//approveMembershipRequest
-Route::post('user/approveMembershipRequest/{userId}/{approvalStatus}', 'App\Http\Controllers\UserController@approveMembershipRequest');
+Route::get('users/requests', 'App\Http\Controllers\UserController@membershipRequest');
+//processMembershipRequest
+Route::put('users/requests/process', 'App\Http\Controllers\UserController@processMembershipRequest');
 
 
 //Filters of case
