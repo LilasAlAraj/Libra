@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Validator;
 use App\Models\Case_attachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -11,13 +11,11 @@ class CaseAttachmentController extends Controller
 
     public function store(Request $request)
     {
-        // $this->validate($request, [
-
-        //     'file_name' => 'mimes:pdf,jpeg,png,jpg',
-
-        // ], [
-        //     'file_name.mimes' => 'صيغة المرفق يجب ان تكون   pdf, jpeg , png , jpg',
-        // ]);
+        $validator = Validator::make($request->all(),
+        [
+             'file_name' => 'mimes:pdf,jpeg,png,jpg',
+     
+         ]);
 
         $file = $request->file('attachment');
 
@@ -28,11 +26,13 @@ class CaseAttachmentController extends Controller
         $attachment->file_name = $file_name;
 
         $attachment->case_id = $request->caseID;
+
         $attachment->save();
 
         $id = Case_attachment::latest()->first()->id;
 
         $file->move(public_path('Attachments/Case_' . $request->caseID), $file_name);
+
         return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id]);
 
     }
@@ -42,22 +42,32 @@ class CaseAttachmentController extends Controller
         $attachment = Case_attachment::findOrFail($request->attachment_id);
 
         $case_id = $attachment->case_id;
+
         $file_name = $attachment->file_name;
+
         $path = 'Attachments\Case_' . $case_id . '\\';
 
-        if ($attachment->delete()) {
-            if (unlink(public_path($path . $file_name))) {
+        if ($attachment->delete())
 
-                if (count(scandir($path)) == 2) {
+         {
+            if (unlink(public_path($path . $file_name))) 
+            {
+
+                if (count(scandir($path)) == 2) 
+                {
                     rmdir($path);
                 }
 
                 return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'], 200);
-            } else {
+            }
+             else
+             {
                 return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف من المحرك! أعد المحاولة'], 500);
             }
 
-        } else {
+        }
+         else
+        {
             return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف من قاعدة البيانات! أعد المحاولة'], 500);
         }
     }
@@ -66,10 +76,13 @@ class CaseAttachmentController extends Controller
     {
 
         $file = Case_attachment::findOrFail($request->attachment_id);
+
         $case_id = $file->case_id;
+
         $file_name = $file->file_name;
+
         $path = 'Attachments\Case_' . $case_id . '\\' . $file_name;
-        //return Response::download(public_path($path));
+
         $download_link = asset($path);
 
         return Response::json(['download_link' => $download_link]);

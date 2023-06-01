@@ -43,18 +43,7 @@ class IRController extends Controller
         $query = $requset->toSearch;
 
         $cases = Cases::search($query);
-        // foreach ($cases as $case) {
-
-        //     $casesArray[$i++] = ['id' => $case->id, 'title' => $case->title];
-        // }
-      //  $decisions = Decision::search($query);
-
-        // foreach ($decisions as $decision) {
-
-        //     $case = Decision::find($decision->id)->case;
-        //     $casesArray[$i++] = ['id' => $case->id, 'title' => $case->title];
-        // }
-        // return response()->json(['cases' => $casesArray]);
+        
         return response()->json(['cases' => $cases]);
     }
 
