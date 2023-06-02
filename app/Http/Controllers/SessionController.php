@@ -33,6 +33,21 @@ class SessionController extends Controller
             'date' => 'required|date',
 
             'description' => 'required|string',
+
+        ],[
+
+            
+            'number.required' => 'يرجى إدخال  رقم الجلسة',
+
+            'number.integer' => '0,1,.......,9 رقم الجلسة يجب أن يكون ضمن مجال',
+
+            'date.required' => 'يرجى إدخال تاريخ الجلسة',
+
+            'date.date' => ' تاريخ الجلسة يجب أن يكون تاريخ صحيح',
+
+            'description.required' => 'يرجى إدخال التفاصيل الخاصة بالجلسة',
+
+            'description.string' => 'التفاصيل يجب أن تكون نصية'
         ]);
     
         if ($validator->fails())
@@ -87,24 +102,43 @@ class SessionController extends Controller
 
         $session = Sessions::find($id);
 
+        if (!$session) 
+        {
+            return response()->json(['status' => 'error', 'message' => 'Session not found'], 404);
+        }
+      
+
         $validator = Validator::make($request->all(),
          [
+            'case_id' => 'required|integer|exists:cases,id',
+
+            'number' => 'required',
+
             'date' => 'required|date',
 
             'description' => 'required|string',
 
-            'number' => 'required',
+        ],[
+
+            
+            'number.required' => 'يرجى إدخال  رقم الجلسة',
+
+            'number.integer' => '0,1,.......,9 رقم الجلسة يجب أن يكون ضمن مجال',
+
+            'date.required' => 'يرجى إدخال تاريخ الجلسة',
+
+            'date.date' => ' تاريخ الجلسة يجب أن يكون تاريخ صحيح',
+
+            'description.required' => 'يرجى إدخال التفاصيل الخاصة بالجلسة',
+
+            'description.string' => 'التفاصيل يجب أن تكون نصية'
         ]);
     
         if ($validator->fails())
-       {
+        {
             return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
         }
     
-        if (!$session) {
-            return response()->json(['status' => 'error', 'message' => 'Session not found'], 404);
-        }
-      
 
         $session->update([
 
@@ -115,7 +149,7 @@ class SessionController extends Controller
             'number' => $request->number,
         ]);
 
-        return response()->json(['status' => 'success', 'message' => 'تم تعديل الجلسة بنجاح'], 200);
+        return response()->json(['status' => 'success', 'message' => 'تم تحديث الجلسة بنجاح'], 200);
 
     }
 

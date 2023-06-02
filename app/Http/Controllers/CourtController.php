@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cases;
 use App\Models\Courts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CourtController extends Controller
 {
@@ -20,16 +21,44 @@ class CourtController extends Controller
     }
 
     public function store(Request $request)
+
     {
+        $validator = Validator::make($request->all(), 
+        [
+            
+            'name' => 'required|string',
+
+            'place' => 'required|string',
+        ], 
+        [
+    
+            'name.required' => '  يرجى إدخال اسم المحكمة',
+
+            'name.string' => ' الاسم يجب أن يكون سلسلة نصية',
+
+            'place.required' => 'يرجى إدخال العنوان',
+
+            'place.string' => 'العنوان يجب أن يكون سلسلة نصية',
+        ]);
+        
+        if ($validator->fails())
+
+       {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        }
 
         $input = $request->all();
 
         $b_exit = Courts::where('name', '=', $input['name'])->where('place', '=', $input['place'])->exists();
 
-        if ($b_exit) {
+        if ($b_exit)
+        {
 
             return response()->json(['status' => 'failed', 'message' => 'هذه المحكمة مضافة مسبقاً']);
-        } else {
+        } 
+
+        else 
+        {
 
             $court = new Courts();
 
@@ -38,6 +67,7 @@ class CourtController extends Controller
             $court->place = $request->place;
 
             $court->save();
+
             $id = Courts::latest()->first()->id;
 
             return response()->json(['status' => 'success', 'message' => 'تم إضافة المحكمة بنجاح', 'id' => $id]);
@@ -49,12 +79,17 @@ class CourtController extends Controller
 
         $MyCases_id = Cases::where('court_id', $request->id)->pluck('court_id');
 
-        if ($MyCases_id->count() == 0) {
+        if ($MyCases_id->count() == 0) 
+        {
 
             Courts::findOrFail($request->id)->delete();
+
             return response()->json(['status' => 'success', 'message' => 'تم حذف المحكمة بنجاح']);
 
-        } else {
+        } 
+        else
+        
+        {
 
             return response()->json(['status' => 'failed', 'message' => 'لا يمكن حذف هذه المحكمة. هناك قضايا تتعلق بها!']);
 
