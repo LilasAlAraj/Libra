@@ -47,32 +47,35 @@ class UserController extends Controller
     {
         $user=User::where('status','=','قيد الانتظار')->get();
 
-        return response()->json(['message'=>'طلبات قيد النتظار للموافقة عليها !' , 'user' => $user]);
+        return response()->json($user);
     }
 
-    public function approveMembershipRequest($userId,$approvalStatus)
+    public function processMembershipRequest(Request $request)
     {
-        $user = User::find($userId);
+
+        $user = User::find($request->userId);
 
         if (!$user) {
             return response()->json(['message' => 'لم يتم العثور على المستخدم'], 404);
         }
-        
-        if ($approvalStatus == 'approve')
+
+        if ($request->operation == 'approve')
         {
             $user->status = 'مفعل';
+            $user->save();
 
-        } 
+            return response()->json(['status'=>'success','message' => 'تمت إضافة العضو بنجاح']);
 
-        elseif ($approvalStatus == 'reject') 
+        }
+
+        elseif ($request->operation == 'deny')
 
         {
-            $user->status = 'غير مفعل';
+            $user->delete();
+            return response()->json(['status'=>'success','message' => 'تمت رفض العضو بنجاح']);
         }
-    
-        $user->save();  
-    
-        return response()->json(['message' => 'تمت المعالجة بنجاح']);
+
+
     }
 
     public function store(Request $request)
@@ -148,6 +151,20 @@ class UserController extends Controller
         $password = Hash::make($request->input('password'));
 
         $user = new User;
+<<<<<<< HEAD
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->mother_name = $request->input('mother_name');
+        $user->father_name = $request->input('father_name');
+        $user->phone = $request->input('phone');
+        $user->email = $request->input('email');
+        $user->place_of_birth = $request->input('place_of_birth');
+        $user->current_address = $request->input('current_address');
+        $user->date_of_birth = $request->input('date_of_birth');
+        $user->status = $request->input('status');
+        $user->role_name = $request->input('role_name');
+        $user->password = $password;
+=======
 
         $user->password = $password; 
 
@@ -173,6 +190,7 @@ class UserController extends Controller
 
         $user->date_of_birth = $request->input('date_of_birth');
       
+>>>>>>> 180ab63605100b488855a518df7c4587f8b7c2b5
         $user->save();
 
         return response()->json(['status' => 'success', 'message' => 'تم الإضافة بنجاح'], 200);

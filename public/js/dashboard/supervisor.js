@@ -385,7 +385,148 @@ function addTaskRow(data, table, num) {
 }
 
 
+function fillMembershipRequestTable() {
+    let data;
+    $.ajax({
+        url: 'http://127.0.0.1:8000/users/requests',
+        type: 'get',
 
+        success: function (response) {
+
+            data = response;
+            // عرض الصفوف
+
+            var table = document.getElementById("membership-request-table");
+            if (table.rows.length === 2)
+                table.rows[1].remove();
+            body = $('#membership-request-body-table');
+            body.text('');
+            for (var i = 0; i < data.length; i++) {
+                addMembershipRequsetRow(data[i], body, i + 1)
+            }
+
+
+
+            var table = document.getElementById("membership-request-table");
+            if (table.rows.length == 1) {
+
+                var headerRow = table.rows[0];
+                var numColumns = headerRow.cells.length;
+                var row = table.insertRow(1);
+                var cell = row.insertCell(0);
+                cell.colSpan = numColumns;
+                cell.innerHTML = "لا يوجد أي طلبات";
+                cell.style.textAlign = 'center'
+
+            }
+
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+
+}
+
+
+function addMembershipRequsetRow(data, table, num) {
+
+    const request = data;
+
+    const name = request.first_name + ' ' + request.last_name;
+    const role = request.role_name;
+    const id = request.id;
+
+
+    const approveRequest = document.createElement('button');
+    approveRequest.title = 'قبول الطلب';
+    approveRequest.classList.add('btn', 'btn-success');
+    approveRequest.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        + " قبول";
+    approveRequest.onclick = function () {
+        processRequest(id, 'approve');
+    }
+    approveRequest.style.marginLeft='1em';
+
+    const denyRequest = document.createElement('button');
+    denyRequest.title = 'رفص الطلب';
+    denyRequest.classList.add('btn', 'btn-danger');
+    denyRequest.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
+        + " رفض";
+    denyRequest.onclick = function () {
+        processRequest(id, 'deny');
+    }
+
+
+    const opperation = document.createElement('div');
+    opperation.classList.add('d-flex','container');
+    opperation.append(approveRequest, denyRequest)
+    var row = $('<tr>').append(
+
+        $('<td>').text(num),
+        $('<td>').text(name),
+        $('<td>').text(role),
+        $('<td>').append(opperation),
+
+    );
+
+    row.attr('id','request-' + id);
+    table.append(row);
+
+}
+
+function processRequest(id, operation) {
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url: "http://127.0.0.1:8000/users/requests/process",
+        type: "put",
+        data: {
+            'userId': id,
+            'operation': operation
+        },
+        success: function (response) {
+
+            console.log(response)
+            console.log(response.status)
+            console.log(response.message)
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            if (response.status === 'success') {
+
+                document.getElementById('request-' + id).remove();
+                var table = document.getElementById("membership-request-table");
+                if (table.rows.length == 1) {
+
+                    var headerRow = table.rows[0];
+                    var numColumns = headerRow.cells.length;
+                    var row = table.insertRow(1);
+                    var cell = row.insertCell(0);
+                    cell.colSpan = numColumns;
+                    cell.innerHTML = "لا يوجد أي طلبات";
+                    cell.style.textAlign = 'center'
+
+                }
+
+            }
+        },
+
+        error: function (response) {
+            console.log(response)
+
+            $('.error').html(response.message);
+
+        }
+    });
+
+
+}
 $(document).ready(function () {
 
     setNumUnarchivedCases();
@@ -395,6 +536,7 @@ $(document).ready(function () {
     set_Cases_Chart()
     fillCasesTable();
     fillTasksTable();
+    fillMembershipRequestTable();
 });
 
 

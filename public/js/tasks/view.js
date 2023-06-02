@@ -384,6 +384,9 @@ function showPage(pageNumber, data) {
     for (var i = startIndex; i < endIndex; i++) {
         const task = data[i].task;
         const lawyers = data[i].lawyers;
+
+        console.log(task)
+
         var lawyersString = '';
         for (var j = 0; j < lawyers.length; j++) {
 

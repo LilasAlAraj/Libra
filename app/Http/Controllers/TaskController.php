@@ -27,31 +27,63 @@ class TaskController extends Controller
         $taskList = [];
         $i = 0;
 
-        if ($id == 'all') {
+        if ($id == 'all') {//كل المهام
 
             $tasks = Task::all();
 
             foreach ($tasks as $task) {
 
                 $lawyers = $task->lawyers;
-                $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                if (Auth::check() && Auth::user()->role_name === 'محامي') {
+                    foreach ($lawyers as $lawyer) {
+                        if (Auth::user()->id == $lawyer->id) {
+                            $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                            break;
+                        }
+
+                    }
+                } else {
+                    $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                }
 
             }
 
-        } else if ($id == 'next') {
+        } else if ($id == 'next') { // جيب المهام القادمة
             $tasks = Task::whereDate('start_date', '>', Carbon::today())->get();
             foreach ($tasks as $task) {
 
                 $lawyers = $task->lawyers;
-                $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                if (Auth::check() && Auth::user()->role_name === 'محامي') {
+                    foreach ($lawyers as $lawyer) {
+                        if (Auth::user()->id == $lawyer->id) {
+                            $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                            break;
+                        }
+
+                    }
+                } else {
+                    $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                }
+
 
             }
-        } else {
+        } else {//مهمة محددة برقم
 
             $task = Task::where('id', $id)->first();
             $lawyers = $task->lawyers;
 
-            $taskList = ['task' => $task, 'lawyers' => $lawyers];
+            if (Auth::check() && Auth::user()->role_name === 'محامي') {
+                foreach ($lawyers as $lawyer) {
+                    if (Auth::user()->id == $lawyer->id) {
+                        $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                        break;
+                    }
+
+                }
+            } else {
+                $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+            }
+
 
         }
 
@@ -269,7 +301,7 @@ class TaskController extends Controller
             }
 
         } else if ($request->search_key == 3) { //search for specific date tasks
-            $date = explode('-',$request->date);
+            $date = explode('-', $request->date);
             $compareDate = Carbon::createFromDate($date[0], $date[1], $date[2]);
             $tasks = Task::whereDate('start_date', '=', $compareDate)->
                 orWhereDate('end_date', '=', $date)->get();
@@ -281,7 +313,17 @@ class TaskController extends Controller
         foreach ($tasks as $task) {
 
             $lawyers = $task->lawyers;
-            $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+            if (Auth::check() && Auth::user()->role_name === 'محامي') {
+                foreach ($lawyers as $lawyer) {
+                    if (Auth::user()->id == $lawyer->id) {
+                        $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+                        break;
+                    }
+
+                }
+            } else {
+                $taskList[$i++] = ['task' => $task, 'lawyers' => $lawyers];
+            }
 
         }
         return response()->json($taskList);
