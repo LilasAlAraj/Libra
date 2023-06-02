@@ -84,18 +84,60 @@ class UserController extends Controller
 
             'last_name' => 'required|string',
 
-            'mother_name' => 'required|string',
+            'mother_name' => 'string',
 
-            'father_name' => 'required|string',
+            'father_name' => 'string',
 
-            'phone' => 'required|string',
-
-            'status' => 'required|string',
+            'phone' => 'required|numeric|unique:users',
 
             'role_name' => 'required|string',
 
-            'password' => 'required|string|min:8',
-        ]);
+            'password' =>
+            
+            [
+
+                'required',
+
+                'string',
+
+                'min:8',
+
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            ],
+         ],
+
+         [
+
+          'first_name'.'string'=>'يجب أن يكون الاسم الأول عبارة عن سلسة نصية',
+
+          'first_name'.'required' => 'يرجى إدخال الاسم الأول',
+
+          'last_name'.'string'=>'يجب أن يكون الاسم الأول عبارة عن سلسة نصية',
+
+          'last_name'.'required' => 'يرجى إدخال الاسم الأخير',
+
+          'mother_name'.'string'=>'يجب أن يكون الاسم الأول عبارة عن سلسة نصية',
+
+          'father_name'.'string'=>'يجب أن يكون الاسم الأول عبارة عن سلسة نصية',
+
+          'phone.required' => 'يرجى إدخال رقم الهاتف',
+
+          'phone.numeric' => 'يجب أن يكون رقم الهاتف قيمة رقمية',
+  
+          'phone.unique' => 'رقم الهاتف مسجل مسبقاً',
+       
+          'role_name'.'required'=>'يرجى إدخال دور المستخدم',
+
+          'password.required' => 'يرجى إدخال كلمة المرور',
+
+          'password.string' => 'يجب أن تكون كلمة المرور سلسلة نصية',
+
+          'password.min' => 'يجب أن تحتوي كلمة المرور على الأقل على 8 أحرف',
+
+          'password.regex' => 'كلمة المرور يجب أن تحتوي على حرف كبير وحرف صغير ورقم على الأقل',
+          
+
+         ]);
     
         if ($validator->fails())
          
@@ -149,7 +191,8 @@ class UserController extends Controller
         else if ($id == 'getmembers') 
         {
             $members = User::where('role_name', '=', 'محامي')->orWhere('role_name', '=', 'سكرتاريا')
-                ->get();
+
+            ->get();
             return response()->json(['members' => $members]);
 
         } 
@@ -157,6 +200,7 @@ class UserController extends Controller
         {
 
             $user = User::find($id);
+            
             return response()->json($user);
         }
     }
