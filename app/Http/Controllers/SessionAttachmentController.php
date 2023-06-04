@@ -16,11 +16,20 @@ class SessionAttachmentController extends Controller
     
         $validator = Validator::make($request->all(),
        [
+
             'file_name' => 'mimes:pdf,jpeg,png,jpg',
-    
+
+            'session_number' => 'required|string',
+       ],
+       [
+
+        'session_number.required' => 'يرجى إدخال  رقم الجلسة',
+
+        'session_number.integer' => '0,1,.......,9 رقم الجلسة يجب أن يكون ضمن مجال',
         ]);
     
         if ($validator->fails()) 
+
         {
             return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
         }
@@ -45,7 +54,7 @@ class SessionAttachmentController extends Controller
 
         $file->move(public_path('Attachments/Case_' . $case_id . '/Session_' . $request->session_id), $file_name);
 
-        return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id]);
+        return response()->json(['status' => 'success', 'message' => 'تم اضافة المرفق بنجاح', 'id' => $id],200);
 
     }
 

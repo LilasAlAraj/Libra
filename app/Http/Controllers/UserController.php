@@ -87,13 +87,11 @@ class UserController extends Controller
 
             'last_name' => 'required|string',
 
-            'mother_name' => 'required|string',
+            'mother_name' => 'string',
 
-            'father_name' => 'required|string',
+            'father_name' => 'string',
 
-            'phone' => 'required|string',
-
-            'status' => 'required|string',
+            'phone' => 'required|numeric|unique:users',
 
             'role_name' => 'required|string',
 
@@ -139,7 +137,8 @@ class UserController extends Controller
         else if ($id == 'getmembers')
         {
             $members = User::where('role_name', '=', 'محامي')->orWhere('role_name', '=', 'سكرتاريا')
-                ->get();
+
+            ->get();
             return response()->json(['members' => $members]);
 
         }
@@ -147,6 +146,7 @@ class UserController extends Controller
         {
 
             $user = User::find($id);
+
             return response()->json($user);
         }
     }

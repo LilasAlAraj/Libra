@@ -168,6 +168,21 @@ class CasesController extends Controller
             'case_room' => 'required|string',
 
             'title' => 'required|string',
+        ],[
+
+            'court_id.required' => 'يرجى إدخال المحكمة',
+
+            'court_id.integer' => ' المحكمة يجب أن تكون متاحة ',
+
+            'court_id.exists' => 'معرف المحكمة غير صحيح',
+
+            'case_room.required' => 'يرجى إدخال الغرفة',
+
+            'case_room.string' => ' الغرفة يجب أن تكون سلسلة نصية',
+
+            'title.required' => 'يرجى إدخال العنوان',
+            
+            'title.string' => 'العنوان يجب أن يكون سلسلة نصية',
         ]);
 
         if ($validator->fails())

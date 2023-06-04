@@ -18,28 +18,57 @@ class DecisionController extends Controller
 
     public function store(Request $request)
     {   
-        $validator = Validator::make($request->all(), 
+          
+
+        $validator = Validator::make($request->all(),
+        
         [
             'number' => 'required|string',
 
-            'date' => 'required|date',
-
             'description' => 'required|string',
 
-            'case_id' => 'required|integer|exists:cases,id',
+            'date' => 'required|date',
+        ],
+         [
+            'number.required' => 'يرجى إدخال رقم القرار',
+
+            'number.string' => 'يجب أن يكون رقم القرار سلسلة نصية',
+
+            'date.required' => 'يرجى إدخال تاريخ القرار',
+
+            'date.date' => 'يجب أن يكون تاريخ القرار صالحًا',
+
+            'description.required' => 'يرجى إدخال التفاصيل الخاص بالقرار',
+
+            'description.string' => 'التفاصيل يجب أن تكون نصية'
+
         ]);
     
+        $validator->after(function ($validator) use ($request)
+        
+        {
+            $exists = Decision::where('number', $request->number)
+
+                ->where('date', $request->date)
+
+                ->first();
+    
+            if ($exists) 
+
+            {
+                $validator->errors()->add('number', 'رقم القرار وتاريخه مسجل بالفعل');
+            }
+
+        });
+    
         if ($validator->fails()) 
+
         {
             return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
         }
     
-        $decision = Decision::find($request->id);
+        return response()->json(['status' => 'success', 'message' => 'تم التحقق من صحة رقم القرار وتاريخه'], 200);
     
-        if (!$decision)
-       {
-            return response()->json(['status' => 'error', 'message' => 'Decision not found'], 404);
-        }
 
         $decision = new Decision;
 
@@ -63,28 +92,63 @@ class DecisionController extends Controller
 
         $id = $request->id;
 
-        $validator = Validator::make($request->all(), 
+        $decision = Decision::find($id);
+
+        if (!$decision)
+    
+        {
+            return response()->json(['status' => 'error', 'message' => 'القرار غير موجود !'], 404);
+        }
+
+        $validator = Validator::make($request->all(),
+        
         [
-        'date' => 'required|date',
+            'number' => 'required|string',
 
-        'description' => 'required|string',
+            'description' => 'required|string',
 
-        'number' => 'required|string',
-       ]);
+            'date' => 'required|date',
+        ],
+         [
+            'number.required' => 'يرجى إدخال رقم القرار',
 
-    if ($validator->fails()) 
+            'number.string' => 'يجب أن يكون رقم القرار سلسلة نصية',
 
-    {
-        return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
-    }
+            'date.required' => 'يرجى إدخال تاريخ القرار',
 
-    $decision = Decision::find($id);
+            'date.date' => 'يجب أن يكون تاريخ القرار صالحًا',
 
-    if (!$decision)
+            'description.required' => 'يرجى إدخال التفاصيل الخاص بالقرار',
 
-    {
-        return response()->json(['status' => 'error', 'message' => 'Decision not found'], 404);
-    }
+            'description.string' => 'التفاصيل يجب أن تكون نصية'
+
+        ]);
+    
+        $validator->after(function ($validator) use ($request, $id)
+
+         {
+            $exists = Decision::where('number', $request->number)
+
+                ->where('date', $request->date)
+
+                ->where('id', '!=', $id)
+
+                ->first();
+    
+            if ($exists)
+
+            {
+                $validator->errors()->add('number', ' رقم القرار وتاريخه مسجل بالفعل');
+            }
+        });
+    
+        if ($validator->fails()) 
+
+        {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        }
+    
+        return response()->json(['status' => 'success', 'message' => 'تم التحقق من صحة رقم القرار وتاريخه'], 200);
 
         $decision->update
         ([
