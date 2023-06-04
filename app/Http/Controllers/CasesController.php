@@ -41,7 +41,7 @@ class CasesController extends Controller
 
             $b_exit = BaseNumber::where('number', '=', $number)->where('date', '=', $date)->exists();
 
-            if ($b_exit) 
+            if ($b_exit)
             {
 
                 session()->flash('Erorr', 'Error the BaseNumber already exist');
@@ -161,7 +161,7 @@ class CasesController extends Controller
 
         $this->checkBaseNumbers($Base_Numbers);
 
-        $validator = Validator::make($request->all(), 
+        $validator = Validator::make($request->all(),
         [
             'court_id' => 'required|integer|exists:courts,id',
 
@@ -169,7 +169,7 @@ class CasesController extends Controller
 
             'title' => 'required|string',
         ]);
-    
+
         if ($validator->fails())
        {
             return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
@@ -248,11 +248,11 @@ class CasesController extends Controller
 
                 $clients = $case->clients;
 
-                if (Auth::user()->role_name === 'زبون') 
+                if (Auth::user()->role_name === 'زبون')
                 {
                     foreach ($clients as $client)
                      {
-                        if (Auth::user()->id == $client->id) 
+                        if (Auth::user()->id == $client->id)
                         {
                             $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
 
@@ -267,7 +267,7 @@ class CasesController extends Controller
 
                 } else if (Auth::user()->role_name === 'محامي')
                  {
-                    foreach ($lawyers as $lawyer) 
+                    foreach ($lawyers as $lawyer)
                     {
                         if (Auth::user()->id == $lawyer->id)
                          {
@@ -291,7 +291,7 @@ class CasesController extends Controller
                 }
             }
 
-        } 
+        }
         else
          {
 
@@ -324,7 +324,7 @@ class CasesController extends Controller
 
             if (Auth::user()->role_name === 'زبون')
              {
-                foreach ($clients as $client) 
+                foreach ($clients as $client)
                 {
                     if (Auth::user()->id == $client->id)
                      {
@@ -339,9 +339,9 @@ class CasesController extends Controller
                     }
                 }
 
-            } else if (Auth::user()->role_name === 'محامي') 
+            } else if (Auth::user()->role_name === 'محامي')
             {
-                foreach ($lawyers as $lawyer) 
+                foreach ($lawyers as $lawyer)
                 {
                     if (Auth::user()->id == $lawyer->id)
                      {
@@ -355,8 +355,8 @@ class CasesController extends Controller
                     }
                 }
 
-            }  
-             else 
+            }
+             else
            {
                 $casesArray[$i++] = ['case' => $case, 'plaintiff_names' => $clients, 'plaintiff_lawyers' => $lawyers,
 
@@ -381,7 +381,7 @@ class CasesController extends Controller
     {
 
         $case_id = $request->case_id;
-        
+
         $case = Cases::findorfail($case_id);
 
         $validator = Validator::make($request->all(),
@@ -394,7 +394,7 @@ class CasesController extends Controller
 
             'title' => 'required|string',
         ]);
-    
+
         if ($validator->fails())
         {
             return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
@@ -415,7 +415,7 @@ class CasesController extends Controller
         /////base numbers
         // هون مسحنا كل أرقام الأساس القديمة لنضمن عدم حدوث أي مشكلة بالقديم
 
-        foreach ($Base_Numbers as $Base_Number) 
+        foreach ($Base_Numbers as $Base_Number)
         {
             $Base_Number->delete();
         }
@@ -433,7 +433,7 @@ class CasesController extends Controller
 
         $enemy_lawyers = $case->enemy_lawyers;
 
-        foreach ($enemy_lawyers as $enemy_lawyer) 
+        foreach ($enemy_lawyers as $enemy_lawyer)
         {
             $enemy_lawyer->delete();
         }
@@ -488,23 +488,23 @@ class CasesController extends Controller
     }
     private function deleteDirectory($directory)
     {
-        if (!is_dir($directory)) 
+        if (!is_dir($directory))
         {
             return;
         }
 
         $files = array_diff(scandir($directory), array('.', '..'));
 
-        foreach ($files as $file) 
+        foreach ($files as $file)
         {
             $path = $directory . '/' . $file;
 
-            if (is_dir($path)) 
+            if (is_dir($path))
             {
                 $this->deleteDirectory($path);
             }
-            
-            else 
+
+            else
             {
                 unlink($path);
             }
@@ -523,7 +523,7 @@ class CasesController extends Controller
 
         if ($id_Archive != 2) {
 
-            if ($case->deleteIndex() && $case->forceDelete()) 
+            if ($case->deleteIndex() && $case->forceDelete())
             {
                 //remove all attachments files from storage
                 $path = 'Attachments\Case_' . $request->case_id;
@@ -531,22 +531,22 @@ class CasesController extends Controller
                 $this->deleteDirectory($path);
 
                 return response()->json(['status' => 'success', 'message' => 'تم حذف القضية بنجاح.']);
-            } 
+            }
            else
            {
                 return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف. الرجاء إعادة المحاولة']);
             }
-        } 
-        else 
+        }
+        else
         {
 
-            if ($case->delete()) 
+            if ($case->delete())
 
             {
                 return response()->json(['status' => 'success', 'message' => 'تم أرشفة القضية بنجاح.']);
-            } 
-            
-            else 
+            }
+
+            else
             {
                 return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الأرشفة. الرجاء إعادة المحاولة']);
             }
@@ -585,8 +585,8 @@ class CasesController extends Controller
             ]);
 
         }
-        
-        elseif ($request->Value_Status === '2') 
+
+        elseif ($request->Value_Status === '2')
         {
 
             $cases->update
@@ -595,8 +595,8 @@ class CasesController extends Controller
 
                 'Value_Status' => $request->Value_Status,
             ]);
-        } 
-        elseif ($request->Value_Status === '3') 
+        }
+        elseif ($request->Value_Status === '3')
         {
 
             $cases->update
@@ -605,8 +605,8 @@ class CasesController extends Controller
 
                 'Value_Status' => $request->Value_Status,
             ]);
-        } 
-        else 
+        }
+        else
         {
 
             $cases->update
@@ -638,7 +638,7 @@ class CasesController extends Controller
 
         return response()->json(['num_cases' => $num_cases]);
 
-    } 
+    }
 
     public function totalCasesCountAssignedForLawyer()
 
@@ -646,14 +646,14 @@ class CasesController extends Controller
 
         $LawyerID = Auth::user()->id;
 
-        $unArchived_cases = Cases::whereHas('lawyers', function ($query) use ($LawyerID) 
+        $unArchived_cases = Cases::whereHas('lawyers', function ($query) use ($LawyerID)
         {
 
             $query->where('user_id', '=', $LawyerID);
 
         })->count();
 
-        $archived_cases = Cases::onlyTrashed()->whereHas('lawyers', function ($query) use ($LawyerID) 
+        $archived_cases = Cases::onlyTrashed()->whereHas('lawyers', function ($query) use ($LawyerID)
         {
 
             $query->where('user_id', '=', $LawyerID);
@@ -724,7 +724,7 @@ class CasesController extends Controller
 
         $cases = Cases::latest()->limit(4)->get();
 
-        foreach ($cases as $case) 
+        foreach ($cases as $case)
         {
 
             $lawyers = $case->lawyers;
@@ -733,7 +733,7 @@ class CasesController extends Controller
 
             if (Auth::user()->role_name === 'محامي')
              {
-                foreach ($lawyers as $lawyer) 
+                foreach ($lawyers as $lawyer)
                 {
                     if (Auth::user()->id == $lawyer->id)
                    {
@@ -758,7 +758,7 @@ class CasesController extends Controller
         if (Auth::check())
 
          {
-            if (Auth::user()->role_name === 'محامي') 
+            if (Auth::user()->role_name === 'محامي')
             {
                 $cases = Cases::whereHas('lawyers_case')->count();
 
@@ -773,13 +773,13 @@ class CasesController extends Controller
                 return response()->json(['cases' => $cases]);
             }
 
-            elseif (Auth::user()->role_name === 'مشرف' || Auth::user()->role_name === 'سكرتاريا') 
+            elseif (Auth::user()->role_name === 'مشرف' || Auth::user()->role_name === 'سكرتاريا')
             {
                 $cases=Cases::all()->Count();
 
                 return response()->json(['cases' => $cases]);
             }
-    
+
         }
     }
     // public function MarkAsRead_all (Request $request)
