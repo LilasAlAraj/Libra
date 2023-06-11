@@ -8,24 +8,19 @@ function updateTime() {
 setInterval(updateTime, 1000);
 
 
-function logout() {
 
+function setNavAuth(role) {
+
+
+    setCaseNavAuth(role);
+    setTaskNavAuth(role);
+    setClientNavAuth(role);
+    setMemberNavAuth(role);
+    setSettingsAuth(role);
+    setDashboardNavAuth(role);
 }
 
-
-
-function setNavAuth() {
-
-
-    setCaseNavAuth();
-    setTaskNavAuth();
-    setClientNavAuth();
-    setMemberNavAuth();
-    setSettingsAuth();
-    setDashboardNavAuth();
-}
-
-function setDashboardNavAuth() {
+function setDashboardNavAuth(role) {
     let location;
     if (role == 1) {
         location = 'http://127.0.0.1:8000/dashboard/supervisor';
@@ -48,7 +43,7 @@ function setDashboardNavAuth() {
 }
 
 
-function setSettingsAuth() {
+function setSettingsAuth(role) {
     if (role == 2) {
         document.getElementById('courtSettingsNav').innerHTML = '<a href="http://127.0.0.1:8000/courts" class="nav-link d-inline-flex  collapse-items">'
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers align-text-bottom" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>'
@@ -71,7 +66,7 @@ function setSettingsAuth() {
             + '</a>'
     }
 }
-function setMemberNavAuth() {
+function setMemberNavAuth(role) {
     if (role == 1 || role == 2) {
         document.getElementById('membersLi').innerHTML = '<li class="mb-1 nav-item ">'
             + '<button '
@@ -100,7 +95,7 @@ function setMemberNavAuth() {
 }
 
 
-function setClientNavAuth() {
+function setClientNavAuth(role) {
     if (role == 1 || role == 2) {
 
         document.getElementById('clientsLi').innerHTML = '<li class="mb-1 nav-item ">'
@@ -129,7 +124,7 @@ function setClientNavAuth() {
 }
 
 
-function setTaskNavAuth() {
+function setTaskNavAuth(role) {
 
 
     addNewTask = '';
@@ -162,7 +157,7 @@ function setTaskNavAuth() {
 
     }
 }
-function setCaseNavAuth() {
+function setCaseNavAuth(role) {
 
     if (role == 1) {
         document.getElementById('retreiveCaseNav').innerHTML = '<a href="http://127.0.0.1:8000/cases/ir" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">'
@@ -190,9 +185,6 @@ function setCaseNavAuth() {
 }
 
 
-$(document).ready(function () {
-    setNavAuth();
-});
 
 
 
@@ -238,3 +230,14 @@ $(document).ready(function () {
 
 
 
+
+(() => {
+
+    fetchUserRole()
+        .then((role) => {
+            setNavAuth(role);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();

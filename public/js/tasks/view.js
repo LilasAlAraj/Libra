@@ -29,13 +29,21 @@ function setAuth() {
 
 let data;
 
-$(document).ready(function () {
-
-    setAuth();
-    displayAll()
-});
-
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            setAuth();
+            displayAll()
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
 function displayAll() {
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     // جلب البيانات من ملف JSON
     $.ajax({
         url: 'http://127.0.0.1:8000/tasks/all',
@@ -48,6 +56,8 @@ function displayAll() {
             // تحديث Pagination
             updatePagination(data);
             showPage(1, data)
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
 
         },
         error: function (response) {
@@ -61,6 +71,9 @@ function nextTasksSearch() {
     $('#searchByNextDates').validate(
         {
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
 
                 $('#errorNextTask').html()
 
@@ -77,7 +90,7 @@ function nextTasksSearch() {
                         data: {
                             'search_key': '1',
                             'status': statusSearch,
-                            'priority':prioritySearch
+                            'priority': prioritySearch
                         },
                         success: function (response) {
 
@@ -86,10 +99,14 @@ function nextTasksSearch() {
                             updatePagination(data);
                             showPage(1, data)
 
+                            document.getElementById('content').style.display = 'block';
+                            document.getElementById('spinner').style.display = 'none';
                         },
                         error: function (response) {
                             console.log(response);
 
+                            document.getElementById('content').style.display = 'block';
+                            document.getElementById('spinner').style.display = 'none';
                         }
                     });
 
@@ -107,22 +124,25 @@ function specificSearch() {
         {
             submitHandler: function (form) {
 
+
                 $('#errorSpecificTasks').html()
 
                 var statusSearch = $('#specificStatusSearch').val();
                 var prioritySearch = $('#specificPrioritySearch').val();
+                console.log(statusSearch + " " + prioritySearch)
                 if (prioritySearch === null && statusSearch === null) {
                     $('#errorSpecificTasks').html('الرجاء اختيار مفاتيح البحث')
                     return;
                 } else {
-
+                    document.getElementById('content').style.display = 'none';
+                    document.getElementById('spinner').style.display = 'flex';
                     $.ajax({
                         url: 'http://127.0.0.1:8000/tasks/filter',
                         type: 'get',
                         data: {
                             'search_key': '2',
                             'status': statusSearch,
-                            'priority':prioritySearch
+                            'priority': prioritySearch
                         },
                         success: function (response) {
 
@@ -130,10 +150,13 @@ function specificSearch() {
                             // تحديث Pagination
                             updatePagination(data);
                             showPage(1, data)
-
+                            document.getElementById('content').style.display = 'block';
+                            document.getElementById('spinner').style.display = 'none';
                         },
                         error: function (response) {
                             console.log(response);
+                            document.getElementById('content').style.display = 'block';
+                            document.getElementById('spinner').style.display = 'none';
                         }
                     });
                 }
@@ -143,6 +166,9 @@ function specificSearch() {
 }
 
 function nextTasks() {
+
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     // جلب البيانات من ملف JSON
     $.ajax({
         url: 'http://127.0.0.1:8000/tasks/next',
@@ -156,73 +182,77 @@ function nextTasks() {
             updatePagination(data);
             showPage(1, data)
 
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         },
         error: function (response) {
             console.log(response);
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
 
         }
     });
 }
 
 
-function search() {
+// function search() {
 
-    $('#search-options').validate(
-        {
+//     $('#search-options').validate(
+//         {
 
-            rules: {
-                from_date: {
-                    required: true
-                },
-                to_date: {
-                    required: true
-                }
-            },
-            messages: {
-                from_date: {
-                    required: "الرجاء اختيار التاريخ"
-                },
-                to_date: {
-                    required: "الرجاء اختيار التاريخ"
-                }
-            },
-            submitHandler: function (form) {
+//             rules: {
+//                 from_date: {
+//                     required: true
+//                 },
+//                 to_date: {
+//                     required: true
+//                 }
+//             },
+//             messages: {
+//                 from_date: {
+//                     required: "الرجاء اختيار التاريخ"
+//                 },
+//                 to_date: {
+//                     required: "الرجاء اختيار التاريخ"
+//                 }
+//             },
+//             submitHandler: function (form) {
 
-                $('.error').html()
-
-
-                var from_date = $('#from_date').val();
-                var to_date = $('#to_date').val();
+//                 $('.error').html()
 
 
+//                 var from_date = $('#from_date').val();
+//                 var to_date = $('#to_date').val();
 
 
-                let from = new Date(from_date).getTime();
-                let to = new Date(to_date).getTime();
-
-                if (from > to) {
-                    $('.error').html('الرجاء اختيار التواريخ بشكل صحيح')
-
-                } else {
 
 
-                    var searchResults = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].date >= from_date && data[i].date <= to_date) {
-                            searchResults.push(data[i]);
-                        }
-                    }
+//                 let from = new Date(from_date).getTime();
+//                 let to = new Date(to_date).getTime();
 
-                    updatePagination(searchResults);
+//                 if (from > to) {
+//                     $('.error').html('الرجاء اختيار التواريخ بشكل صحيح')
 
-                    showPage(1, searchResults)
+//                 } else {
 
-                }
 
-            }
-        }
-    )
-}
+//                     var searchResults = [];
+//                     for (var i = 0; i < data.length; i++) {
+//                         if (data[i].date >= from_date && data[i].date <= to_date) {
+//                             searchResults.push(data[i]);
+//                         }
+//                     }
+
+//                     updatePagination(searchResults);
+
+//                     showPage(1, searchResults)
+
+//                 }
+
+//             }
+//         }
+//     )
+// }
 
 var currentPageGlobally = 1;
 

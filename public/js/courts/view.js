@@ -13,6 +13,10 @@ function setAuth() {
             + '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle align-text-bottom" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>'
             + ' إضافة  محكمة جديدة'
             + '</button>'
+
+        addNewCourtBtn.onclick = function () {
+            $('#addCourtError').html('');
+        }
     }
 }
 
@@ -79,8 +83,10 @@ function add_court() {
                         document.getElementById('message-text').innerHTML = response.message;
                         $('#messageBackdrop').modal('show');
                         $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
-                        closeModal();
-
+                        document.getElementById('closeModal').onclick = function(){
+                            $('#court_name').val('');
+                            $('#court_location').val('');
+                        }
                     } else {
                         $('#addCourtError').html(response.message);
 
@@ -102,27 +108,41 @@ function add_court() {
 
 let data;
 
-$(document).ready(function () {
-    setAuth();
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            setAuth();
 
-    // جلب البيانات من ملف JSON
-    $.ajax({
-        url: 'http://127.0.0.1:8000/court/all',
-        type: 'get',
-        success: function (response) {
+            // جلب البيانات من ملف JSON
+            $.ajax({
+                url: 'http://127.0.0.1:8000/court/all',
+                type: 'get',
+                success: function (response) {
 
-            data = response;
-            // تحديث Pagination
-            displayAll();
+                    data = response;
+                    // تحديث Pagination
+                    displayAll();
 
-        },
-        error: function (response) {
-            console.log(response);
 
-        }
-    });
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
+                },
+                error: function (response) {
+                    console.log(response);
 
-});
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
+                }
+            });
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
 
 
 

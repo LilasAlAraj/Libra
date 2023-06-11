@@ -1,9 +1,8 @@
 <?php
 
 use App\Models\User;
-use Elastic\Elasticsearch\ClientBuilder;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,15 +35,29 @@ if (Auth::check()) {
 
 Auth::routes();
 
-Route::get('/home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('home');
+Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
+Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
+Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
+
+Route::group(['middleware' => 'admin'], function () {
+
+    Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
+
+    Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');
+
+    Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails');
+
+});
+
+Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('home');
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('sessions', 'App\Http\Controllers\SessionController'); // 🌷جلسات القضية
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
 //Dashboard
-Route::get('/dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
-Route::get('/dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria');
-Route::get('/dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
+Route::get('dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
+Route::get('dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria')->name('DashboardSecretaria');
+Route::get('dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
 
 //Requirements For Dashboards
 Route::get('users/clients/count', 'App\Http\Controllers\UserController@clientCount');
@@ -69,12 +82,10 @@ Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@d
 //Role of user
 Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
 
-
 //membershipRequest
 Route::get('users/requests', 'App\Http\Controllers\UserController@membershipRequest');
 //processMembershipRequest
 Route::put('users/requests/process', 'App\Http\Controllers\UserController@processMembershipRequest');
-
 
 //Filters of case
 Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');
@@ -110,11 +121,11 @@ Route::get('session/{id}', 'App\Http\Controllers\SessionController@show');
 Route::put('session/update', 'App\Http\Controllers\SessionController@update');
 Route::delete('session/', 'App\Http\Controllers\SessionController@destroy');
 
-// archive
-Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
-Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
-Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
-Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
+// // archive
+// Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
+// Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
+// Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
+// Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
 
 //account setting
 Route::get('account/setting', 'App\Http\Controllers\SettingAccountController@index');
@@ -164,4 +175,3 @@ Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
 Route::get('tasks/{id}/edit', 'App\Http\Controllers\TaskController@edit');
 Route::put('tasks/{id}/status/edit', 'App\Http\Controllers\TaskController@updateStatus');
 Route::get('/tasks/{userId}', 'App\Http\Controllers\TaskController@taskDisplay');
-

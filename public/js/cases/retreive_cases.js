@@ -11,18 +11,22 @@
 
 
 $(document).ready(function () {
-    var table = document.getElementsByClassName("table")[0];
+    // var table = document.getElementsByClassName("table")[0];
 
-    if (table.rows.length == 1) {
+    // if (table.rows.length == 1) {
 
-        var headerRow = table.rows[0];
-        var numColumns = headerRow.cells.length;
-        var row = table.insertRow(1);
-        var cell = row.insertCell(0);
-        cell.colSpan = numColumns;
-        cell.innerHTML = "لا يوجد بيانات";
+    //     var headerRow = table.rows[0];
+    //     var numColumns = headerRow.cells.length;
+    //     var row = table.insertRow(1);
+    //     var cell = row.insertCell(0);
+    //     cell.colSpan = numColumns;
+    //     cell.innerHTML = "لا يوجد بيانات";
 
-    }
+    // }
+
+
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
 });
 
 
@@ -34,8 +38,19 @@ let currentData;
 
 
 function displayAll() {
-    updatePagination(currentData);
+
     showPage(1, currentData)
+    if (currentData.length != 0) {
+        document.getElementById('casesControllerContainer').innerHTML = '<nav aria-label="Page navigation example" class="row">'
+            + '<ul id="pagination" class="pagination"></ul>'
+            + '</nav>'
+            + '<button style="height: 100%;" id="reverse-btn" type="button" data-display="asc"'
+            + 'class="operations-btn btn" onclick="reverseData()">'
+            + '<span data-feather="refresh-cw" class="align-text-bottom"></span>'
+            + 'عرض تنازلي'
+            + '</button>'
+        updatePagination(currentData);
+    }
 
 }
 
@@ -69,7 +84,7 @@ function retreive() {
                         console.log(response);
 
 
-                        currentData = data = response;
+                        currentData = data = response.cases;
                         // تحديث Pagination
                         displayAll();
 
@@ -238,142 +253,243 @@ function showPage(pageNumber, data) {
     var startIndex = (pageNumber - 1) * itemsPerPage;
     var endIndex = Math.min(startIndex + itemsPerPage, data.length);
 
-    // عرض الصفوف
-    $('#table-body').empty();
-    for (var i = startIndex; i < endIndex; i++) {
-        const case_ = data[i];
 
 
 
-        var case_numbers = '';
-        for (var j = 0; j < case_.case_numbers.length; j++) {
-            case_numbers += case_.case_numbers[j];
-            if (j !== case_.case_numbers.length - 1)
-                case_numbers += "\n____________\n";
+
+    const retreivedCases = document.getElementById('retreivedCases');
+    retreivedCases.innerHTML = "";
+    if (data.length == 0) {
+        retreivedCases.innerHTML = 'لا يوجد بيانات حول ما تبحث عنه'
+
+        document.getElementById('casesControllerContainer').innerHTML = '';
+
+    } else {
+
+
+        for (var i = startIndex; i < endIndex; i++) {
+            const Case = data[i];
+            const CaseCard = document.createElement('div');
+            CaseCard.classList.add("row", "card", "mb-3");
+
+            //ضبط ادعاء القضية
+            const CaseCardHeader = document.createElement('div');
+            CaseCardHeader.classList.add("card-header");
+            const title = document.createElement('span');
+            title.classList.add("caseTitle");
+            title.innerHTML = Case.title;
+            title.title = 'انقر لعرض القضية وتفاصيلها بشكل كامل'
+            title.onclick = function () {
+                viewCase(Case.id)
+            }
+
+
+            CaseCardHeader.append(title);
+
+
+            const CaseCardBody = document.createElement('div');
+            CaseCardBody.classList.add("card-body");
+
+            const Accordion = document.createElement('div');
+            Accordion.id = 'accordionCase' + i;
+            Accordion.classList.add('accordion');
+
+            //ضبط وقائع القضية
+            let fact_text = Case.facts
+            const fact_text_content = document.createElement('p');
+            if (fact_text.length > 90) {
+                const show_more_fact = document.createElement('b');
+                show_more_fact.innerText = 'اعرض المزيد.'
+                show_more_fact.classList.add('show_more');
+                show_more_fact.setAttribute("data-bs-toggle", "modal")
+                show_more_fact.setAttribute("data-bs-target", "#showMoreBackdrop")
+                show_more_fact.onclick = function () {
+                    ShowMoreFacts("وقائع القضية", Case.facts, i)
+                }
+
+                fact_text = fact_text.substring(0, 90) + '... '
+                fact_text_content.append(fact_text, show_more_fact)
+
+            } else {
+                fact_text_content.append(fact_text)
+            }
+
+            const FactAccordionItem = document.createElement('div');
+            FactAccordionItem.classList.add('accordion-item');
+            accordion_header = document.createElement('h2');
+            accordion_header.classList.add('accordion-header');
+            accordion_button = document.createElement('button');
+            accordion_button.classList.add('accordion-button', 'collapsed');
+            accordion_button.type = 'button';
+            accordion_button.setAttribute('aria-expanded', 'false');
+            accordion_button.setAttribute('aria-controls', "collapseFacts-" + i)
+            accordion_button.setAttribute("data-bs-toggle", "collapse")
+            accordion_button.setAttribute("data-bs-target", "#collapseFacts-" + i)
+            accordion_button.innerHTML = 'الوقائع'
+            accordion_header.append(accordion_button);
+
+            accordion_collapse = document.createElement("div");
+            accordion_collapse.id = "collapseFacts-" + i;
+            accordion_collapse.classList.add("accordion-collapse", "collapse");
+            accordion_collapse.setAttribute("data-bs-parent", "#accordionCase" + i);
+            accordion_body = document.createElement("div");
+            accordion_body.classList.add("accordion-body");
+            accordion_body.append(fact_text_content);
+            accordion_collapse.append(accordion_body)
+            FactAccordionItem.append(accordion_header, accordion_collapse);
+            Accordion.append(FactAccordionItem);
+
+            //ضبط التماس القضية
+            let claim_text = Case.claim
+            const claim_text_content = document.createElement('p');
+            if (claim_text.length > 900) {
+                const show_more_claim = document.createElement('b');
+                show_more_claim.innerText = 'اعرض المزيد.'
+                show_more_claim.classList.add('show_more');
+                show_more_claim.setAttribute("data-bs-toggle", "modal")
+                show_more_claim.setAttribute("data-bs-target", "#showMoreBackdrop")
+                show_more_claim.onclick = function () {
+                    ShowMoreClaim("التماس القضية", Case.claim, i)
+                }
+
+
+                claim_text = claim_text.substring(0, 900) + '... '
+                claim_text_content.append(claim_text, show_more_claim)
+
+            } else {
+                claim_text_content.append(claim_text)
+            }
+            const ClaimAccordionItem = document.createElement('div');
+            ClaimAccordionItem.classList.add('accordion-item');
+            accordion_header = document.createElement('h2');
+            accordion_header.classList.add('accordion-header');
+            accordion_button = document.createElement('button');
+            accordion_button.classList.add('accordion-button', 'collapsed');
+            accordion_button.type = 'button';
+            accordion_button.setAttribute('aria-expanded', 'false');
+            accordion_button.setAttribute('aria-controls', "collapseClaims-" + i)
+            accordion_button.setAttribute("data-bs-toggle", "collapse")
+            accordion_button.setAttribute("data-bs-target", "#collapseClaims-" + i)
+            accordion_button.innerHTML = 'الالتماس'
+            accordion_header.append(accordion_button);
+
+            accordion_collapse = document.createElement("div");
+            accordion_collapse.id = "collapseClaims-" + i;
+            accordion_collapse.classList.add("accordion-collapse", "collapse");
+            accordion_collapse.setAttribute("data-bs-parent", "#accordionCase" + i);
+            accordion_body = document.createElement("div");
+            accordion_body.classList.add("accordion-body");
+            accordion_body.append(claim_text_content);
+            accordion_collapse.append(accordion_body)
+            ClaimAccordionItem.append(accordion_header, accordion_collapse);
+            Accordion.append(ClaimAccordionItem);
+
+            // ضبط قرارات القضية
+            const decisionTable = document.createElement('table');
+            thead = document.createElement('thead');
+            thead.style.textAlign = 'right'
+            theadTR = document.createElement('tr');
+            theadTRTH1 = document.createElement('th'); theadTRTH1.innerHTML = '#';
+            theadTRTH2 = document.createElement('th'); theadTRTH2.innerHTML = 'القرار';
+            theadTR.append(theadTRTH1, theadTRTH2);
+            thead.append(theadTR);
+            decisionTable.append(thead);
+            decisionTable.classList.add('table', 'table-bordered', 'table-striped')
+            const decisionsBody = document.createElement('tbody');
+            var j = 1;
+            for (const decisionID in Case.decisions) {
+                if (Case.decisions.hasOwnProperty(decisionID)) {
+
+                    decision_text = Case.decisions[decisionID];
+                    const decision_text_content = document.createElement('p');
+                    if (decision_text.length > 500) {
+                        let show_more_decision = document.createElement('b');
+                        show_more_decision.innerText = 'اعرض المزيد.'
+                        show_more_decision.classList.add('show_more');
+                        show_more_decision.setAttribute("data-bs-toggle", "modal")
+                        show_more_decision.setAttribute("data-bs-target", "#showMoreBackdrop")
+                        show_more_decision.id = "showMoreDecision" + i + "-" + j;
+                        show_more_decision.addEventListener('click', function () {
+                            ShowMoreDecision("قرار القضية", Case.decisions[decisionID], i);
+                        });
+                        decision_text = decision_text.substring(0, 500) + '... '
+                        decision_text_content.append(decision_text, show_more_decision)
+
+                    } else {
+                        decision_text_content.append(decision_text)
+                    }
+                    const row = document.createElement('tr');
+                    const numCol = document.createElement('td');
+                    numCol.innerHTML = j++;
+                    numCol.style.fontWeight = 'bold';
+                    const decisionTextCol = document.createElement('td');
+                    decisionTextCol.append(decision_text_content)
+                    row.append(numCol, decisionTextCol)
+                    decisionsBody.append(row)
+                }
+            }
+
+            decisionTable.append(decisionsBody);
+
+            const DecisionAccordionItem = document.createElement('div');
+            DecisionAccordionItem.classList.add('accordion-item');
+            accordion_header = document.createElement('h2');
+            accordion_header.classList.add('accordion-header');
+            accordion_button = document.createElement('button');
+            accordion_button.classList.add('accordion-button', 'collapsed');
+            accordion_button.type = 'button';
+            accordion_button.setAttribute('aria-expanded', 'false');
+            accordion_button.setAttribute('aria-controls', "CollapseDecision-" + i)
+            accordion_button.setAttribute("data-bs-toggle", "collapse")
+            accordion_button.setAttribute("data-bs-target", "#CollapseDecision-" + i)
+            accordion_button.innerHTML = 'القرارات'
+            accordion_header.append(accordion_button);
+
+            accordion_collapse = document.createElement("div");
+            accordion_collapse.id = "CollapseDecision-" + i;
+            accordion_collapse.classList.add("accordion-collapse", "collapse");
+            accordion_collapse.setAttribute("data-bs-parent", "#accordionCase" + i);
+            accordion_body = document.createElement("div");
+            accordion_body.classList.add("accordion-body", "accordion-body-decisions");
+            accordion_body.append(decisionTable);
+            accordion_collapse.append(accordion_body)
+            DecisionAccordionItem.append(accordion_header, accordion_collapse);
+            Accordion.append(DecisionAccordionItem);
+
+            CaseCardBody.append(Accordion);
+            CaseCard.append(CaseCardHeader);
+            CaseCard.append(CaseCardBody);
+
+            retreivedCases.append(CaseCard);
         }
-
-
-        var plaintiff_names = '';
-        for (var j = 0; j < case_.plaintiff_names.length; j++) {
-            plaintiff_names += case_.plaintiff_names[j];
-            if (j !== case_.plaintiff_names.length - 1)
-                plaintiff_names += "\n____________\n";
-        }
-
-
-
-        var plaintiff_lawyers = '';
-        for (var j = 0; j < case_.plaintiff_lawyers.length; j++) {
-            plaintiff_lawyers += case_.plaintiff_lawyers[j];
-            if (j !== case_.plaintiff_lawyers.length - 1)
-                plaintiff_lawyers += "\n____________\n";
-        }
-        var defendant_names = '';
-        for (var j = 0; j < case_.defendant_names.length; j++) {
-            defendant_names += case_.defendant_names[j];
-            if (j !== case_.defendant_names.length - 1)
-                defendant_names += "\n____________\n";
-        }
-
-
-        var defendant_lawyers = '';
-        for (var j = 0; j < case_.defendant_lawyers.length; j++) {
-            defendant_lawyers += case_.defendant_lawyers[j];
-            if (j !== case_.defendant_lawyers.length - 1)
-                defendant_lawyers += "\n____________\n";
-        }
-
-
-
-        const operations = document.createElement('div');
-        operations.classList.add('dropdown');
-        const opBtn = document.createElement('button');
-
-        opBtn.classList.add('dropdown-toggle', 'btn', 'btn-secondary')
-        opBtn.type = 'button';
-        opBtn.setAttribute("data-bs-toggle", "dropdown")
-        opBtn.setAttribute("aria-expanded", "false");
-        const operationMenu = document.createElement('ul');
-        operationMenu.id = 'operationMenu';
-        operationMenu.classList.add('dropdown-menu');
-
-
-
-
-        const viewBtn = document.createElement('button')
-        viewBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-text-bottom" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
-            + ' عرض القضية كاملة'
-        viewBtn.setAttribute('title', 'عرض القضية');
-        viewBtn.classList.add('btn', 'btn-info', 'menu-operations-btn');
-        viewBtn.onclick = function () {
-            viewCase(case_.id)
-        }
-        const viewOpLi = document.createElement('li');
-        viewOpLi.append(viewBtn);
-        viewOpLi.classList = 'operationMenuItem'
-
-
-
-        operationMenu.append(viewOpLi);
-
-
-        operations.append(opBtn, operationMenu);
-
-        const state = document.createElement('span');
-        state.classList.add('badge', 'state');
-
-        if (case_.state === 1) {
-            //winner
-            state.classList.add('text-bg-success');
-            state.innerHTML = 'رابحة'
-        } else if (case_.state === 2) {
-            //losser
-            state.innerHTML = 'خاسرة'
-            state.classList.add('text-bg-danger');
-        } else if (case_.state === 3) {
-            //running
-            state.innerHTML = 'جار العمل عليها'
-            state.classList.add('text-bg-info');
-        } else if (case_.state === 4) {
-            //blocked
-            state.innerHTML = 'معلقة'
-            state.classList.add('text-bg-dark');
-        }
-
-        const row = $('<tr>').append(
-            $('<td>').append($('<pre>').text(case_numbers)),
-            $('<td>').text(case_.case_title),
-            $('<td>').text(case_.court + "/" + case_.room),
-            $('<td>').append($('<pre>').text(plaintiff_names)),
-            $('<td>').append($('<pre>').text(plaintiff_lawyers)),
-            $('<td>').append($('<pre>').text(defendant_names)),
-            $('<td>').append($('<pre>').text(defendant_lawyers)),
-            $('<td>').append(state),
-            $('<td>').append(operations)
-
-        );
-
-        row.attr('id', case_.id);
-        $('#table-body').append(row);
-    }
-
-
-    var table = document.getElementsByClassName("table")[0];
-    if (table.rows.length == 1) {
-
-        var headerRow = table.rows[0];
-        var numColumns = headerRow.cells.length;
-        var row = table.insertRow(1);
-        var cell = row.insertCell(0);
-        cell.colSpan = numColumns;
-        cell.innerHTML = "لا يوجد بيانات";
-
     }
 }
 
+function ShowMoreFacts(title, text, i) {
+    console.log(i);
+    console.log(title);
+    console.log(text);
+    document.getElementById('showMoreBackdropLabel').innerHTML = title;
+    document.getElementById('showMore-text').innerHTML = text;
+}
+function ShowMoreClaim(title, text, i) {
+    console.log(i);
+    console.log(title);
+    console.log(text);
+    document.getElementById('showMoreBackdropLabel').innerHTML = title;
+    document.getElementById('showMore-text').innerHTML = text;
+}
+function ShowMoreDecision(title, text, i) {
+    console.log(i);
+    console.log(title);
+    console.log(text);
+    document.getElementById('showMoreBackdropLabel').innerHTML = title;
+    document.getElementById('showMore-text').innerHTML = text;
+}
 
 function viewCase(caseId) {
-    window.location.href = "view_case.html?id=" + caseId;
+    console.log(caseId);
+    window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
 
 }
 

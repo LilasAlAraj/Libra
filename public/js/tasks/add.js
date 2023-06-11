@@ -13,6 +13,10 @@
 $(document).ready(function () {
     addLawyerField();
     addNewTask();
+
+
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
 });
 
 function addNewTask() {

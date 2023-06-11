@@ -440,7 +440,7 @@ function addMembershipRequsetRow(data, table, num) {
 
     const approveRequest = document.createElement('button');
     approveRequest.title = 'قبول الطلب';
-    approveRequest.classList.add('btn', 'btn-success');
+    approveRequest.classList.add('btn', 'btn-success','btn-sm');
     approveRequest.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="20 6 9 17 4 12"></polyline></svg>'
         + " قبول";
     approveRequest.onclick = function () {
@@ -450,7 +450,7 @@ function addMembershipRequsetRow(data, table, num) {
 
     const denyRequest = document.createElement('button');
     denyRequest.title = 'رفص الطلب';
-    denyRequest.classList.add('btn', 'btn-danger');
+    denyRequest.classList.add('btn', 'btn-danger','btn-sm');
     denyRequest.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
         + " رفض";
     denyRequest.onclick = function () {
@@ -537,6 +537,9 @@ $(document).ready(function () {
     fillCasesTable();
     fillTasksTable();
     fillMembershipRequestTable();
+
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
 });
 
 

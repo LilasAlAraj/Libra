@@ -114,18 +114,18 @@ class TaskController extends Controller
 
             'end_date' => 'required|date',
 
-            'priority' => 'required|integer|min:1|max:10',
+            'priority' => 'required|string',
 
             'lawyers' => 'required|array',
 
             'lawyers.*' => 'integer|exists:lawyers,id',
         ]);
-    
-        if ($validator->fails()) 
-        {
-            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
         }
-    
+
 
         $task = new Task;
 
@@ -156,7 +156,7 @@ class TaskController extends Controller
 
         $task = Task::find($id);
 
-        $validator = Validator::make($request->all(), 
+        $validator = Validator::make($request->all(),
         [
             'name' => 'required|string|max:255',
 
@@ -168,15 +168,13 @@ class TaskController extends Controller
 
             'priority' => 'required|integer|min:1|max:10',
         ]);
-    
-        if ($validator->fails()) 
-        {
-            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
         }
-    
-        if (!$task) {
-            return response()->json(['status' => 'error', 'message' => 'Task not found'], 404);
-        }
+
+
 
         $task->name = $request['name'];
 
@@ -353,17 +351,17 @@ class TaskController extends Controller
     {
         $user = User::find($userId);
 
-        if ($user->role_name === 'مشرف' || $user->role_name === 'سكرتاريا')
+        if ($user->role_name === 'مدير' || $user->role_name === 'سكرتاريا')
         {
           $tasks = Task::all();
         }
-        else 
+        else
         {
            $tasks = $user->tasks;
         }
         $taskDetails = [];
 
-       foreach ($tasks as $task) 
+       foreach ($tasks as $task)
     {
        $name= $task->name;
 
@@ -377,7 +375,7 @@ class TaskController extends Controller
 
        $priority=$task->priority;
 
-       $taskDetails[] = 
+       $taskDetails[] =
        [
         'name' => $name,
 
@@ -388,11 +386,11 @@ class TaskController extends Controller
         'end_date' => $end_date,
 
         'Status' => $Status,
-        
+
         'priority' => $priority
     ];
     return response()->json($taskDetails);
     }
-  }   
+  }
 
 }

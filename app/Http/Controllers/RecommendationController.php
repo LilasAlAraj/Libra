@@ -23,21 +23,18 @@ class RecommendationController extends Controller
             'content' => 'required|string',
         ],
         [
-            
-            'title.required' => 'يرجى إدخال العنوان',
-                
-            'title.string' => 'العنوان يجب أن يكون سلسلة نصية',
+
+            'title.required' => 'يرجى إدخال عنوان التوصية',
 
             'content.required' => 'يرجى إدخال المحتوى الخاص بالتوصية',
 
-            'content.string' => 'المحتوى يجب أن تكون نصية'
 
         ]);
-    
-        if ($validator->fails()) 
+
+        if ($validator->fails())
 
         {
-            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+            return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
         }
 
         Recommendation::create
@@ -72,19 +69,19 @@ class RecommendationController extends Controller
     public function update(Request $request)
 
     {
-        $validator = Validator::make($request->all(), 
-        
+        $validator = Validator::make($request->all(),
+
         [
             'id' => 'required|exists:recommendations',
 
             'title' => 'required|string',
 
             'content' => 'required|string',
-            
+
         ],[
-            
+
             'title.required' => 'يرجى إدخال العنوان',
-                
+
             'title.string' => 'العنوان يجب أن يكون سلسلة نصية',
 
             'content.required' => 'يرجى إدخال المحتوى الخاص بالتوصية',
@@ -92,7 +89,7 @@ class RecommendationController extends Controller
             'content.string' => 'المحتوى يجب أن تكون نصية'
 
         ]);
-    
+
         if ($validator->fails())
 
         {
@@ -121,10 +118,10 @@ class RecommendationController extends Controller
 
         if (Recommendation::find($id)->delete())
         {
-            
+
             return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'],200);
 
-        } 
+        }
         else
         {
 

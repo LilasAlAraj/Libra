@@ -64,7 +64,7 @@ function add_Recommendation() {
                 success: function (response) {
                     console.log(response)
                     if (response.status == 'success') {
-                        Recommendation = [];
+                        const Recommendation = [];
                         Recommendation["title"] = title
                         Recommendation["content"] = content
                         Recommendation['id'] = response.id;
@@ -103,28 +103,38 @@ function add_Recommendation() {
 
 let data;
 
-$(document).ready(function () {
-    setAuth();
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            setAuth();
 
-    // جلب البيانات من ملف JSON
-    $.ajax({
-        url: 'http://127.0.0.1:8000/recommendations/all',
-        type: 'get',
-        success: function (response) {
+            // جلب البيانات من ملف JSON
+            $.ajax({
+                url: 'http://127.0.0.1:8000/recommendations/all',
+                type: 'get',
+                success: function (response) {
 
-            console.log(response)
-            data = response.recommendations;
-            // تحديث Pagination
-            displayAll();
+                    console.log(response)
+                    data = response.recommendations;
+                    // تحديث Pagination
+                    displayAll();
 
-        },
-        error: function (response) {
-            console.log(response);
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
 
-        }
-    });
+                },
+                error: function (response) {
+                    console.log(response);
 
-});
+                }
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
 
 
 
@@ -181,9 +191,9 @@ function addRecommendationRow(table, Recommendation) {
     view_btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-text-bottom" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
         + ' عرض التوصية'
     view_btn.setAttribute("data-bs-toggle", "modal")
-    view_btn.setAttribute("data-bs-target", "#editRecommendationModal")
+    view_btn.setAttribute("data-bs-target", "#viewRecommendationBackdrop")
     view_btn.onclick = function () {
-        viewRecommendation(Recommendation.id)
+        viewRecommendation(Recommendation.title, Recommendation.content)
     }
 
     const viewOpLi = document.createElement('li');
@@ -249,24 +259,10 @@ function addRecommendationRow(table, Recommendation) {
 }
 
 
-function viewRecommendation(id) {
-    $.ajax({
-        url: 'http://127.0.0.1:8000/recommendation/' + id,
-        type: 'get',
-        success: function (response) {
-            recommendation = response;
+function viewRecommendation(title, content) {
+    document.getElementById('recommendationTitle').innerHTML = (title);
+    document.getElementById('recommendationContent').innerHTML = (content);
 
-
-            document.getElementById('recommendationTitle').append(recommendation.title);
-            document.getElementById('recommendationContent').append(recommendation.content);
-
-
-            /// ضبط الآيدي مشان وقت بدي احذف هي الجلسة
-        },
-        error: function (response) {
-            console.log(response);
-        }
-    });
 }
 
 function confirmDeleteRecommendation(id) {
@@ -366,8 +362,14 @@ function editRecommendation(id, title, content) {
                         cells = Rec_row.getElementsByTagName('td');
                         cells[0].innerHTML = editTitle
                         recTitle.innerHTML = editTitle;
-                        cells[1].innerHTML = editContent
+
+
                         recContent.innerHTML = editContent;
+
+
+                        if (editContent.length > 50)
+                            editContent = editContent.substring(0, 150) + '.. إلخ'
+                        cells[1].innerHTML = editContent
                         $('#editRecommendationModal').modal('hide');
 
 

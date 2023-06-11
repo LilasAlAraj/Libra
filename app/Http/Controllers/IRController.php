@@ -12,9 +12,9 @@ class IRController extends Controller
     public function index()
     {
 
-        $this->destroyIndex();
-        $this->createIndex();
-        $this->indexAll();
+        // $this->destroyIndex();
+        // $this->createIndex();
+        // $this->indexAll();
         return view('cases.retreive_cases');
     }
 
@@ -43,7 +43,7 @@ class IRController extends Controller
         $query = $requset->toSearch;
 
         $cases = Cases::search($query);
-        
+
         return response()->json(['cases' => $cases]);
     }
 

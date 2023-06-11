@@ -32,11 +32,27 @@ function add_client() {
 let data;
 var currentData;
 
-$(document).ready(function () {
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            setAuth();
+            displayAll();
 
-    setAuth();
+            // جلب البيانات من ملف JSON
 
-    // جلب البيانات من ملف JSON
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
+
+
+function displayAll() {
+
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     $.ajax({
         url: 'http://127.0.0.1:8000/users/getclients',
         dataType: 'json',
@@ -45,18 +61,20 @@ $(document).ready(function () {
 
             currentData = data = response.clients;
             // تحديث Pagination
-            displayAll();
+
+            updatePagination(currentData);
+            showPage(1, currentData)
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
+
 
         },
         error: function (response) {
             console.log(response)
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         }
     });
-});
-
-function displayAll() {
-    updatePagination(currentData);
-    showPage(1, currentData)
 }
 
 function searchByName() {
@@ -73,6 +91,9 @@ function searchByName() {
                 }
             },
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 var name = $('#name').val();
                 $.ajax({
@@ -92,9 +113,14 @@ function searchByName() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     }
                 });
             }
@@ -396,18 +422,6 @@ function showPage(pageNumber, data) {
 
 
 
-    var table = document.getElementsByClassName("table")[0];
-    if (table.rows.length == 1) {
-
-        var headerRow = table.rows[0];
-        var numColumns = headerRow.cells.length;
-        var row = table.insertRow(1);
-        var cell = row.insertCell(0);
-        cell.colSpan = numColumns;
-        cell.innerHTML = "لا يوجد بيانات";
-
-    }
-
 }
 
 
@@ -425,7 +439,7 @@ function deleteClient(clientId) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/'+clientId,
+        url: 'http://127.0.0.1:8000/users/' + clientId,
         type: 'delete',
         success: function (response) {
             console.log(response)
@@ -477,7 +491,7 @@ function editStatus(clientId) {
 }
 
 function editClient(clientId) {
-    window.location.href = 'http://127.0.0.1:8000/users/client/'+clientId+'/edit/'
+    window.location.href = 'http://127.0.0.1:8000/users/client/' + clientId + '/edit/'
 
 }
 function reverseData() {

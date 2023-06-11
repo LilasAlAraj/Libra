@@ -22,6 +22,9 @@ function isValidPhoneNumber(phoneNumber) {
 }
 
 $(document).ready(function () {
+
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
     $('#register-form').validate({
         rules: {
             first_name: {
@@ -143,11 +146,23 @@ $(document).ready(function () {
                         },
                         success: function (response) {
                             if (response.status == 'success') {
-                                if (role === 'زبون')
-                                    window.location.href = 'http://127.0.0.1:8000/users/clients'
-                                else
-                                    window.location.href = 'http://127.0.0.1:8000/users/members'
+                                document.getElementById('message-text').innerHTML = response.message;
+                                $('#messageBackdrop').modal('show');
+                                $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                                document.getElementById('closeModal').onclick = function () {
+                                    window.location.href = 'http://127.0.0.1:8000/cases';
+                                    if (role === 'زبون')
+                                        window.location.href = 'http://127.0.0.1:8000/users/clients'
+                                    else
+                                        window.location.href = 'http://127.0.0.1:8000/users/members'
+                                }
+
                             } else {
+                                messages = '';
+
+                                if (response.message.phone != null)
+
+                                    $('.error').html(response.message.phone);
                                 console.log(response)
 
                             }

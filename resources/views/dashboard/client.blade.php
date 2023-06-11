@@ -29,168 +29,186 @@
 </head>
 
 <body>
-    <header class="navbar sticky-top sticky-top flex-md-nowrap p-0 shadow" style="background-color:  rgb(7, 48, 78);">
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
-            <div class="imgcontainer">
-
-                <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
+    <div id="spinner">
+        <div id="in-spinner">
+            <div class="bounceImg" id="imgcontainer">
+                <img src="{{ asset('Img/Logo.jpg') }}" alt="Avatar" id="avatar">
             </div>
-        </a>
-        <div class="d-flex justify-content-between w-100">
-            <div class="navbar-nav">
-                <div class="nav-item text-nowrap ">
-                    <p class=" px-3 m-2" id="time">time</p>
-                </div>
-            </div>
-            <div class="navbar-nav" style="">
-                <div class="nav-item text-nowrap ">
-
-                    <a class="nav-link px-3"href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
-                        تسجيل الخروج
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <div class="container-fluid">
-        <div class="row">
-
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 col-sm-12 d-md-block  sidebar collapse">
-                <div class="position-sticky pt-3  sidebar-sticky ">
-                    <ul class=" nav nav-pills flex-column mb-auto ">
-                        <li class="mb-1 nav-item" id="homeNav">
-                            <a href="http://127.0.0.1:8000/home" class="nav-link d-inline-flex  collapse-items">
-                                <span data-feather="home" class="align-text-bottom"></span>
-                                الصفحة الرئيسية
-                            </a>
-                        </li>
-                        <div id="dashboardNav">
-
-                        </div>
-                        <li class="mb-1 nav-item ">
-                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                                data-bs-toggle="collapse" data-bs-target="#cases-collapse" aria-expanded="false">
-                                <span data-feather="file" class="align-text-bottom"></span>
-                                القضايا
-                            </button>
-
-                            <div class="collapse collapse-items" id="cases-collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
-                                    <li id="addNewCaseNav">
-
-                                    </li>
-                                    <li id="addNewPrivateCaseNav">
-
-                                    </li>
-                                    <li id="viewCaseNav">
-                                        <a href="http://127.0.0.1:8000/cases" class="nav-link d-inline-flex  collapse-items">
-                                            <span data-feather="file-text" class="align-text-bottom"></span>
-                                            عرض القضايا
-                                        </a>
-                                    </li>
-                                    <li id="retreiveCaseNav">
-
-                                    </li>
-                                    <li id="archiveCaseNav">
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <div id="tasksLi">
-                        </div>
-
-                        <div id="clientsLi">
-                        </div>
-
-                        <div id="membersLi">
-                        </div>
-
-                        <li class="mb-1 nav-item ">
-                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                                data-bs-toggle="collapse" data-bs-target="#settings-collapse" aria-expanded="false">
-                                <span data-feather="settings" class="align-text-bottom"></span>
-                                الإعدادات
-                            </button>
-
-                            <div class="collapse" id="settings-collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
-                                    <li id="courtSettingsNav">
-                                    </li><li id="recommendationsNav">
-                                    </li>
-                                    <li id="role_permessionSettingsNav">
-                                    </li>
-
-                                    <li><a href="http://127.0.0.1:8000/account/setting"
-                                            class="nav-link d-inline-flex  collapse-items">
-                                            <span data-feather="tool" class="align-text-bottom"></span>
-                                            إعدادات حسابي
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <main class="col-md-9 col-lg-10 col-sm-12">
-                <div class="chartjs-size-monitor">
-                    <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
-                    </div>
-                    <div class="chartjs-size-monitor-shrink">
-                        <div class=""></div>
-                    </div>
-                </div>
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-
-                    <h2>الصفحة الرئيسية</h2>
-                </div>
-
-                <div class="container" id='recommendations'>
-
-                </div>
-
-
-
-            </main>
+            <div class="bounce" id="bounce1"></div>
+            <div class="bounce" id="bounce2"></div>
+            <div class="bounce" id="bounce3"></div>
         </div>
     </div>
+    <div id="content" style="display: none">
+        <header class="navbar sticky-top sticky-top flex-md-nowrap p-0 shadow"
+            style="background-color:  rgb(7, 48, 78);">
+            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
+                <div class="imgcontainer">
+
+                    <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
+                </div>
+            </a>
+            <div class="d-flex justify-content-between w-100">
+                <div class="navbar-nav">
+                    <div class="nav-item text-nowrap ">
+                        <p class=" px-3 m-2" id="time">time</p>
+                    </div>
+                </div>
+                <div class="navbar-nav" style="">
+                    <div class="nav-item text-nowrap ">
+
+                        <a class="nav-link px-3"href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                            تسجيل الخروج
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 col-sm-12 d-md-block  sidebar collapse">
+                    <div class="position-sticky pt-3  sidebar-sticky ">
+                        <ul class=" nav nav-pills flex-column mb-auto ">
+                            <li class="mb-1 nav-item" id="homeNav">
+                                <a href="http://127.0.0.1:8000/home" class="nav-link d-inline-flex  collapse-items">
+                                    <span data-feather="home" class="align-text-bottom"></span>
+                                    الصفحة الرئيسية
+                                </a>
+                            </li>
+                            <div id="dashboardNav">
+
+                            </div>
+                            <li class="mb-1 nav-item ">
+                                <button
+                                    class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                                    data-bs-toggle="collapse" data-bs-target="#cases-collapse" aria-expanded="false">
+                                    <span data-feather="file" class="align-text-bottom"></span>
+                                    القضايا
+                                </button>
+
+                                <div class="collapse collapse-items" id="cases-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
+                                        <li id="addNewCaseNav">
+
+                                        </li>
+                                        <li id="addNewPrivateCaseNav">
+
+                                        </li>
+                                        <li id="viewCaseNav">
+                                            <a href="http://127.0.0.1:8000/cases"
+                                                class="nav-link d-inline-flex  collapse-items">
+                                                <span data-feather="file-text" class="align-text-bottom"></span>
+                                                عرض القضايا
+                                            </a>
+                                        </li>
+                                        <li id="retreiveCaseNav">
+
+                                        </li>
+                                        <li id="archiveCaseNav">
+
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <div id="tasksLi">
+                            </div>
+
+                            <div id="clientsLi">
+                            </div>
+
+                            <div id="membersLi">
+                            </div>
+
+                            <li class="mb-1 nav-item ">
+                                <button
+                                    class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                                    data-bs-toggle="collapse" data-bs-target="#settings-collapse"
+                                    aria-expanded="false">
+                                    <span data-feather="settings" class="align-text-bottom"></span>
+                                    الإعدادات
+                                </button>
+
+                                <div class="collapse" id="settings-collapse">
+                                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
+                                        <li id="courtSettingsNav">
+                                        </li>
+                                        <li id="recommendationsNav">
+                                        </li>
+                                        <li id="role_permessionSettingsNav">
+                                        </li>
+
+                                        <li><a href="http://127.0.0.1:8000/account/setting"
+                                                class="nav-link d-inline-flex  collapse-items">
+                                                <span data-feather="tool" class="align-text-bottom"></span>
+                                                إعدادات حسابي
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <main class="col-md-9 col-lg-10 col-sm-12">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <div
+                        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+
+                        <h2>الصفحة الرئيسية</h2>
+                    </div>
+
+                    <div class="container" id='recommendations'>
+
+                    </div>
 
 
-    <div class="modal fade" id="recommendationBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="recommendationBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
-                    <h1 class="modal-title" id="recommendationBackdropLabel"
-                        style=" color:white; font-size: 1em;overflow-wrap: break-word">
 
-                    </h1>
-                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                </main>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="recommendationBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="recommendationBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header" style=" background-color: rgb(87, 126, 155);">
+                        <h1 class="modal-title" id="recommendationBackdropLabel"
+                            style=" color:white; font-size: 1em;overflow-wrap: break-word">
+
+                        </h1>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+
+                    </div>
+                    <div class=" modal-body" id="recommendationBackdropContent" style="overflow-wrap: break-word">
+
+                    </div>
 
                 </div>
-                <div class=" modal-body" id="recommendationBackdropContent" style="overflow-wrap: break-word">
-
-                </div>
-
             </div>
         </div>
     </div>

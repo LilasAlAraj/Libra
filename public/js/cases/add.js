@@ -9,13 +9,15 @@
 /********************* */
 
 $(document).ready(function () {
+    getCourts();
+    addLawyerPlaintiffField();
 
     addBaseNumber();
     addClientPlaintiffField();
-    addLawyerPlaintiffField();
     addClientEnemyField();
     addLawyerEnemyField();
-    getCourts();
+    document.getElementById('content').style.display='block';
+    document.getElementById('spinner').style.display='none';
 
 });
 

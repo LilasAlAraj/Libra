@@ -150,21 +150,30 @@ $(document).ready(function () {
                         'date_of_birth': date_of_birth,
                         'place_of_birth': place_of_birth,
                         "email": email,
-                        'id':userID
+                        'id': userID
                     },
                     success: function (response) {
                         console.log(response);
                         if (response.status == 'success') {
 
-                            // redirect user to appropriate page
-                            if (role_name === 'زبون')
-                                window.location.href = 'http://127.0.0.1:8000/users/clients'
-                            else
-                                window.location.href = 'http://127.0.0.1:8000/users/members'
-
+                            document.getElementById('message-text').innerHTML = response.message;
+                            $('#messageBackdrop').modal('show');
+                            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                            document.getElementById('closeModal').onclick = function () {
+                                window.location.href = 'http://127.0.0.1:8000/cases';
+                                if (role_name === 'زبون')
+                                    window.location.href = 'http://127.0.0.1:8000/users/clients'
+                                else
+                                    window.location.href = 'http://127.0.0.1:8000/users/members'
+                            }
                         } else {
+                            messages = '';
 
-                            $('.error').html(response.message);
+                            if (response.message.phone != null)
+
+                                $('.error').html(response.message.phone);
+                            console.log(response)
+
                         }
                     },
 

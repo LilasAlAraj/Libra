@@ -366,8 +366,11 @@ function addNewDecision() {
                     console.log(response);
                     decision_table = document.getElementById('decision-table-body');
 
-                    decision['id'] = response.id
-                    addDecisionRow(decision_table, decision);
+                    if (response.status === 'success') {
+                        decision['id'] = response.id
+
+                        addDecisionRow(decision_table, decision);
+                    }
 
                     closeModal();
                     $('#addNewDecisionBackdrop').modal('hide');

@@ -32,10 +32,29 @@ function setAuth() {
 let data;
 let currentData;
 
-$(document).ready(function () {
-    fillYears()
 
-    setAuth();
+
+
+(() => {
+
+    fetchUserRole()
+        .then((role) => {
+            console.log(role)
+            fillYears()
+
+            setAuth();
+            displayAll();
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
+
+
+function displayAll() {
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     // جلب البيانات من ملف JSON
     $.ajax({
         url: 'http://127.0.0.1:8000/cases/archive/all',
@@ -45,18 +64,18 @@ $(document).ready(function () {
 
             currentData = data = response.cases;
             // تحديث Pagination
-            displayAll();
 
+
+            updatePagination(currentData);
+            showPage(1, currentData)
+
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         },
         error: function (response) {
             console.log(response)
         }
     });
-});
-
-function displayAll() {
-    updatePagination(currentData);
-    showPage(1, currentData)
 
 }
 

@@ -80,6 +80,7 @@ function fillCasesTable() {
         success: function (response) {
 
             data = response.cases;
+            console.log(data);
             // عرض الصفوف
             table = $('#cases-body-table');
             table.empty();
@@ -295,13 +296,15 @@ $(document).ready(function () {
 
     // setNumUnarchivedCases();
     // setNumArchivedCases();
-    // setTotalNumAssignedCases();
+     setTotalNumAssignedCases();
     // setNumClients();
     // set_Cases_Chart()
     fillCasesTable();
     fillTasksTable();
     setNumNextTasks();
 
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
 });
 
 

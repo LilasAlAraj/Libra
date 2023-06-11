@@ -17,6 +17,8 @@ $(document).ready(function () {
             // تحديث Pagination
             displayAll();
 
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         },
         error: function (response) {
             console.log(response);

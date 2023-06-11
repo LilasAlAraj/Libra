@@ -30,6 +30,9 @@ $(document).ready(function () {
 
             setClientData();
 
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
+
         },
         error: function (response) {
             console.log(response);

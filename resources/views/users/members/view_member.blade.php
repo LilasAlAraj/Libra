@@ -32,9 +32,17 @@
 </head>
 
 <body>
-    <div class="overlay" id="overlay"></div>
-
-    <div id="content">
+    <div id="spinner">
+        <div id="in-spinner">
+            <div class="bounceImg" id="imgcontainer">
+                <img src="{{ asset('Img/Logo.jpg') }}" alt="Avatar" id="avatar">
+            </div>
+            <div class="bounce" id="bounce1"></div>
+            <div class="bounce" id="bounce2"></div>
+            <div class="bounce" id="bounce3"></div>
+        </div>
+    </div>
+    <div id="content" style="display: none">
         <header class="navbar sticky-top sticky-top flex-md-nowrap p-0 shadow"
             style="background-color:  rgb(7, 48, 78);">
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button"
@@ -134,7 +142,8 @@
                             <li class="mb-1 nav-item ">
                                 <button
                                     class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                                    data-bs-toggle="collapse" data-bs-target="#settings-collapse" aria-expanded="false">
+                                    data-bs-toggle="collapse" data-bs-target="#settings-collapse"
+                                    aria-expanded="false">
                                     <span data-feather="settings" class="align-text-bottom"></span>
                                     الإعدادات
                                 </button>
@@ -231,12 +240,14 @@
                 </main>
             </div>
         </div>
+
+
+
+
+
+
+
     </div>
-
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
         integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
     </script>
@@ -245,7 +256,6 @@
     <script src="../../../js/users/auth.js"></script>
     <script src="../../../js/navs.js"></script>
     <script src="../../../js/users/members/view_member.js"></script>
-
 
 
 </body>

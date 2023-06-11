@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Validator;
+
 use App\Models\Sessions;
 use App\Models\session_attachment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SessionController extends Controller
 {
-
 
     public function show($id)
     {
@@ -16,7 +16,7 @@ class SessionController extends Controller
 
         $attachments = $sesssion->attachments;
 
-        $sesssion['attachments']=$attachments;
+        $sesssion['attachments'] = $attachments;
 
         return response()->json($sesssion);
 
@@ -24,35 +24,45 @@ class SessionController extends Controller
 
     public function store(Request $request)
     {
+
+        $number = $request->number;
+
+        $date = $request->date;
+
+        $s_exit = Sessions::where('number', '=', $number)->where('date', '=', $date)->exists();
+
+        if ($s_exit) {
+
+            $message = "رقم الجلسة " . $number . "\\" . $date . " هذه موجود من قبل";
+
+            return response()->json(['status' => 'failed', 'message' => $message]);
+        }
+
         $validator = Validator::make($request->all(),
-         [
-            'case_id' => 'required|integer|exists:cases,id',
+            [
+                'case_id' => 'required|exists:cases,id',
 
-            'number' => 'required',
+                'number' => 'required',
 
-            'date' => 'required|date',
+                'date' => 'required|date',
 
-            'description' => 'required|string',
+                'description' => 'required|string',
 
-        ],[
+            ], [
 
-            
-            'number.required' => 'يرجى إدخال  رقم الجلسة',
+                'number.required' => 'يرجى إدخال  رقم الجلسة',
 
-            'number.integer' => '0,1,.......,9 رقم الجلسة يجب أن يكون ضمن مجال',
+                'date.required' => 'يرجى إدخال تاريخ الجلسة',
 
-            'date.required' => 'يرجى إدخال تاريخ الجلسة',
+                'date.date' => ' تاريخ الجلسة يجب أن يكون تاريخ صحيح',
 
-            'date.date' => ' تاريخ الجلسة يجب أن يكون تاريخ صحيح',
+                'description.required' => 'يرجى إدخال التفاصيل الخاصة بالجلسة',
 
-            'description.required' => 'يرجى إدخال التفاصيل الخاصة بالجلسة',
+                'description.string' => 'التفاصيل يجب أن تكون نصية',
+            ]);
 
-            'description.string' => 'التفاصيل يجب أن تكون نصية'
-        ]);
-    
-        if ($validator->fails())
-       {
-            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+        if ($validator->fails()) {
+            return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
         }
 
         Sessions::create([
@@ -67,8 +77,7 @@ class SessionController extends Controller
         ]);
         $id = Sessions::latest()->first()->id;
 
-        if ($request->hasFile('atachments'))
-         {
+        if ($request->hasFile('atachments')) {
             $files = $request->file('atachments');
 
             foreach ($files as $file) {
@@ -88,7 +97,7 @@ class SessionController extends Controller
                 // move pic
                 //  $fileName = $request->file_name->getClientOriginalName();
 
-                $file->move(public_path('Attachments/Session_' . $request->number), $file_name);
+                $file->move(public_path('Attachments/Case_' . $request->case_id .'/Session_' .$id), $file_name);
             }
         }
         return response()->json(['status' => 'success', 'message' => 'تم إضافة الجلسة بنجاح', 'id' => $id], 200);
@@ -102,43 +111,48 @@ class SessionController extends Controller
 
         $session = Sessions::find($id);
 
-        if (!$session) 
-        {
+        if (!$session) {
             return response()->json(['status' => 'error', 'message' => 'Session not found'], 404);
         }
-      
+        $number = $request->number;
 
-        $validator = Validator::make($request->all(),
-         [
-            'case_id' => 'required|integer|exists:cases,id',
+        $date = $request->date;
 
-            'number' => 'required',
+        $s_exit = Sessions::where('number', '=', $number)->where('date', '=', $date)->where('id', '!=', $id)->exists();
 
-            'date' => 'required|date',
+        if ($s_exit) {
 
-            'description' => 'required|string',
+            $message = "رقم الجلسة " . $number . "\\" . $date . " هذه موجود من قبل";
 
-        ],[
-
-            
-            'number.required' => 'يرجى إدخال  رقم الجلسة',
-
-            'number.integer' => '0,1,.......,9 رقم الجلسة يجب أن يكون ضمن مجال',
-
-            'date.required' => 'يرجى إدخال تاريخ الجلسة',
-
-            'date.date' => ' تاريخ الجلسة يجب أن يكون تاريخ صحيح',
-
-            'description.required' => 'يرجى إدخال التفاصيل الخاصة بالجلسة',
-
-            'description.string' => 'التفاصيل يجب أن تكون نصية'
-        ]);
-    
-        if ($validator->fails())
-        {
-            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+            return response()->json(['status' => 'failed', 'message' => $message]);
         }
-    
+        $validator = Validator::make($request->all(),
+            [
+
+                'number' => 'required|',
+
+                'date' => 'required|date',
+
+                'description' => 'required|string',
+
+            ], [
+
+                'number.required' => 'يرجى إدخال  رقم الجلسة',
+
+                'number.unique' => ' رقم الجلسة يجب أن يكون فريد',
+
+                'date.required' => 'يرجى إدخال تاريخ الجلسة',
+
+                'date.date' => ' تاريخ الجلسة يجب أن يكون تاريخ صحيح',
+
+                'description.required' => 'يرجى إدخال التفاصيل الخاصة بالجلسة',
+
+                'description.string' => 'التفاصيل يجب أن تكون نصية',
+            ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
+        }
 
         $session->update([
 
@@ -153,15 +167,38 @@ class SessionController extends Controller
 
     }
 
+    private function deleteDirectory($directory)
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $files = array_diff(scandir($directory), array('.', '..'));
+
+        foreach ($files as $file) {
+            $path = $directory . '/' . $file;
+
+            if (is_dir($path)) {
+                $this->deleteDirectory($path);
+            } else {
+                unlink($path);
+            }
+        }
+
+        rmdir($directory);
+    }
     public function destroy(Request $request)
     {
 
-        if (Sessions::find($request->id)->delete())
-       {
+        $session = Sessions::find($request->id);
+        $id = $session->id;
+        $case_id=$session->case_id;
+        if ($session->delete()) {
+            $path = 'Attachments\Case_' .$case_id .'\Session_' . $id;
+
+            $this->deleteDirectory($path);
             return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'], 200);
-        } 
-        else 
-        {
+        } else {
             return response()->json(['status' => 'failed', 'message' => 'حدث خطأ أثناء الحذف! أعد المحاولة'], 500);
         }
 

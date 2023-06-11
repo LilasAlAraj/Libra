@@ -34,12 +34,12 @@ function searchByTitleAuth() {
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success" onclick="searchByTitle()">'
+        + 'class="operations-btn btn btn-success btn-sm" onclick="searchByTitle()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
         + '<button type="reset" id="remove-button"'
-        + 'class="operations-btn btn btn-danger">'
+        + 'class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -70,18 +70,18 @@ function searchByBaseNumberAuth() {
         + '</div>'
         + '<div class="col-6">'
         + '<label for="year"><b>العام</b></label>'
-        + '<select id="year" class="year" name="year">'
+        + '<select id="year" class="year searchInput" name="year">'
         + '</select>'
         + '</div>'
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success" onclick="searchByBaseNumber()">'
+        + 'class="operations-btn btn btn-success btn-sm" onclick="searchByBaseNumber()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
         + '<button type="reset" id="remove-button"'
-        + 'class="operations-btn btn btn-danger">'
+        + 'class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -118,12 +118,12 @@ function searchByStatusAuth() {
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success" onclick="searchByState()">'
+        + 'class="operations-btn btn btn-success btn-sm" onclick="searchByState()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
         + '<button type="reset" id="remove-button"'
-        + 'class="operations-btn btn btn-danger">'
+        + 'class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -160,12 +160,12 @@ function searchByCourtAuth() {
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success" onclick="searchByCourt()">'
+        + 'class="operations-btn btn btn-success btn-sm" onclick="searchByCourt()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
         + '<button type="reset" id="remove-button"'
-        + 'class="operations-btn btn btn-danger">'
+        + 'class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -199,12 +199,12 @@ function searchByPlaintaiffNameAuth() {
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success" onclick="searchByplaintiffName()">'
+        + 'class="operations-btn btn btn-success btn-sm" onclick="searchByplaintiffName()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
         + '<button type="reset" id="remove-button"'
-        + 'class="operations-btn btn btn-danger">'
+        + 'class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -237,12 +237,12 @@ function searchByLawyerNameAuth() {
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success"'
-        + 'onclick="searchByplaintiff_lawyer()">'
+        + 'class="operations-btn btn btn-success btn-sm"'
+        + 'onclick="searchByplaintiff_lawyer()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
-        + '<button type="reset" id="remove-button"  class="operations-btn btn btn-danger">'
+        + '<button type="reset" id="remove-button"  class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -269,22 +269,22 @@ function searchByYearsAuth() {
         + '<div class="row">'
         + '<div class="col-6">'
         + '<label for="from_year"><b>من عام</b></label>'
-        + '<select id="from_year" class="year" class="searchInput" name="from_year">'
+        + '<select id="from_year" class="year searchInput" class="searchInput" name="from_year">'
         + '</select>'
         + '</div>'
         + '<div class="col-6">'
         + '<label for="to_year"><b>إلى عام</b></label>'
-        + '<select id="to_year" class="year" name="to_year">'
+        + '<select id="to_year" class="year searchInput" name="to_year">'
         + '</select>'
         + '</div>'
         + '</div>'
         + '<div class="container" style="padding: 0;">'
         + '<button type="submit" id="search-button"'
-        + 'class="operations-btn btn btn-success" onclick="searchByYears()">'
+        + 'class="operations-btn btn btn-success btn-sm" onclick="searchByYears()" style="margin-left:2px">'
         + '<span data-feather="search" class="align-text-bottom"></span>'
         + 'ابحث'
         + '</button>'
-        + '<button type="reset" id="remove-button"   class="operations-btn btn btn-danger">'
+        + '<button type="reset" id="remove-button"   class="operations-btn btn btn-danger btn-sm">'
         + '<span data-feather="x-circle" class="align-text-bottom"></span>'
         + 'امسح'
         + '</button>'
@@ -341,6 +341,9 @@ function searchByTitle() {
                 }
             },
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 var title = $('#title').val();
                 $.ajax({
@@ -357,9 +360,15 @@ function searchByTitle() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none ';
                     }
                 });
             }
@@ -389,6 +398,9 @@ function searchByBaseNumber() {
                 }
             },
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 console.log(6656)
 
@@ -413,8 +425,15 @@ function searchByBaseNumber() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
+
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
                 });
@@ -446,6 +465,9 @@ function searchByYears() {
                 }
             },
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 console.log(6656)
 
@@ -469,9 +491,16 @@ function searchByYears() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     }
                 });
             }
@@ -493,6 +522,10 @@ function searchByState() {
                 }
             },
             submitHandler: function (form) {
+
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 var value_status = $('#state').val();
                 $.ajax({
@@ -512,9 +545,16 @@ function searchByState() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
+
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     }
                 });
             }
@@ -536,6 +576,9 @@ function searchByCourt() {
                 }
             },
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 var court_id = $('#court').val();
                 $.ajax({
@@ -555,8 +598,15 @@ function searchByCourt() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
+
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
                 });
@@ -581,6 +631,9 @@ function searchByplaintiffName() {
                 }
             },
             submitHandler: function (form) {
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 var plaintiff_name = $('#plaintiff_name').val();
                 $.ajax({
@@ -600,9 +653,15 @@ function searchByplaintiffName() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
+
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none'; console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
                 });
             }
@@ -626,7 +685,10 @@ function searchByplaintiff_lawyer() {
                 }
             },
             submitHandler: function (form) {
-                $('.error').html()
+
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex'; $('.error').html()
                 var lawyerName = $('#plaintiff_lawyer').val();
                 $.ajax({
                     url: 'http://127.0.0.1:8000/cases/filter',
@@ -645,15 +707,49 @@ function searchByplaintiff_lawyer() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
-                        console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none'; console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
                     }
                 });
             }
         }
     )
 }
-$(document).ready(function () {
-    setAuth();
-})
+
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            setAuth();
+            fillYears();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
+
+function fillYears() {
+    // الحصول على عنصر select عن طريق الـ class
+    var yearSelect = document.getElementsByClassName("year");
+
+    // الحصول على التاريخ الحالي
+    var currentYear = new Date().getFullYear();
+    for (var j = 0; j < yearSelect.length; j++) {
+        yearSelect[j].add(document.createElement("option"));
+        for (i = 1980; i <= currentYear; i++) {
+            var option = document.createElement("option");
+            option.text = i;
+            option.value = i;
+            yearSelect[j].add(option);
+        }
+    }
+
+}

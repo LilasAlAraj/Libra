@@ -44,6 +44,7 @@ function setNumUnarchivedCases() {
         success: function (response) {
             num_unarchived_cases = response.num_unarchived_cases;
             document.getElementById('num_unarchived_cases').innerHTML = num_unarchived_cases;
+
         },
         error: function (response) {
             console.log(response.responseJSON);
@@ -300,28 +301,27 @@ function fillTasksTable() {
 
             data = response;
             // عرض الصفوف
-            table = $('#tasks-body-table');
-            table.text('');
-            console.log(table)
+            var table = document.getElementById("tasks-table");
+            if (table.rows.length === 2)
+                table.rows[1].remove();
+            body = $('#tasks-body-table');
+            body.text('');
             for (var i = 0; i < data.length; i++) {
-                addTaskRow(data[i], table, i + 1)
+                addTaskRow(data[i], body, i + 1)
             }
 
 
-            var table = document.getElementById("tasks-table");
-
-            if (table.rows.length == 0) {
+            if (table.rows.length === 1) {
 
                 var headerRow = table.rows[0];
                 var numColumns = headerRow.cells.length;
-
+                var row = table.insertRow(1);
                 var cell = row.insertCell(0);
                 cell.colSpan = numColumns;
                 cell.innerHTML = "لا يوجد أي مهام لليوم ";
                 cell.style.textAlign = 'center'
 
             }
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
@@ -392,6 +392,9 @@ $(document).ready(function () {
     set_Cases_Chart()
     fillCasesTable();
     fillTasksTable();
+
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
 });
 
 

@@ -239,6 +239,9 @@ function addNewSessionAttachment() {
         submitHandler: function (form) {
             // تحديد المتغيرات اللازمة
 
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('spinner').style.display = 'flex';
+
             newAttachmentFile = $("#newSeesionAttachmentFile")[0].files[0];
 
 
@@ -262,6 +265,9 @@ function addNewSessionAttachment() {
                 processData: false,
                 contentType: false,
                 success: function (response) {
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
                     // Handle the response from the server
                     if (response.status === 'success') {
                         const sessionAttachments = document.getElementById('sessionAttachments-body');
@@ -276,9 +282,17 @@ function addNewSessionAttachment() {
                         document.getElementById('message-text').innerHTML = response.message;
                         $('#messageBackdrop').modal('show');
                         $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+                    } else {
+                        $('#errorAddSessionAttachment').html(response.message);
                     }
+                    console.log(response);
+
                 },
+
                 error: function (response) {
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
                     // Handle the error
                     console.log(response);
 
@@ -413,14 +427,12 @@ function confirmEditSession() {
                         cells[2].innerHTML = editSessionDetails
                         sessionDescreption.innerHTML = editSessionDetails;
                         $('#editSessionBackdrop').modal('hide');
-                        document.getElementById('message-text').innerHTML = response.message;
 
-                        $('#messageBackdrop').modal('show');
-                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
 
-                    } else {
-                        $('.errorEditSession').html(response.message);
-                    }
+                    } document.getElementById('message-text').innerHTML = response.message;
+
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                 },
                 error: function (response) {
                     console.log(response);

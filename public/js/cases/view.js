@@ -54,24 +54,6 @@ function getCourts() {
     });
 
 }
-function fillYears() {
-    // الحصول على عنصر select عن طريق الـ class
-    var yearSelect = document.getElementsByClassName("year");
-
-    // الحصول على التاريخ الحالي
-    var currentYear = new Date().getFullYear();
-    for (var j = 0; j < yearSelect.length; j++) {
-        yearSelect[j].add(document.createElement("option"));
-        for (i = 1980; i <= currentYear; i++) {
-            var option = document.createElement("option");
-            option.text = i;
-            option.value = i;
-            yearSelect[j].add(option);
-        }
-    }
-
-}
-
 /********************* */
 
 
@@ -98,17 +80,29 @@ function add_cases() {
 
 let currentData;
 
-$(document).ready(function () {
-    fillYears()
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
 
-    setAuth();
-    displayAll();
-    getCourts();
-    getLawyers();
+            getCourts();
+            getLawyers();
 
-});
 
+            setAuth();
+            displayAll();
+
+
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
 function displayAll() {
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     $.ajax({
         url: 'http://127.0.0.1:8000/cases/all',
         type: 'get',
@@ -120,6 +114,9 @@ function displayAll() {
             // تحديث Pagination
             updatePagination(currentData);
             showPage(1, currentData)
+
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
 
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
@@ -369,9 +366,10 @@ function showPage(pageNumber, data) {
         archiveBtn.classList.add('btn', 'btn-warning', 'menu-operations-btn');
         archiveBtn.setAttribute("data-bs-target", "#archiveCaseBackdrop");
         archiveBtn.setAttribute("data-bs-toggle", "modal")
-
-        archiveBtnBackdrop.onclick = function () {
-            ArhiveCase(case_.id)
+        archiveBtn.onclick = function () {
+            document.getElementById('archiveBtnBackdrop').onclick = function () {
+                ArhiveCase(case_.id)
+            }
         }
         const archOpLi = document.createElement('li');
         archOpLi.append(archiveBtn);
@@ -382,8 +380,10 @@ function showPage(pageNumber, data) {
             + ' تعديل معلومات القضية'
         edit_btn.setAttribute('title', 'تغيير حالة القضية');
         edit_btn.classList.add('btn', 'btn-secondary', 'menu-operations-btn');
-        editBtnBackdrop.onclick = function () {
-            editCase(case_.id)
+        edit_btn.onclick = function () {
+            document.getElementById('editBtnBackdrop').onclick = function () {
+                editCase(case_.id)
+            }
         }
 
         edit_btn.setAttribute("data-bs-toggle", "modal")

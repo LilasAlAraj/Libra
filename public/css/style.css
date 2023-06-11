@@ -24,6 +24,7 @@ form {
     margin: auto;
     padding: auto;
 }
+
 #login-form {
     border-radius: 6%;
     width: fit-content;
@@ -62,7 +63,7 @@ input.searchInput {
 }
 
 select,
-input:not(input[type="radio"], input[type='checkbox'],.searchInput ) {
+input:not(input[type="radio"], input[type='checkbox'], .searchInput) {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -363,6 +364,7 @@ tr.clickable-row:hover td {
     ;
 }
 
+.caseTitle,
 .show_more {
     text-decoration: none;
     cursor: pointer;
@@ -371,4 +373,20 @@ tr.clickable-row:hover td {
 .show_more:hover {
     text-decoration: underline;
     color: rgb(87, 126, 155);
+
+}
+
+.caseTitle:hover {
+    text-decoration: underline;
+}
+
+
+/********************ir************/
+#retreivedCases .card-body {
+    padding: 0;
+}
+
+#retreivedCases .accordion-body-decisions{
+    padding-bottom: 0;
+
 }

@@ -18,6 +18,9 @@ $(document).ready(function () {
 
             document.getElementById('account_name').append(user.first_name + ' ' + user.father_name + ' ' + user.last_name)
             document.getElementById('account_type').append(user.role_name);
+
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         },
         error: function (response) {
             console.log(response)

@@ -31,15 +31,25 @@ function add_member() {
 let data;
 var currentData;
 
-$(document).ready(function () {
-    setAuth();
-    displayAll();
 
-    // جلب البيانات من ملف JSON
 
-});
-
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            setAuth();
+            displayAll();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
 function displayAll() {
+
+
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     $.ajax({
         url: 'http://127.0.0.1:8000/users/getmembers',
         dataType: 'json',
@@ -50,6 +60,10 @@ function displayAll() {
             // تحديث Pagination
             updatePagination(currentData);
             showPage(1, currentData)
+
+
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
@@ -71,6 +85,10 @@ function searchByName() {
                 }
             },
             submitHandler: function (form) {
+
+
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
                 $('.error').html()
                 var name = $('#name').val();
                 $.ajax({
@@ -90,9 +108,17 @@ function searchByName() {
                         updatePagination(currentData);
                         showPage(1, currentData)
 
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
+
                     },
                     error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
                         console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
+
+
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     }
                 });
             }
@@ -400,20 +426,6 @@ function showPage(pageNumber, data) {
     for (var i = startIndex; i < endIndex; i++) {
         const member = data[i];
         addMemberRow(table, member)
-    }
-
-
-
-    var table = document.getElementsByClassName("table")[0];
-    if (table.rows.length == 1) {
-
-        var headerRow = table.rows[0];
-        var numColumns = headerRow.cells.length;
-        var row = table.insertRow(1);
-        var cell = row.insertCell(0);
-        cell.colSpan = numColumns;
-        cell.innerHTML = "لا يوجد بيانات";
-
     }
 
 }

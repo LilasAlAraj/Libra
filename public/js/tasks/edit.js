@@ -22,10 +22,14 @@ $(document).ready(function () {
             data = response;
 
             setTaskData(data);
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
 
         },
         error: function (response) {
             console.log(response)
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
 
         }
     });
@@ -34,7 +38,8 @@ $(document).ready(function () {
 
 function setTaskData(data) {
 
-    task = data.task;
+    task = data[0].task;
+
     document.getElementById('name').value = task.name;
     document.getElementById('priority').value = task.priority;
     document.getElementById('description').value = task.description;
@@ -42,9 +47,9 @@ function setTaskData(data) {
     document.getElementById('start_date').value = task.start_date;
 
 
-    totalLawyerName = data.lawyers.length;
+    totalLawyerName = data[0].lawyers.length;
     for (var i = 0; i < totalLawyerName; i++) {
-        addLawyerField(data.lawyers[i].id);
+        addLawyerField(data[0].lawyers[i].id);
     }
 
 
@@ -102,7 +107,7 @@ function editTask() {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/tasks/"+taskID,
+                    url: "http://127.0.0.1:8000/tasks/" + taskID,
                     type: "put",
                     data: {
                         "lawyers": task.lawyers,

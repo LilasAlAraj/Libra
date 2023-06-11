@@ -23,15 +23,15 @@ class CourtController extends Controller
     public function store(Request $request)
 
     {
-        $validator = Validator::make($request->all(), 
+        $validator = Validator::make($request->all(),
         [
-            
+
             'name' => 'required|string',
 
             'place' => 'required|string',
-        ], 
+        ],
         [
-    
+
             'name.required' => '  يرجى إدخال اسم المحكمة',
 
             'name.string' => ' الاسم يجب أن يكون سلسلة نصية',
@@ -40,11 +40,11 @@ class CourtController extends Controller
 
             'place.string' => 'العنوان يجب أن يكون سلسلة نصية',
         ]);
-        
+
         if ($validator->fails())
 
        {
-            return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
+            return response()->json(['status' => 'error', 'message' => $validator->errors()]);
         }
 
         $input = $request->all();
@@ -55,9 +55,9 @@ class CourtController extends Controller
         {
 
             return response()->json(['status' => 'failed', 'message' => 'هذه المحكمة مضافة مسبقاً']);
-        } 
+        }
 
-        else 
+        else
         {
 
             $court = new Courts();
@@ -79,16 +79,16 @@ class CourtController extends Controller
 
         $MyCases_id = Cases::where('court_id', $request->id)->pluck('court_id');
 
-        if ($MyCases_id->count() == 0) 
+        if ($MyCases_id->count() == 0)
         {
 
             Courts::findOrFail($request->id)->delete();
 
             return response()->json(['status' => 'success', 'message' => 'تم حذف المحكمة بنجاح']);
 
-        } 
+        }
         else
-        
+
         {
 
             return response()->json(['status' => 'failed', 'message' => 'لا يمكن حذف هذه المحكمة. هناك قضايا تتعلق بها!']);

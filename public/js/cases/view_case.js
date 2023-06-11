@@ -9,36 +9,43 @@
 let data, caseItem, caseID;
 
 
+(() => {
+    console.log(role);
+    fetchUserRole()
+        .then((role) => {
+            console.log(role);
+            caseID = window.location.href.split('/');
+            caseID = caseID[caseID.length - 1];
 
-$(document).ready(function () {
-    caseID = window.location.href.split('/');
-    caseID = caseID[caseID.length - 1];
-
-    // جلب البيانات من ملف JSON
-    $.ajax({
-        url: 'http://127.0.0.1:8000/cases/' + caseID,
-        dataType: 'json',
-        success: function (response) {
-
-
-
-            data = response.cases[0];
-            caseItem = data
-
-            setCaseAuth();
-
-            setCaseData();
-
-        },
-        error: function (response) {
-            console.log(response)
-        }
-    });
+            // جلب البيانات من ملف JSON
+            $.ajax({
+                url: 'http://127.0.0.1:8000/cases/' + caseID,
+                dataType: 'json',
+                success: function (response) {
 
 
 
-}
-);
+                    data = response.cases[0];
+                    caseItem = data
+
+                    setCaseData();
+                    setCaseAuth();
+
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
+
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+})();
+
 
 
 
@@ -187,7 +194,7 @@ function addSessionRow(table, session) {
     const sessionID = session.id;
     row = document.createElement('tr');
     num = document.createElement('td');
-    num.append(sessionID);
+    num.append(session.number);
 
     date = document.createElement('td');
     date.append(session.date);
@@ -233,7 +240,7 @@ function addSessionRow(table, session) {
     operationMenu.append(viewOpLi)
 
     if (role == 1 || role == 2) {
-        if (caseItem.isArchived !== 'true') {
+        if (caseItem.case.deleted_at != null) {
 
 
             const deleteBtn = document.createElement('button');
@@ -341,7 +348,7 @@ function addAttachmentRow(table, attachment) {
     operationMenu.append(downloadOpLi, viewOpLi)
 
     if (role == 1 || role == 2) {
-        if (caseItem.isArchived !== 'true') {
+        if (caseItem.case.deleted_at != null) {
 
             const deleteBtn = document.createElement('button');
             deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-text-bottom" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'
@@ -460,7 +467,7 @@ function setCaseAuth() {
 
         case_operation = document.createElement('div');
         case_operation.classList.add('container')
-        if (caseItem.isArchived !== 'true') {
+        if (caseItem.case.deleted_at == null) {
 
             const edit_btn = document.createElement('button')
             edit_btn.type = "button"
@@ -847,6 +854,8 @@ function addNewSession() {
             }
         },
         submitHandler: function (form) {
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('spinner').style.display = 'flex';
             // تحديد المتغيرات اللازمة
             SessionNumber = $("#newSessionNumber").val();
             SessionDate = $("#newSessionDate").val();
@@ -882,6 +891,9 @@ function addNewSession() {
                 processData: false,
                 contentType: false,
                 success: function (response) {
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
                     // Handle the response from the server
                     console.log(response);
 
@@ -900,13 +912,17 @@ function addNewSession() {
 
                         $('#addNewSessionBackdrop').modal('hide');
 
-                        document.getElementById('message-text').innerHTML = response.message;
-                        $('#messageBackdrop').modal('show');
-                        $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                     }
+
+                    document.getElementById('message-text').innerHTML = response.message;
+                    $('#messageBackdrop').modal('show');
+                    $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
 
                 },
                 error: function (response) {
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
                     // Handle the error
                     console.log(response);
 
@@ -941,6 +957,8 @@ function addNewAttachment() {
         submitHandler: function (form) {
             // تحديد المتغيرات اللازمة
 
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('spinner').style.display = 'flex';
             newAttachmentFile = $("#newAttachmentFile")[0].files[0];
 
 
@@ -962,6 +980,9 @@ function addNewAttachment() {
                 processData: false,
                 contentType: false,
                 success: function (response) {
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
                     // Handle the response from the server
                     attachment = {
                         'id': response.id,
@@ -977,6 +998,9 @@ function addNewAttachment() {
                     $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                 },
                 error: function (response) {
+
+                    document.getElementById('content').style.display = 'block';
+                    document.getElementById('spinner').style.display = 'none';
                     // Handle the error
                     console.log(response);
 
