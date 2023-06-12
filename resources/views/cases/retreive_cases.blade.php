@@ -50,7 +50,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="http://127.0.0.1:8000/">
                 <div class="imgcontainer">
 
                     <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
@@ -224,6 +224,9 @@
                         </div>
                     </div>
                 </main>
+                <footer class="text-center sticky-bottom">
+                    <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
+                </footer>
             </div>
         </div>
 
@@ -236,7 +239,7 @@
 
                         </h1>
                         <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id='closeModal'
-                             aria-label="Close"></button>
+                            aria-label="Close"></button>
 
                     </div>
                     <div class=" modal-body">

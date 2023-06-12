@@ -48,7 +48,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="http://127.0.0.1:8000">
                 <div class="imgcontainer">
 
                     <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
@@ -310,7 +310,9 @@
 
                     </div>
 
-
+                    <footer class="text-center sticky-bottom">
+                        <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
+                    </footer>
                 </main>
             </div>
         </div>

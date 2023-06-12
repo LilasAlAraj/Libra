@@ -27,7 +27,7 @@ function login() {
         const loginBtn = document.querySelector('#login-nav-item');
         loginBtn.innerHTML = '  <button class="btn" id="login-btn" onclick="login()"> تسجيل الدخول </button > '
         const loginWidth = loginBtn.offsetWidth;
-        const rightValue = navWidth -loginWidth*2- navbarWidth - brandWidth;
+        const rightValue = navWidth - loginWidth * 2 - navbarWidth - brandWidth;
         loginBtn.style.right = rightValue + 'px';
         loginBtn.style.position = 'relative';
 
@@ -37,6 +37,8 @@ function login() {
 
     }
     fadeInOut();
+
+
 
 
 })();
@@ -62,7 +64,7 @@ function fadeInOut() {
                 const bottom = io.getBoundingClientRect().bottom;
                 if (trigger + 170 > top) {
                     fade_in(io);
-                    if (trigger - 300 > bottom)
+                    if (trigger - 340 > bottom)
                         fade_out(io);
                 } else {
                     fade_out(io);

@@ -282,7 +282,11 @@ function showPage(pageNumber, data) {
     var endIndex = Math.min(startIndex + itemsPerPage, data.length);
 
     // عرض الصفوف
-    $('#table-body').empty();
+    var table = document.getElementById("cases-table");
+    if (table.rows.length === 2)
+        table.rows[1].remove();
+    body = $('#table-body');
+    body.text('');
     for (var i = startIndex; i < endIndex; i++) {
         const case_ = data[i].case;
 
@@ -450,11 +454,10 @@ function showPage(pageNumber, data) {
         );
 
         row.attr('id', case_.id);
-        $('#table-body').append(row);
+        body.append(row);
 
     }
 
-    var table = document.getElementsByClassName("table")[0];
     if (table.rows.length == 1) {
 
         var headerRow = table.rows[0];

@@ -1,4 +1,7 @@
-.feather {
+
+body{
+    min-height: 100vh;
+}.feather {
     width: 16px;
     height: 16px;
 }
@@ -271,4 +274,25 @@ main {
     100% {
         transform: scale(1.0);
     }
+}
+
+
+
+footer {
+    background-color: rgb(7, 48, 78);
+    color: white;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    position: sticky;
+    bottom: 0;
+}
+footer p {
+    display: contents;
+}
+
+footer span.logo {
+    color:  rgb(87, 126, 155);
+
 }

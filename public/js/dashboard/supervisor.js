@@ -407,7 +407,6 @@ function fillMembershipRequestTable() {
 
 
 
-            var table = document.getElementById("membership-request-table");
             if (table.rows.length == 1) {
 
                 var headerRow = table.rows[0];

@@ -55,6 +55,9 @@ function displayAll() {
 }
 
 function retreive() {
+
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'flex';
     $('#retreive-form').validate(
         {
             rules: {
@@ -88,9 +91,13 @@ function retreive() {
                         // تحديث Pagination
                         displayAll();
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                     },
                     error: function (response) {
 
+                        document.getElementById('content').style.display = 'block';
+                        document.getElementById('spinner').style.display = 'none';
                         console.log(response);
                     }
                 });
@@ -297,7 +304,7 @@ function showPage(pageNumber, data) {
             //ضبط وقائع القضية
             let fact_text = Case.facts
             const fact_text_content = document.createElement('p');
-            if (fact_text.length > 90) {
+            if (fact_text.length > 900) {
                 const show_more_fact = document.createElement('b');
                 show_more_fact.innerText = 'اعرض المزيد.'
                 show_more_fact.classList.add('show_more');
@@ -307,7 +314,7 @@ function showPage(pageNumber, data) {
                     ShowMoreFacts("وقائع القضية", Case.facts, i)
                 }
 
-                fact_text = fact_text.substring(0, 90) + '... '
+                fact_text = fact_text.substring(0, 900) + '... '
                 fact_text_content.append(fact_text, show_more_fact)
 
             } else {

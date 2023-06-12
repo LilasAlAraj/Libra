@@ -233,6 +233,22 @@ $(document).ready(function () {
 
 (() => {
 
+     // Create a new Date object
+     const currentDate = new Date();
+     // Get the current year
+     const currentYear = currentDate.getFullYear();
+     document.getElementById('year').innerHTML = currentYear;
+
+
+
+
+    const screenHeigh = window.innerHeight;
+
+    const footer = document.querySelector('footer');
+    const footerHeigh = footer.offsetHeight;
+    footer.style.top = (screenHeigh - footerHeigh) + 'px';
+
+
     fetchUserRole()
         .then((role) => {
             setNavAuth(role);

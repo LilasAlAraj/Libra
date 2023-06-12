@@ -219,7 +219,6 @@ class UserController extends Controller
 
                 'phone' => 'required|numeric|unique:users',
 
-
             ],
 
             [
@@ -241,7 +240,6 @@ class UserController extends Controller
                 'phone.numeric' => 'يجب أن يكون رقم الهاتف قيمة رقمية',
 
                 'phone.unique' => 'رقم الهاتف مسجل مسبقاً',
-
 
             ]);
 
@@ -346,6 +344,10 @@ class UserController extends Controller
         return response()->json(['role' => $roleID]);
     }
 
+    public function isLoggedIn()
+    {
+        return response()->json(Auth::check());
+    }
     public function clientCount()
     {
         $num_clients = User::where('role_name', '=', 'زبون')->count();
