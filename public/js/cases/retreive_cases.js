@@ -56,8 +56,6 @@ function displayAll() {
 
 function retreive() {
 
-    document.getElementById('content').style.display = 'none';
-    document.getElementById('spinner').style.display = 'flex';
     $('#retreive-form').validate(
         {
             rules: {
@@ -75,8 +73,11 @@ function retreive() {
                 var toSearch = $('#toSearch').val();
 
 
+                document.getElementById('content').style.display = 'none';
+                document.getElementById('spinner').style.display = 'flex';
 
                 $.ajax({
+
                     url: 'http://127.0.0.1:8000/cases/ir/search',
                     type: 'get',
                     data: {

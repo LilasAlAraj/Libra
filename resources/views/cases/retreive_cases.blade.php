@@ -184,24 +184,35 @@
 
 
                             <form id="retreive-form" class="search-options" action="get" autocomplete="off">
-
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="toSearch"><b>أدخل ما تريد البحث عنه</b></label>
-                                        <input type="text" id="toSearch" name="toSearch"
+                                        <input type="text" id="toSearch" name="toSearch" class="searchInput"
                                             placeholder="أدخل ما تريد البحث عنه" required>
                                     </div>
-
-
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="from_year"><b>من عام</b></label>
+                                        <select id="from_year" class="year searchInput" class="searchInput"
+                                            name="from_year">
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="to_year"><b>إلى عام</b></label>
+                                        <select id="to_year" class="year searchInput" name="to_year">
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="container" style="padding: 0;">
-                                    <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                        onclick="retreive()">
+                                    <button type="submit" id="search-button"
+                                        class="operations-btn btn btn-success  btn-sm" onclick="retreive()">
                                         <span data-feather="search" class="align-text-bottom"></span>
                                         ابحث
 
                                     </button>
-                                    <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                    <button type="reset" id="remove-button"
+                                        class="operations-btn btn btn-danger btn-sm">
                                         <span data-feather="x-circle" class="align-text-bottom"></span>
                                         امسح
                                     </button>
