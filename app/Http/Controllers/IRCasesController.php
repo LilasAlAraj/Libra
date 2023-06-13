@@ -46,6 +46,6 @@ class IRCasesController extends Controller
         return response()->json(['cases' => $cases]);
     }
 
-
+    
 
 }
