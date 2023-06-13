@@ -240,7 +240,7 @@
                                 <div class="row ">
                                     <div class="col-12">
                                         <label for="content"><b>المحتوى</b></label>
-                                        <textarea class="form-control" id="content" name="content" rows="5" style="max-height:8em;" required></textarea>
+                                        <textarea class="form-control" id="content-rec" name="content" rows="5" style="max-height:8em;" required></textarea>
                                     </div>
                                 </div>
 

@@ -37,13 +37,13 @@ class RecommendationController extends Controller
             return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
         }
 
-        Recommendation::create
-        ([
+        $recommendation=new Recommendation;
 
-            'title' => $request->title,
+        $recommendation->title = $request['title'];
 
-            'content' => $request->content,
-        ]);
+        $recommendation->content = $request['content'];
+
+        $recommendation->index();
 
         $id = Recommendation::latest()->first()->id;
 
@@ -96,16 +96,16 @@ class RecommendationController extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->errors()], 400);
         }
 
-        $recommendation = Recommendation::find($request->id);
 
-        $recommendation->update
+        $id = $request->id;
 
-        ([
+        $recommendation = Recommendation::where('id', '=', $id)->first();
 
-            'title' => $request->title,
+        $recommendation->update(['title' => $request->title, 'content' => $request->content]);
 
-            'content' => $request->content,
-        ]);
+        $recommendation->updateIndex();
+
+
 
         return response()->json(['status' => 'success', 'message' => 'تم تحديث التوصية بنجاح'], 200);
     }
@@ -113,10 +113,12 @@ class RecommendationController extends Controller
     public function destroy(Request $request)
 
     {
+        $id=$request->id;
 
-        $id = $request->id;
+        $recomendation = Recommendation::where('id', '=', $id)->first();
 
-        if (Recommendation::find($id)->delete())
+
+        if ($recomendation->deleteIndex() && $recomendation->delete())
         {
 
             return response()->json(['status' => 'success', 'message' => 'تم الحذف بنجاح'],200);
