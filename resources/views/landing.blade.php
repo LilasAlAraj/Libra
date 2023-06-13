@@ -64,6 +64,7 @@
                     <div class="col-lg-6 col-md-6" id="landing-text">
                         <div class="m-5">
                             <h2>موقع العدل والعدالة</h2>
+                            <br>
                             <p>
                                 مرحبًا بك في صفحة إدارة مكتبنا التفاعلية! نحن فريق محاماة متخصص يقدم خدمات قانونية شاملة
                                 لعملائنا الكرام. نحن ندرك أهمية تنظيم وإدارة المكتب والقضايا، ولذلك نقدم لكم تجربة فريدة
@@ -75,7 +76,7 @@
                         <div class="img-box rounded-circle position-relative">
                             <img src="../../Img/Logo.jpg" style="width: 25%" class=" js-testimonial-img rounded-circle"
                                 alt="Logo">
-                            <h1 class="name">ليبرا</h1>
+                            <h1 class="name agency-font"  style="color: white">Libra</h1>
                         </div>
                     </div>
                 </div>

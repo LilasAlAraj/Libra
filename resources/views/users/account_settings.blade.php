@@ -194,7 +194,9 @@
                             تغيير كلمة المرور
                         </button>
                     </div>
-                </main>
+                </main><footer class="text-center sticky-bottom">
+                    <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
+                </footer>
             </div>
         </div>
 
