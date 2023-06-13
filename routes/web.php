@@ -72,6 +72,9 @@ Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_task
 
 Route::get('cases/count', 'App\Http\Controllers\CasesController@getCountCases');
 //Recommendations
+
+Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController@index');
+Route::get('recommendations/ir/search', 'App\Http\Controllers\IRRecomendationController@search');
 Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
 Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
 Route::get('recommendation/{id}', 'App\Http\Controllers\RecommendationController@show');

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cases;
-use App\Models\Decision;
 use Illuminate\Http\Request;
 
-class IRController extends Controller
+class IRCasesController extends Controller
 {
 
     public function index()
@@ -21,18 +20,18 @@ class IRController extends Controller
     public function createIndex()
     {
         Cases::createIndex();
-        // Decision::createIndex();
     }
+
     public function destroyIndex()
     {
         Cases::destroyIndex();
-        //     Decision::destroyIndex();
+
     }
 
     public function indexAll()
     {
         Cases::indexAll();
-        //  Decision::indexAll();
+
     }
 
     public function search(Request $requset)
@@ -47,6 +46,10 @@ class IRController extends Controller
         return response()->json(['cases' => $cases]);
     }
 
+<<<<<<< HEAD:app/Http/Controllers/IRController.php
     
+=======
+
+>>>>>>> d60e38fa4fe2f2f1477505d27ab0bbfef46393ba:app/Http/Controllers/IRCasesController.php
 
 }

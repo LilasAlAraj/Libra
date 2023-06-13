@@ -46,13 +46,18 @@ function add_Recommendation() {
 
 
             var title = $('#title').val();
-            var content = document.getElementById('content').value;
-            console.log(title, content);
+            var content = $('#content-rec').val();
+
+
+            console.log(title);
+            console.log(content);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            // console.log($('meta[name="csrf-token"]').attr('content'));
             $.ajax({
                 url: "http://127.0.0.1:8000/recommendation",
                 type: "POST",
@@ -63,7 +68,7 @@ function add_Recommendation() {
                 , dataType: 'json',
                 success: function (response) {
                     console.log(response)
-                    if (response.status == 'success') {
+                    if (response.status === 'success') {
                         const Recommendation = [];
                         Recommendation["title"] = title
                         Recommendation["content"] = content
