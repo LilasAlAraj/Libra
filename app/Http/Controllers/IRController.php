@@ -47,4 +47,6 @@ class IRController extends Controller
         return response()->json(['cases' => $cases]);
     }
 
+    
+
 }

@@ -56,6 +56,7 @@ function displayAll() {
 
 function retreive() {
 
+
     document.getElementById('content').style.display = 'none';
     document.getElementById('spinner').style.display = 'flex';
     $('#retreive-form').validate(
@@ -95,6 +96,7 @@ function retreive() {
                         document.getElementById('spinner').style.display = 'none';
                     },
                     error: function (response) {
+                        console.log(toSearch);
 
                         document.getElementById('content').style.display = 'block';
                         document.getElementById('spinner').style.display = 'none';
@@ -275,7 +277,7 @@ function showPage(pageNumber, data) {
 
 
         for (var i = startIndex; i < endIndex; i++) {
-            const Case = data[i];
+            const Case = data[i].result;
             const CaseCard = document.createElement('div');
             CaseCard.classList.add("row", "card", "mb-3");
 

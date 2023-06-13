@@ -114,10 +114,10 @@ class Cases extends Model
                 'index' => Cases::$index,
                 'id' => $case->id,
                 'body' => [
+                    'id' => $case->id,
+                    'title' => $case->title,
                     'claim' => $case->claim,
                     'facts' => $case->facts,
-                    'title' => $case->title,
-                    'id' => $case->id,
                     // 'decisions.id' => $case->decisions->pluck('id'),
                     'decisions' => $case->decisions->pluck('description','id'),
                     // أضف المزيد من الحقول اللازمة
@@ -193,17 +193,33 @@ class Cases extends Model
             ->setHosts(['localhost:9200'])
             ->setBasicAuthentication('Lilas', '123456789')
             ->build();
-        $params = [
-            'index' => Cases::$index,
-            'body' => [
-                'query' => [
-                    'multi_match' => [
-                        'query' => $query,
-                        'fields' => ['facts', 'claim', 'title', 'decisions.description'],
-                    ],
-                ],
+      
+        
+    $params = [
+        'index' => Cases::$index,
+        'body' => [
+            'query' => [
+                'bool' => [
+                    'should' => [
+                        ['match' => ['claim' => $query]],
+                        ['match' => ['facts' => $query]],
+                        ['match' => ['title' => $query]],
+                        ['nested' => [
+                            'path' => 'decisions',
+                            'query' => [
+                                'match' => ['decisions.description' => $query]
+                            ]
+                        ]]
+                    ]
+                ]
             ],
-        ];
+            
+            'sort' => [
+                ['_score' => 'desc']
+            ],
+            
+        ]
+    ];
         $response = $client->search($params);
 
         $hits = $response['hits']['hits'];
@@ -211,19 +227,33 @@ class Cases extends Model
         $results = [];
 
         // foreach ($hits as $hit) {
-        //     $result = $hit['_source'];
-        //     $result['type'] = $hit['_type'];
-        //     $result['score'] = $hit['_score'];
-        //     $results[] = $result;
+        //     $results[]['result'] = $hit['_source'];
         // }
 
+        // return $results;
+
         foreach ($hits as $hit) {
-            $results[] = $hit['_source'];
+            $source = $hit['_source'];
+            $score = $hit['_score'];
+    
+            // قم بتقييم النتيجة بناءً على الدرجة التوافق (score)
+            $evaluation = $score; // يمكنك تعديل هذا الجزء حسب احتياجاتك وقواعد التقييم الخاصة بك
+    
+            // أضف النتيجة والتقييم إلى القائمة النهائية
+            $results[] = [
+                'result' => $source,
+                'evaluation' => $evaluation,
+            ];
         }
-
-        return $results;
+    
+        // قم بترتيب النتائج بناءً على التقييم (بحسب الدرجة التوافق)
+        usort($results, function ($a, $b) {
+            return $b['evaluation'] <=> $a['evaluation']; // ترتيب تنازلي للتقييم
+        });
+    
+         return $results;
     }
-
+    
     protected $fillable = [
         'title',
         'court_id',
