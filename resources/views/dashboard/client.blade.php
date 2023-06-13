@@ -179,14 +179,82 @@
 
                         <h2>الصفحة الرئيسية</h2>
                     </div>
+                    <div class="container">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link tab searchBy active " id="all-tab" data-bs-toggle="tab"
+                                    data-bs-target="#all-tab-pane" type="button" role="tab"
+                                    aria-controls="all-tab-pane" aria-selected="true" onclick="displayAll()">
+                                    عرض الكل
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link tab searchBy" id="search-tab" data-bs-toggle="tab"
+                                    data-bs-target="#search-tab-pane" type="button" role="tab"
+                                    aria-controls="search-tab-pane" aria-selected="false">
+                                    بحث
+                                </button>
+                            </li>
 
-                    <div class="container" id='recommendations'>
+                        </ul>
 
+
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade show active" id="all-tab-pane" role="tabpanel"
+                                aria-labelledby="all-tab" tabindex="0">
+                                <br>
+
+                            </div>
+                            <div class="tab-pane fade" id="search-tab-pane" role="tabpanel"
+                                aria-labelledby="search-tab" tabindex="0">
+                                <form id="search" class="search-options" action="get">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="toSearch"><b>أدخل ما تريد البحث عنه</b></label>
+                                        <input type="text" id="toSearch" name="toSearch"
+                                            placeholder="أدخل ما تريد البحث عنه" required>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="container" style="padding: 0;">
+                                        <button type="submit" id="search-button"
+                                            class="operations-btn btn btn-success btn-sm" onclick="search()">
+                                            <span data-feather="search" class="align-text-bottom"></span>
+                                            ابحث
+
+                                        </button>
+                                        <button type="reset" id="remove-button"
+                                            class="operations-btn btn btn-danger btn-sm">
+                                            <span data-feather="x-circle" class="align-text-bottom"></span>
+                                            امسح
+                                        </button>
+
+
+                                        <span id="error" class="error">
+                                        </span>
+                                    </div>
+                                    <hr>
+
+
+                                </form>
+                            </div>
+
+
+
+                        </div>
+                        <div class="container" id='recommendations'>
+
+                        </div>
                     </div>
 
 
 
-                </main><footer class="text-center sticky-bottom">
+
+                </main>
+                <footer class="text-center sticky-bottom">
                     <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                 </footer>
             </div>
