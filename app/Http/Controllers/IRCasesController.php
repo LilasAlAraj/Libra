@@ -46,10 +46,6 @@ class IRCasesController extends Controller
         return response()->json(['cases' => $cases]);
     }
 
-<<<<<<< HEAD:app/Http/Controllers/IRController.php
     
-=======
-
->>>>>>> d60e38fa4fe2f2f1477505d27ab0bbfef46393ba:app/Http/Controllers/IRCasesController.php
 
 }

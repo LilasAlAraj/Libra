@@ -135,8 +135,8 @@ Route::get('account/setting', 'App\Http\Controllers\SettingAccountController@ind
 Route::post('account/change_password', 'App\Http\Controllers\SettingAccountController@update');
 Route::get('account', 'App\Http\Controllers\SettingAccountController@show');
 
-Route::get('cases/ir', 'App\Http\Controllers\IRController@index');
-Route::get('cases/ir/search', 'App\Http\Controllers\IRController@search');
+Route::get('cases/ir', 'App\Http\Controllers\IRCasesController@index');
+Route::get('cases/ir/search', 'App\Http\Controllers\IRCasesController@search');
 Route::resource('cases', 'App\Http\Controllers\CasesController'); // 🌷القضية
 
 Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');

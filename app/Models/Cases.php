@@ -193,17 +193,22 @@ class Cases extends Model
             ->setHosts(['localhost:9200'])
             ->setBasicAuthentication('Lilas', '123456789')
             ->build();
-      
+            
         
     $params = [
         'index' => Cases::$index,
+        
         'body' => [
             'query' => [
                 'bool' => [
                     'should' => [
-                        ['match' => ['claim' => $query]],
+                        ['match' => ['title' => [
+                            'query' => $query,
+                            'boost' => 10.0, // زيادة وزن حقل العنوان
+                        ]]],
                         ['match' => ['facts' => $query]],
-                        ['match' => ['title' => $query]],
+                        ['match' => ['claim' => $query]],
+                        
                         ['nested' => [
                             'path' => 'decisions',
                             'query' => [
