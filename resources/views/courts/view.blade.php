@@ -23,6 +23,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&family=Tilt+Prism&display=swap" rel="stylesheet">
+
     <link href="../../css/navs.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
 
@@ -205,7 +207,8 @@
 
                     </div>
 
-                </main><footer class="text-center ">
+                </main>
+                <footer class="text-center ">
                     <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                 </footer>
             </div>
@@ -319,8 +322,8 @@
                         <h1 class="modal-title fs-5" id="messageBackdropLabel" style=" color:white;">
                             رسالة
                         </h1>
-                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id='closeModal' onclick="closeModal()"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" id='closeModal'
+                            onclick="closeModal()" aria-label="Close"></button>
 
                     </div>
                     <div class=" modal-body">
