@@ -85,10 +85,7 @@ function add_Recommendation() {
                         document.getElementById('message-text').innerHTML = response.message;
                         $('#messageBackdrop').modal('show');
                         $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
-                        
-                        
-                        $('#title').val('');
-                        $('#content-rec').val('');
+                        closeModal();
 
                     } else {
                         $('#addRecommendationError').html(response.message);

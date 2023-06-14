@@ -35,14 +35,15 @@ function search() {
             },
         },
         submitHandler: function (form) {
+
             document.getElementById("content").style.display = "none";
             document.getElementById("spinner").style.display = "flex";
             // جلب البيانات من ملف JSON
             let toSearch = $("#toSearch").val();
             $.ajax({
-                url: "http://127.0.0.1:8000/recommendations/search",
+                url: "http://127.0.0.1:8000/recommendations/ir/search",
                 type: "get",
-                data: { toSearch: toSearch },
+                data: { "toSearch": toSearch },
                 success: function (response) {
                     console.log(response);
                     recs = response.recommendations;

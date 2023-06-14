@@ -184,24 +184,35 @@
 
 
                             <form id="retreive-form" class="search-options" action="get" autocomplete="off">
-
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="toSearch"><b>أدخل ما تريد البحث عنه</b></label>
-                                        <input type="text" id="toSearch" name="toSearch"
+                                        <input type="text" id="toSearch" name="toSearch" class="searchInput"
                                             placeholder="أدخل ما تريد البحث عنه" required>
                                     </div>
-
-
                                 </div>
-                                <div class=" row container" style="padding: 0;">
-                                    <button type="submit" id="search-button" class="operations-btn btn btn-success"
-                                        onclick="retreive()">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="from_year"><b>من عام</b></label>
+                                        <input type="number" id="from_year" class=" searchInput" class="searchInput"
+                                            name="from_year" min="1980" placeholder="1980">
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="to_year"><b>إلى عام</b></label>
+                                        <input type="number" id="to_year" class=" searchInput" name="to_year" min="1980" >
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row container" style="padding: 0;">
+                                    <button type="submit" id="search-button"
+                                        class="operations-btn btn btn-success  btn-sm" onclick="retreive()">
                                         <span data-feather="search" class="align-text-bottom"></span>
                                         ابحث
 
                                     </button>
-                                    <button type="reset" id="remove-button" class="operations-btn btn btn-danger">
+                                    <button type="reset" id="remove-button"
+                                        class="operations-btn btn btn-danger btn-sm">
                                         <span data-feather="x-circle" class="align-text-bottom"></span>
                                         امسح
                                     </button>
@@ -232,7 +243,7 @@
                         </div>
                     </div>
                 </main>
-                <footer class="text-center sticky-bottom">
+                <footer class="text-center ">
                     <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                 </footer>
             </div>

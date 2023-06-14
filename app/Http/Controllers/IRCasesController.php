@@ -37,15 +37,49 @@ class IRCasesController extends Controller
     public function search(Request $requset)
     {
 
-        // $i = 0;
-        // $casesArray = [];
+        $i = 0;
+        $casesArray = [];
         $query = $requset->toSearch;
 
         $cases = Cases::search($query);
 
-        return response()->json(['cases' => $cases]);
-    }
+        $from_year = $requset->from_year;
 
-    
+        $to_year = $requset->to_year;
+
+        if (is_null($from_year) && is_null($to_year)) {
+
+            return response()->json(['cases' => $cases]);
+        } else if (!is_null($from_year) && !is_null($to_year)) {
+            $temp_cases = Cases::whereHas('baseNumbers', function ($query) use ($from_year, $to_year) {
+                $query->whereBetween('date', [$from_year, $to_year]);
+
+            })->get();
+
+        } else if (is_null($from_year) && !is_null($to_year)) {
+            $temp_cases = Cases::whereHas('baseNumbers', function ($query) use ($to_year) {
+                $query->where('date', '<', $to_year);
+
+            })->get();
+
+        } else if (!is_null($from_year) && is_null($to_year)) {
+            $temp_cases = Cases::whereHas('baseNumbers', function ($query) use ($from_year) {
+                $query->where('date', '>=', $from_year);
+
+            })->get();
+
+        }
+
+        foreach ($temp_cases as $tCase) {
+            foreach ($cases as $case) {
+
+                if ($tCase->id == $case['result']['id']) {
+                    $casesArray[$i++] = $case;
+                }
+            }
+        }
+        return response()->json(['cases' => $casesArray]);
+
+    }
 
 }

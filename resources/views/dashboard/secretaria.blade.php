@@ -344,7 +344,7 @@
                                 <tbody id="tasks-body-table"></tbody>
                             </table>
                         </div>
-                    </div><footer class="text-center sticky-bottom">
+                    </div><footer class="text-center 
                         <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                     </footer>
                 </main>

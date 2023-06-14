@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-
 
 class Recommendation extends Model
 {
@@ -33,7 +32,7 @@ class Recommendation extends Model
             ->build();
 
         $params = [
-            'index' =>Recommendation::$index,
+            'index' => Recommendation::$index,
             'body' => [
                 'settings' => [
                     'analysis' => [
@@ -41,7 +40,9 @@ class Recommendation extends Model
                             'my_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'arabic_normalization', 'arabic_stop', 'arabic_stemmer'],
+                                'filter' => ['lowercase', 'arabic_normalization', 'arabic_stop', 'arabic_stemmer'
+                                ,'arabic_stopwords', // تعريف "ستوب ووردز" المستخدم للفهرسة العربية
+                            ],
                             ],
                         ],
                         'filter' => [
@@ -55,6 +56,13 @@ class Recommendation extends Model
                             'arabic_stemmer' => [
                                 'type' => 'stemmer',
                                 'language' => 'arabic',
+                            ], 'arabic_stopwords' => [
+                                'type' => 'stop',
+                                'stopwords' => [
+                                    'ب', 'من', 'إلى', 'عن', 'في', 'على', 'مع', 'أن', 'هذا', 'هذه',
+                                    // قائمة تحتوي على أحرف الجر والكلمات التي ترغب في تعيينها كـ "ستوب ووردز"
+                                ],
+                                'ignore_case' => true,
                             ],
 
                         ],
@@ -68,18 +76,16 @@ class Recommendation extends Model
                             'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
                         ],
 
-                                'content' => [
-                                    'type' => 'text',
-                                    'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
-                                ],
-
-                            ],
+                        'content' => [
+                            'type' => 'text',
+                            'analyzer' => 'my_analyzer', // استخدام التحليل المناسب هنا
                         ],
 
                     ],
-                ];
+                ],
 
-
+            ],
+        ];
 
         $response = $client->indices()->create($params);
     }
@@ -98,7 +104,7 @@ class Recommendation extends Model
                 'body' => [
                     'title' => $recommendation->title,
                     'content' => $recommendation->content,
-                    'id' => $recommendation->id
+                    'id' => $recommendation->id,
                 ],
             ];
 
@@ -199,7 +205,7 @@ class Recommendation extends Model
         return $results;
     }
 
-   protected $fillable=[
-    'title','content'
-   ];
+    protected $fillable = [
+        'title', 'content',
+    ];
 }

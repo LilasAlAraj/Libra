@@ -310,7 +310,7 @@
 
                     </div>
 
-                    <footer class="text-center sticky-bottom">
+                    <footer class="text-center 
                         <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                     </footer>
                 </main>

@@ -5,7 +5,7 @@
 /**************************** */
 
 function setAuth() {
-    if (role === 2) {
+    if (role === 2||role ==1) {
         addNewCourtBtn = document.getElementById('addNewCourtBtn');
 
         addNewCourtBtn.innerHTML =

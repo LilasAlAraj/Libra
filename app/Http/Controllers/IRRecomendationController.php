@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 class IRRecomendationController extends Controller
 {
 
-    public function index()
+    public  function index()
     {
+        Recommendation::createIndex();
 
         // $this->destroyIndex();
      $this->createIndex();
         // $this->indexAll();
-        return view('Recomendation.retreive_Recomendation');
+        // return view('Recomendation.retreive_Recomendation');
     }
 
-    public function createIndex()
+    public static function createIndex()
     {
 
         Recommendation::createIndex();
@@ -42,9 +43,9 @@ class IRRecomendationController extends Controller
 
         $query = $requset->toSearch;
 
-        $recommendation = Recommendation::search($query);
+        $recommendations = Recommendation::search($query);
 
-        return response()->json(['recommendation' => $recommendation]);
+        return response()->json(['recommendations' => $recommendations]);
     }
 
 

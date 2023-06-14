@@ -10,6 +10,11 @@ class RecommendationController extends Controller
 
     public function index()
     {
+
+        // Recommendation::createIndex();
+        // Recommendation::destroyIndex();
+       // Recommendation::indexAll();
+
         return view('recommendations.view');
     }
     public function store(Request $request)
