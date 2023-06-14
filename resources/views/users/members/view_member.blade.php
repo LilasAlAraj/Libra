@@ -237,7 +237,7 @@
 
 
                     </div>
-                </main><footer class="text-center
+                </main><footer class="text-center">
                     <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                 </footer>
             </div>
