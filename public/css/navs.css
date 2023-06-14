@@ -281,12 +281,12 @@ main {
 footer {
     background-color: rgb(7, 48, 78);
     color: white;
-    position: fixed;
     width: 100%;
     text-align: center;
     left: 0;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    z-index: 301 ;
 }
 footer p {
     display: contents;

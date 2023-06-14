@@ -382,8 +382,12 @@ function addMemberRow(table, member) {
     deleteBtn.setAttribute('title', 'حذف الحساب');
     deleteBtn.classList.add('btn', 'btn-danger', 'menu-operations-btn');
 
+    deleteBtn.setAttribute("data-bs-target", "#deleteMemberBackdrop");
+    deleteBtn.setAttribute("data-bs-toggle", "modal")
     deleteBtn.onclick = function () {
-        deleteMember(member_id)
+        document.getElementById('deleteMemerPopup').onclick = function () {
+            deleteMember(member_id)
+        }
     }
     const deleteOpLi = document.createElement('li');
     deleteOpLi.append(deleteBtn)
@@ -451,6 +455,13 @@ function deleteMember(memberId) {
             console.log(response)
 
             // وقت الحذف لازم يطلع بوب أب برسالة الاستجابة
+            $('#deleteMemberBackdrop').modal('hide');
+
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            $('tr#'+memberId).remove();
+
 
         },
         error: function (response) {

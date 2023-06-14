@@ -373,9 +373,12 @@ function addClientRow(table, client) {
         + ' حذف الحساب'
     deleteBtn.setAttribute('title', 'حذف الحساب');
     deleteBtn.classList.add('btn', 'btn-danger', 'menu-operations-btn');
-
+    deleteBtn.setAttribute("data-bs-target", "#deleteClientBackdrop");
+    deleteBtn.setAttribute("data-bs-toggle", "modal")
     deleteBtn.onclick = function () {
-        deleteClient(client_id)
+        document.getElementById('deleteClientPopup').onclick = function () {
+            deleteClient(client_id)
+        }
     }
     const deleteOpLi = document.createElement('li');
     deleteOpLi.append(deleteBtn)
@@ -445,7 +448,12 @@ function deleteClient(clientId) {
             console.log(response)
 
             // وقت الحذف لازم يطلع بوب أب برسالة الاستجابة
+            $('#deleteClientBackdrop').modal('hide');
 
+            document.getElementById('message-text').innerHTML = response.message;
+            $('#messageBackdrop').modal('show');
+            $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
+            $('tr#'+clientId).remove();
         },
         error: function (response) {
             console.log(response)

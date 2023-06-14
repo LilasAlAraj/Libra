@@ -50,15 +50,25 @@ function setUserData() {
             $('#current_address').val(user.current_address)
             $('#email').val(user.email)
             role_name = user.role_name;
+
             var radioBtn = document.getElementById(role_name);
 
+            if(radioBtn!=null)
             radioBtn.checked = true;
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
+
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+
+
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('spinner').style.display = 'none';
         }
     });
+
 
 }
 $(document).ready(function () {

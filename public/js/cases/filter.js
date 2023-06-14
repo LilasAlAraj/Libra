@@ -445,7 +445,6 @@ function searchByBaseNumber() {
 
 function searchByYears() {
 
-    console.log(456)
     $('#searchByYears').validate(
         {
 

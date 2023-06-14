@@ -194,13 +194,13 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="from_year"><b>من عام</b></label>
-                                        <select id="from_year" class="year searchInput" class="searchInput"
-                                            name="from_year">
+                                        <input type="number" id="from_year" class=" searchInput" class="searchInput"
+                                            name="from_year" min="1980" placeholder="1980">
                                         </select>
                                     </div>
                                     <div class="col-6">
                                         <label for="to_year"><b>إلى عام</b></label>
-                                        <select id="to_year" class="year searchInput" name="to_year">
+                                        <input type="number" id="to_year" class=" searchInput" name="to_year" min="1980" >
                                         </select>
                                     </div>
                                 </div>
@@ -235,7 +235,7 @@
                         </div>
                     </div>
                 </main>
-                <footer class="text-center sticky-bottom">
+                <footer class="text-center ">
                     <p>جميع الحقوق محفوظة © <span id="year"></span> <span class="logo">Libra</span></p>
                 </footer>
             </div>

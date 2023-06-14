@@ -17,6 +17,8 @@ $(document).ready(function () {
     //     cell.innerHTML = "لا يوجد بيانات";
 
     // }
+    fillYears();
+
 
     document.getElementById("content").style.display = "block";
     document.getElementById("spinner").style.display = "none";
@@ -44,22 +46,10 @@ function displayAll() {
 }
 
 function retreive() {
-<<<<<<< HEAD
-
-    $('#retreive-form').validate(
-        {
-            rules: {
-                toSearch: {
-                    required: true
-                }
-=======
-    document.getElementById("content").style.display = "none";
-    document.getElementById("spinner").style.display = "flex";
     $("#retreive-form").validate({
         rules: {
             toSearch: {
                 required: true,
->>>>>>> 1ffb36d12dcdb4d071bbf09e060fd2ede534dc29
             },
         },
         messages: {
@@ -70,48 +60,49 @@ function retreive() {
         submitHandler: function (form) {
             $(".error").html();
             var toSearch = $("#toSearch").val();
+            var from_year = $("#from_year").val();
+            var to_year = $("#to_year").val();
 
-            $.ajax({
-                url: "http://127.0.0.1:8000/cases/ir/search",
-                type: "get",
-                data: {
-                    toSearch: toSearch,
-                },
-                success: function (response) {
-                    console.log(toSearch);
-                    console.log(response);
 
-<<<<<<< HEAD
-                document.getElementById('content').style.display = 'none';
-                document.getElementById('spinner').style.display = 'flex';
+            let from = new Date(from_year).getTime();
+            let to = new Date(to_year).getTime();
 
+            if (from > to) {
+                $('.error').html('الرجاء اختيار التواريخ بشكل صحيح')
+
+            } else {
+
+                document.getElementById("content").style.display = "none";
+                document.getElementById("spinner").style.display = "flex";
                 $.ajax({
-
-                    url: 'http://127.0.0.1:8000/cases/ir/search',
-                    type: 'get',
+                    url: "http://127.0.0.1:8000/cases/ir/search",
+                    type: "get",
                     data: {
-                        'toSearch': toSearch
+                        toSearch: toSearch,
+                        from_year: from_year,
+                        to_year: to_year
                     },
                     success: function (response) {
                         console.log(toSearch);
                         console.log(response);
-=======
-                    currentData = data = response.cases;
-                    // تحديث Pagination
-                    displayAll();
 
-                    document.getElementById("content").style.display = "block";
-                    document.getElementById("spinner").style.display = "none";
-                },
-                error: function (response) {
-                    console.log(toSearch);
->>>>>>> 1ffb36d12dcdb4d071bbf09e060fd2ede534dc29
+                        currentData = data = response.cases;
+                        // تحديث Pagination
+                        displayAll();
 
-                    document.getElementById("content").style.display = "block";
-                    document.getElementById("spinner").style.display = "none";
-                    console.log(response);
-                },
-            });
+                        document.getElementById("content").style.display = "block";
+                        document.getElementById("spinner").style.display = "none";
+
+                    },
+                    error: function (response) {
+                        console.log(toSearch);
+
+                        document.getElementById("content").style.display = "block";
+                        document.getElementById("spinner").style.display = "none";
+                        console.log(response);
+                    },
+                });
+            }
         },
     });
 }
@@ -558,4 +549,15 @@ function reverseData() {
             "عرض تنازلي";
         btn.setAttribute("data-display", "asc");
     }
+}
+
+function fillYears() {
+
+    const currentDate = new Date();
+    // Get the current year
+    const currentYear = currentDate.getFullYear();
+    document.getElementById('to_year').setAttribute("max", currentYear);
+    document.getElementById('to_year').setAttribute("placeholder", currentYear);
+    document.getElementById('from_year').setAttribute("max", currentYear - 1);
+
 }
