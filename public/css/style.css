@@ -390,3 +390,7 @@ tr.clickable-row:hover td {
     padding-bottom: 0;
 
 }
+
+.highlight{
+    background-color:  rgb(153, 211, 255);
+}

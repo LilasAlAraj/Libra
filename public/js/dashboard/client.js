@@ -35,7 +35,6 @@ function search() {
             },
         },
         submitHandler: function (form) {
-            
             document.getElementById("content").style.display = "none";
             document.getElementById("spinner").style.display = "flex";
             // جلب البيانات من ملف JSON
@@ -91,7 +90,7 @@ function displayAll() {
 function addRecommendationRow(recommendations, Recommendation) {
     card_header = document.createElement("div");
     card_header.classList.add("card-header");
-    card_header.append(Recommendation.title);
+    card_header.append(HighlightText(Recommendation.title));
 
     card_body = document.createElement("div");
     card_body.classList.add("card-body");
@@ -107,13 +106,13 @@ function addRecommendationRow(recommendations, Recommendation) {
         show_more.setAttribute("data-bs-target", "#recommendationBackdrop");
         show_more.onclick = function () {
             show_more_recommendation(
-                Recommendation.title,
-                Recommendation.content
+                HighlightText(Recommendation.title),
+                HighlightText(Recommendation.content)
             );
         };
-        content.append(content_text, show_more);
+        content.append(HighlightText(Recommendation.content), show_more);
     } else {
-        content.append(content_text);
+        content.append(HighlightText(Recommendation.content));
     }
     card_body.append(content);
 
@@ -128,4 +127,29 @@ function show_more_recommendation(title, content) {
     document.getElementById("recommendationBackdropLabel").innerHTML = title;
     document.getElementById("recommendationBackdropContent").innerHTML =
         content;
+}
+
+function HighlightText(text) {
+    let highlightText = "";
+
+    query = document.getElementById("toSearch").value;
+
+    queryWords = query.split(" ");
+
+    textWords = text.split(" ");
+
+    for (var i = 0; i < textWords.length; i++) {
+        tWord = textWords[i];
+        for (var j = 0; j < queryWords.length; j++) {
+            qWord = queryWords[j];
+
+            if (tWord === qWord) {
+                tWord = '<span class="highlight">' + tWord + "</span> ";
+                break;
+            }
+        }
+        highlightText += tWord + " ";
+    }
+
+    return highlightText;
 }

@@ -187,28 +187,162 @@ class Cases extends Model
 
         return $client->delete($params);
     }
-    public static function search($query)
-    {
-        $client = ClientBuilder::create()
-            ->setHosts(['localhost:9200'])
-            ->setBasicAuthentication('Lilas', '123456789')
-            ->build();
-            
+//      }
+//      public static function search($query)
+// {
+//     $client = ClientBuilder::create()
+//         ->setHosts(['localhost:9200'])
+//         ->setBasicAuthentication('Lilas', '123456789')
+//         ->build();
+        
+//     $params = [
+//         'index' => Cases::$index,
+//         'body' => [
+//             'suggest' => [
+//                 'text' => $query,
+//                 'simple_phrase' => [
+//                     'phrase' => [
+//                         'field' => 'title',
+//                         'size' => 5, // عدد الاقتراحات المراد استرجاعها
+//                         'gram_size' => 3, // حجم الجرام (عدد الكلمات) في كل اقتراح
+//                         'direct_generator' => [
+//                             [
+//                                 'field' => 'title',
+//                                 'suggest_mode' => 'always',
+//                             ],
+//                             [
+//                                 'field' => 'facts',
+//                                 'suggest_mode' => 'always',
+//                             ],
+//                             [
+//                                 'field' => 'claim',
+//                                 'suggest_mode' => 'always',
+//                             ],
+//                             [
+//                                 'field' => 'decisions.description',
+//                                 'suggest_mode' => 'always',
+//                             ],
+//                         ],
+//                     ],
+//                 ],
+//             ],
+//             'query' => [
+//                 'bool' => [
+//                     'should' => [
+//                         ['match' => ['title' => [
+//                             'query' => $query,
+//                             'boost' => 10.0,
+//                         ]]],
+//                         ['match' => ['facts' => $query]],
+//                         ['match' => ['claim' => $query]],
+//                         ['nested' => [
+//                             'path' => 'decisions',
+//                             'query' => [
+//                                 'match' => ['decisions.description' => $query]
+//                             ]
+//                         ]]
+//                     ]
+//                 ]
+//             ],
+//             'sort' => [
+//                 ['_score' => 'desc']
+//             ],
+//             'highlight' => [
+//                 'pre_tags' => ['<span style="background-color:green;">'],
+//                 'post_tags' => ['</span>'],
+//                 'fields' => [
+//                     'title' => new \stdClass(),
+//                     'facts' => new \stdClass(),
+//                     'claim' => new \stdClass(),
+//                     'decisions.description' => new \stdClass(),
+//                 ]
+//             ]
+//         ]
+//     ];
+    
+//     $response = $client->search($params);
+//     $hits = $response['hits']['hits'];
+//     $results = [];
+    
+//     foreach ($hits as $hit) {
+//         $source = $hit['_source'];
+//         $score = $hit['_score'];
+//         $highlight = $hit['highlight'];
+    
+//         $evaluation = $score;
+    
+//         $results[] = [
+//             'result' => $source,
+//             'evaluation' => $evaluation,
+//             'highlight' => $highlight,
+//         ];
+//     }
+    
+//     usort($results, function ($a, $b) {
+//         return $b['evaluation'] <=> $a['evaluation'];
+//     });
+    
+//     // استرجاع الاقتراحات
+//     $suggestions = $response['suggest']['simple_phrase'][0]['options'];
+//     $suggestedTerms = [];
+//     foreach ($suggestions as $suggestion) {
+//         $suggestedTerms[] = $suggestion['text'];
+//     }
+    
+//     return [
+//         'results' => $results,
+//         'suggestions' => $suggestedTerms,
+//     ];
+public static function search($query)
+{
+    $client = ClientBuilder::create()
+        ->setHosts(['localhost:9200'])
+        ->setBasicAuthentication('Lilas', '123456789')
+        ->build();
         
     $params = [
         'index' => Cases::$index,
-        
         'body' => [
+            'suggest' => [
+                'text' => $query,
+                
+                'custom_suggest' => [
+                    'phrase' => [
+                        'field' => 'title',
+                        'size' => 5,
+                        'real_word_error_likelihood' => 0.95,
+                        'max_errors' => 0.5,
+                        'gram_size' => 3,
+                        'direct_generator' => [
+                            [
+                                'field' => 'title',
+                                'suggest_mode' => 'always',
+                            ],
+                            [
+                                'field' => 'facts',
+                                'suggest_mode' => 'always',
+                            ],
+                            [
+                                'field' => 'claim',
+                                'suggest_mode' => 'always',
+                            ],
+                            [
+                                'field' => 'decisions.description',
+                                'suggest_mode' => 'always',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'query' => [
                 'bool' => [
                     'should' => [
                         ['match' => ['title' => [
                             'query' => $query,
-                            'boost' => 10.0, // زيادة وزن حقل العنوان
+                            'boost' => 10.0,
                         ]]],
                         ['match' => ['facts' => $query]],
                         ['match' => ['claim' => $query]],
-                        
                         ['nested' => [
                             'path' => 'decisions',
                             'query' => [
@@ -218,46 +352,117 @@ class Cases extends Model
                     ]
                 ]
             ],
-            
             'sort' => [
                 ['_score' => 'desc']
             ],
-            
+            // 'highlight' => [
+            //     'pre_tags' => ['<span style="background-color:green;">'],
+            //     'post_tags' => ['</span>'],
+            //     'fields' => [
+            //         'title' => new \stdClass(),
+            //         'facts' => new \stdClass(),
+            //         'claim' => new \stdClass(),
+            //         'decisions.description' => new \stdClass(),
+            //     ]
+            // ]
         ]
     ];
-        $response = $client->search($params);
-
-        $hits = $response['hits']['hits'];
-
-        $results = [];
-
-        // foreach ($hits as $hit) {
-        //     $results[]['result'] = $hit['_source'];
-        // }
-
-        // return $results;
-
-        foreach ($hits as $hit) {
-            $source = $hit['_source'];
-            $score = $hit['_score'];
     
-            // قم بتقييم النتيجة بناءً على الدرجة التوافق (score)
-            $evaluation = $score; // يمكنك تعديل هذا الجزء حسب احتياجاتك وقواعد التقييم الخاصة بك
+    $response = $client->search($params);
+    $hits = $response['hits']['hits'];
+    $results = [];
     
-            // أضف النتيجة والتقييم إلى القائمة النهائية
-            $results[] = [
-                'result' => $source,
-                'evaluation' => $evaluation,
-            ];
-        }
+    foreach ($hits as $hit) {
+        $source = $hit['_source'];
+        $score = $hit['_score'];
+        // $highlight = $hit['highlight'];
     
-        // قم بترتيب النتائج بناءً على التقييم (بحسب الدرجة التوافق)
-        usort($results, function ($a, $b) {
-            return $b['evaluation'] <=> $a['evaluation']; // ترتيب تنازلي للتقييم
-        });
+        $evaluation = $score;
     
-         return $results;
+        $results[] = [
+            'result' => $source,
+            'evaluation' => $evaluation,
+            // 'highlight' => $highlight,
+        ];
     }
+    
+    usort($results, function ($a, $b) {
+        return $b['evaluation'] <=> $a['evaluation'];
+    });
+    
+    $suggestions = $response['suggest']['custom_suggest'][0]['options'];
+    $suggestedTerms = [];
+    foreach ($suggestions as $suggestion) {
+        $suggestedTerms[] = $suggestion['text'];
+    }
+    
+    return [
+        'results' => $results,
+        'suggestions' => $suggestedTerms,
+    ];
+}
+
+
+    // public static function search($query)
+    // {
+    //     $client = ClientBuilder::create()
+    //         ->setHosts(['localhost:9200'])
+    //         ->setBasicAuthentication('Lilas', '123456789')
+    //         ->build();
+            
+    //     $params = [
+    //         'index' => Cases::$index,
+    //         'body' => [
+    //             'query' => [
+    //                 'bool' => [
+    //                     'should' => [
+    //                         ['match' => ['title' => [
+    //                             'query' => $query,
+    //                             'boost' => 10.0,
+    //                         ]]],
+    //                         ['match' => ['facts' => $query]],
+    //                         ['match' => ['claim' => $query]],
+    //                         ['nested' => [
+    //                             'path' => 'decisions',
+    //                             'query' => [
+    //                                 'match' => ['decisions.description' => $query]
+    //                             ]
+    //                         ]]
+    //                     ]
+    //                 ]
+    //             ],
+    //             'sort' => [
+    //                 ['_score' => 'desc']
+    //             ]
+    //         ]
+    //     ];
+        
+    //     $response = $client->search($params);
+    //     $hits = $response['hits']['hits'];
+    //     $results = [];
+        
+    //     foreach ($hits as $hit) {
+    //         $source = $hit['_source'];
+    //         $score = $hit['_score'];
+        
+    //         // قم بتقييم النتيجة بناءً على الدرجة التوافق (score)
+    //         $evaluation = $score;
+        
+    //         // أضف النتيجة والتقييم إلى القائمة النهائية
+    //         $results[] = [
+    //             'result' => $source,
+    //             'evaluation' => $evaluation,
+    //         ];
+    //     }
+        
+    //     // قم بترتيب النتائج بناءً على التقييم (بحسب الدرجة التوافق)
+    //     usort($results, function ($a, $b) {
+    //         return $b['evaluation'] <=> $a['evaluation']; // ترتيب تنازلي للتقييم
+    //     });
+        
+    //     return $results;
+    // }
+    
     
     protected $fillable = [
         'title',

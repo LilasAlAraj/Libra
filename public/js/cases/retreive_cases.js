@@ -29,18 +29,18 @@ let currentData;
 
 function displayAll() {
     showPage(1, currentData);
-    if (currentData.length != 0) {
-        document.getElementById("casesControllerContainer").innerHTML =
-            '<nav aria-label="Page navigation example" class="row">' +
-            '<ul id="pagination" class="pagination"></ul>' +
-            "</nav>" +
-            '<button style="height: 100%;" id="reverse-btn" type="button" data-display="asc"' +
-            'class="operations-btn btn" onclick="reverseData()">' +
-            '<span data-feather="refresh-cw" class="align-text-bottom"></span>' +
-            "عرض تنازلي" +
-            "</button>";
-        updatePagination(currentData);
-    }
+    // if (currentData.length != 0) {
+    //     document.getElementById("casesControllerContainer").innerHTML =
+    //         '<nav aria-label="Page navigation example" class="row">' +
+    //         '<ul id="pagination" class="pagination"></ul>' +
+    //         "</nav>" +
+    //         '<button style="height: 100%;" id="reverse-btn" type="button" data-display="asc"' +
+    //         'class="operations-btn btn" onclick="reverseData()">' +
+    //         '<span data-feather="refresh-cw" class="align-text-bottom"></span>' +
+    //         "عرض تنازلي" +
+    //         "</button>";
+    //     updatePagination(currentData);
+    // }
 }
 
 function retreive() {
@@ -214,17 +214,32 @@ function showPage(pageNumber, data) {
     // حساب الصفوف التي يجب عرضها
     var itemsPerPage = 10;
     var startIndex = (pageNumber - 1) * itemsPerPage;
-    var endIndex = Math.min(startIndex + itemsPerPage, data.length);
+    var endIndex = Math.min(startIndex + itemsPerPage, data.results.length);
 
+    if (data.suggestions.length != 0) {
+        document.getElementById("do-you-mean").innerHTML = "هل تقصد: ";
+        n = data.suggestions.length;
+        for (var i = 0; i < n; i++) {
+            mean = document.createElement("span");
+            mean.innerHTML = data.suggestions[i];
+            mean.classList.add("mean");
+
+            document.getElementById("means").append(mean);
+            if (i < n - 1) document.getElementById("means").append("،");
+            else document.getElementById("means").append(".");
+        }
+    }
     const retreivedCases = document.getElementById("retreivedCases");
     retreivedCases.innerHTML = "";
-    if (data.length == 0) {
+    if (data.results.length == 0) {
         retreivedCases.innerHTML = "لا يوجد بيانات حول ما تبحث عنه";
 
         document.getElementById("casesControllerContainer").innerHTML = "";
     } else {
         for (var i = startIndex; i < endIndex; i++) {
-            const Case = data[i].result;
+            const Case = data.results[i].result;
+            console.log(Case)
+
             const CaseCard = document.createElement("div");
             CaseCard.classList.add("row", "card", "mb-3");
 
@@ -233,14 +248,15 @@ function showPage(pageNumber, data) {
             CaseCardHeader.classList.add("card-header");
             const title = document.createElement("span");
             title.classList.add("caseTitle");
-            title.innerHTML = Case.title;
+
+            title.innerHTML = HighlightText(Case.title);
             title.title = "انقر لعرض القضية وتفاصيلها بشكل كامل";
             title.onclick = function () {
                 viewCase(Case.id);
             };
 
             const evaluation = document.createElement("span");
-            evaluation.innerHTML = "evaluation= " + data[i].evaluation;
+            evaluation.innerHTML = "evaluation= " + data.results[i].evaluation;
 
             const header = document.createElement("div");
             header.classList.add("d-flex", "justify-content-between");
@@ -256,7 +272,8 @@ function showPage(pageNumber, data) {
             Accordion.classList.add("accordion");
 
             //ضبط وقائع القضية
-            let fact_text = Case.facts;
+            const fact_text = Case.facts;
+
             const fact_text_content = document.createElement("p");
             if (fact_text.length > 900) {
                 const show_more_fact = document.createElement("b");
@@ -268,13 +285,15 @@ function showPage(pageNumber, data) {
                     "#showMoreBackdrop"
                 );
                 show_more_fact.onclick = function () {
-                    ShowMoreFacts("وقائع القضية", Case.facts, i);
+                    ShowMoreFacts("وقائع القضية", HighlightText(fact_text), i);
                 };
 
-                fact_text = fact_text.substring(0, 900) + "... ";
-                fact_text_content.append(fact_text, show_more_fact);
+                fact_text_content.innerHTML = HighlightText(
+                    fact_text.substring(0, 900) + "... "
+                );
+                fact_text_content.appendChild(show_more_fact);
             } else {
-                fact_text_content.append(fact_text);
+                fact_text_content.innerHTML = HighlightText(fact_text);
             }
 
             const FactAccordionItem = document.createElement("div");
@@ -294,6 +313,7 @@ function showPage(pageNumber, data) {
                 "data-bs-target",
                 "#collapseFacts-" + i
             );
+
             accordion_button.innerHTML = "الوقائع";
             accordion_header.append(accordion_button);
 
@@ -312,7 +332,7 @@ function showPage(pageNumber, data) {
             Accordion.append(FactAccordionItem);
 
             //ضبط التماس القضية
-            let claim_text = Case.claim;
+            const claim_text = Case.claim;
             const claim_text_content = document.createElement("p");
             if (claim_text.length > 900) {
                 const show_more_claim = document.createElement("b");
@@ -324,13 +344,19 @@ function showPage(pageNumber, data) {
                     "#showMoreBackdrop"
                 );
                 show_more_claim.onclick = function () {
-                    ShowMoreClaim("التماس القضية", Case.claim, i);
+                    ShowMoreClaim(
+                        "التماس القضية",
+                        HighlightText(claim_text),
+                        i
+                    );
                 };
 
-                claim_text = claim_text.substring(0, 900) + "... ";
-                claim_text_content.append(claim_text, show_more_claim);
+                claim_text_content.innerHTML = HighlightText(
+                    claim_text.substring(0, 900) + "... "
+                );
+                claim_text_content.append(show_more_claim);
             } else {
-                claim_text_content.append(claim_text);
+                claim_text_content.innerHTML = HighlightText(claim_text);
             }
             const ClaimAccordionItem = document.createElement("div");
             ClaimAccordionItem.classList.add("accordion-item");
@@ -387,7 +413,7 @@ function showPage(pageNumber, data) {
             var j = 1;
             for (const decisionID in Case.decisions) {
                 if (Case.decisions.hasOwnProperty(decisionID)) {
-                    decision_text = Case.decisions[decisionID];
+                    const decision_text = Case.decisions[decisionID];
                     const decision_text_content = document.createElement("p");
                     if (decision_text.length > 500) {
                         let show_more_decision = document.createElement("b");
@@ -408,19 +434,18 @@ function showPage(pageNumber, data) {
                             function () {
                                 ShowMoreDecision(
                                     "قرار القضية",
-                                    Case.decisions[decisionID],
-                                    i
+                                    HighlightText(decision_text)
                                 );
                             }
                         );
-                        decision_text =
-                            decision_text.substring(0, 500) + "... ";
-                        decision_text_content.append(
-                            decision_text,
-                            show_more_decision
+
+                        decision_text_content.innerHTML = HighlightText(
+                            decision_text.substring(0, 500) + "... "
                         );
+                        decision_text_content.append(show_more_decision);
                     } else {
-                        decision_text_content.append(decision_text);
+                        decision_text_content.innerHTML =
+                            HighlightText(decision_text);
                     }
                     const row = document.createElement("tr");
                     const numCol = document.createElement("td");
@@ -532,4 +557,29 @@ function reverseData() {
             "عرض تنازلي";
         btn.setAttribute("data-display", "asc");
     }
+}
+
+function HighlightText(text) {
+    let highlightText = "";
+
+    query = document.getElementById("toSearch").value;
+
+    queryWords = query.split(" ");
+
+    textWords = text.split(" ");
+
+    for (var i = 0; i < textWords.length; i++) {
+        tWord = textWords[i];
+        for (var j = 0; j < queryWords.length; j++) {
+            qWord = queryWords[j];
+
+            if (tWord === qWord) {
+                tWord = '<span class="highlight">' + tWord + "</span> ";
+                break;
+            }
+        }
+        highlightText += tWord + " ";
+    }
+
+    return highlightText;
 }

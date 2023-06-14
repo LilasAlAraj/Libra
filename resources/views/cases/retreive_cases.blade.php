@@ -194,7 +194,7 @@
 
 
                                 </div>
-                                <div class="container" style="padding: 0;">
+                                <div class=" row container" style="padding: 0;">
                                     <button type="submit" id="search-button" class="operations-btn btn btn-success"
                                         onclick="retreive()">
                                         <span data-feather="search" class="align-text-bottom"></span>
@@ -210,7 +210,15 @@
                                     <span id="error" class="error">
                                     </span>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span id='do-you-mean'></span>
+                                        <span id='means'></span>
+                                    </div>
 
+
+
+                                </div>
 
                             </form>
                             <hr>
