@@ -8,9 +8,7 @@
     --main-color: rgb(87, 126, 155);
 }
 
-
 body {
-
     direction: rtl;
     text-align: right;
 
@@ -20,7 +18,6 @@ body {
     note:
     i put body class to make style switcher without any container, to make it over on screen scrolling
     */
-
 }
 
 nav {
@@ -29,7 +26,6 @@ nav {
     box-shadow: 0 2px 4px 0 var(--shadow);
     position: sticky;
     top: 0%;
-
 }
 
 .nav-item a {
@@ -63,11 +59,7 @@ footer p {
 
 footer span.logo {
     color: var(--main-color);
-
 }
-
-
-
 
 img.avatar {
     width: 50%;
@@ -75,16 +67,11 @@ img.avatar {
 }
 
 @media screen and (max-width: 991px) {
-
     img.avatar {
         width: 200%;
         border-radius: 50%;
     }
-
-
 }
-
-
 
 .landing .container {
     text-align: center;
@@ -92,19 +79,38 @@ img.avatar {
     min-height: 100%;
     background-color: var(--main-color);
     padding-top: 30px;
-
 }
 
-
 #landing-text {
-
     display: flex;
     text-align: center;
     align-items: center;
 }
 
-.agency-font{
-    font-family: 'Rockwell';
+.agency-font {
+    font-family: "Tilt Prism", cursive;
+
+    font-size: 100px;
+    left: 5px;
+    position: relative;
+    top: 5px;
+}
+
+#motto {
+    font-family: "Reem Kufi", sans-serif;
+    color: var(--bg-color);
+    font-size: 60px;
+}
+
+#provide-message {
+    color: #fff;
+    font-size: 19px;
+    position: relative;
+    top: 25px;
+}
+#logo{
+    position: relative;
+    top: 40px;
 }
 /*****************/
 
@@ -115,8 +121,6 @@ img.avatar {
     padding: 30px;
     margin: 50px 0;
 }
-
-
 
 .box-row {
     border-radius: 5px;
@@ -129,24 +133,22 @@ img.avatar {
     display: flex;
     justify-content: center;
     color: var(--bg-color);
-}
+    font-family: 'Reem Kufi', sans-serif;
 
+}
 
 .section-title h3 {
     font-size: 45px;
     font-weight: 900;
 }
 
-
 /*****************/
-
 
 .feature-name {
     color: var(--white);
     background-color: var(--main-color);
     text-align: center;
-    transition: .5s ease-in-out transform,
-        .5s ease-in-out opacity;
+    transition: 0.5s ease-in-out transform, 0.5s ease-in-out opacity;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -156,7 +158,5 @@ img.avatar {
 }
 
 .feature-description {
-    transition: .5s ease-in-out transform,
-        .5s ease-in-out opacity;
-
+    transition: 0.5s ease-in-out transform, 0.5s ease-in-out opacity;
 }

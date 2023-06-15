@@ -24,6 +24,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&family=Tilt+Prism&display=swap" rel="stylesheet">
     <link href="../../css/navs.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
 
@@ -194,13 +195,14 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="from_year"><b>من عام</b></label>
-                                        <input type="number" id="from_year" class=" searchInput" class="searchInput"
-                                            name="from_year" min="1980" placeholder="1980">
+                                        <input type="number" id="from_year" class=" searchInput"
+                                            class="searchInput" name="from_year" min="1980" placeholder="1980">
                                         </select>
                                     </div>
                                     <div class="col-6">
                                         <label for="to_year"><b>إلى عام</b></label>
-                                        <input type="number" id="to_year" class=" searchInput" name="to_year" min="1980" >
+                                        <input type="number" id="to_year" class=" searchInput" name="to_year"
+                                            min="1980">
                                         </select>
                                     </div>
                                 </div>

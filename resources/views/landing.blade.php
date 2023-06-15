@@ -13,6 +13,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&family=Tilt+Prism&display=swap" rel="stylesheet">
 
     <link href="../../../css/landing.css" rel="stylesheet">
 </head>
@@ -63,20 +66,20 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6" id="landing-text">
                         <div class="m-5">
-                            <h2>موقع العدل والعدالة</h2>
+                            <h2 id='motto'>فريق محاماة متميز لمستقبل قانوني مشرق</h2>
                             <br>
-                            <p>
+                            <p id='provide-message'>
                                 مرحبًا بك في صفحة إدارة مكتبنا التفاعلية! نحن فريق محاماة متخصص يقدم خدمات قانونية شاملة
                                 لعملائنا الكرام. نحن ندرك أهمية تنظيم وإدارة المكتب والقضايا، ولذلك نقدم لكم تجربة فريدة
                                 تجمع بين التكنولوجيا الحديثة والمهارات القانونية المتميزة.
                             </p>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 ">
-                        <div class="img-box rounded-circle position-relative">
-                            <img src="../../Img/Logo.jpg" style="width: 25%" class=" js-testimonial-img rounded-circle"
+                    <div class="col-lg-6 col-md-6">
+                        <div class="img-box rounded-circle position-relative" id='logo'>
+                            <img src="../../Img/Logo.jpg" style='width: 25%;' class=" js-testimonial-img rounded-circle"
                                 alt="Logo">
-                            <h1 class="name agency-font"  style="color: white">Libra</h1>
+                            <h1 class="name agency-font" style="color: white">Libra</h1>
                         </div>
                     </div>
                 </div>

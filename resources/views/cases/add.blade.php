@@ -22,6 +22,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi&family=Tilt+Prism&display=swap" rel="stylesheet">
+
     <link href="../../css/navs.css" rel="stylesheet">
     <link href="../../css/style.css" rel="stylesheet">
 
@@ -377,14 +379,14 @@
     </div>
 
 
-        <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-            integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
-        </script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    </script>
 
-        <script src="../../js/users/auth.js"></script>
-        <script src="../../js/navs.js"></script>
-        <script src="../../js/cases/add.js"></script>
-        <script src="../../js/cases/caseSet.js"></script>
+    <script src="../../js/users/auth.js"></script>
+    <script src="../../js/navs.js"></script>
+    <script src="../../js/cases/add.js"></script>
+    <script src="../../js/cases/caseSet.js"></script>
 </body>
 
 </html>
