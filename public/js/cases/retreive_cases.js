@@ -79,26 +79,24 @@ function retreive() {
                         to_year: to_year,
                     },
                     success: function (response) {
-                        console.log(toSearch);
-                        console.log(response);
+
+
+                        console.log(response)
 
                         currentData = data = response.cases;
                         // تحديث Pagination
                         displayAll();
-
                         document.getElementById("content").style.display =
                             "block";
                         document.getElementById("spinner").style.display =
                             "none";
                     },
                     error: function (response) {
-                        console.log(toSearch);
 
                         document.getElementById("content").style.display =
                             "block";
                         document.getElementById("spinner").style.display =
                             "none";
-                        console.log(response);
                     },
                 });
             }
@@ -253,8 +251,20 @@ function showPage(pageNumber, data) {
         document.getElementById("casesControllerContainer").innerHTML = "";
     } else {
         for (var i = startIndex; i < endIndex; i++) {
+
+
             const Case = data.results[i].result;
-            console.log(Case);
+
+
+            // console.log(Case.claim)
+            // if (data.results[i].highlight != null && data.results[i].highlight.claim != null) {
+
+            //     cl = '';
+            //     for (j = 0; j < data.results[i].highlight.claim.length; j++)
+            //         cl += data.results[i].highlight.claim[j]
+            //     console.log(cl)
+
+            // }
 
             const CaseCard = document.createElement("div");
             CaseCard.classList.add("row", "card", "mb-3");
@@ -523,29 +533,19 @@ function showPage(pageNumber, data) {
 }
 
 function ShowMoreFacts(title, text, i) {
-    console.log(i);
-    console.log(title);
-    console.log(text);
     document.getElementById("showMoreBackdropLabel").innerHTML = title;
     document.getElementById("showMore-text").innerHTML = text;
 }
 function ShowMoreClaim(title, text, i) {
-    console.log(i);
-    console.log(title);
-    console.log(text);
     document.getElementById("showMoreBackdropLabel").innerHTML = title;
     document.getElementById("showMore-text").innerHTML = text;
 }
 function ShowMoreDecision(title, text, i) {
-    console.log(i);
-    console.log(title);
-    console.log(text);
     document.getElementById("showMoreBackdropLabel").innerHTML = title;
     document.getElementById("showMore-text").innerHTML = text;
 }
 
 function viewCase(caseId) {
-    console.log(caseId);
     window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
 }
 

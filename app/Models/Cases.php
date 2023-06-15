@@ -194,7 +194,7 @@ class Cases extends Model
 //         ->setHosts(['localhost:9200'])
 //         ->setBasicAuthentication('Lilas', '123456789')
 //         ->build();
-        
+
 //     $params = [
 //         'index' => Cases::$index,
 //         'body' => [
@@ -259,36 +259,36 @@ class Cases extends Model
 //             ]
 //         ]
 //     ];
-    
+
 //     $response = $client->search($params);
 //     $hits = $response['hits']['hits'];
 //     $results = [];
-    
+
 //     foreach ($hits as $hit) {
 //         $source = $hit['_source'];
 //         $score = $hit['_score'];
 //         $highlight = $hit['highlight'];
-    
+
 //         $evaluation = $score;
-    
+
 //         $results[] = [
 //             'result' => $source,
 //             'evaluation' => $evaluation,
 //             'highlight' => $highlight,
 //         ];
 //     }
-    
+
 //     usort($results, function ($a, $b) {
 //         return $b['evaluation'] <=> $a['evaluation'];
 //     });
-    
+
 //     // استرجاع الاقتراحات
 //     $suggestions = $response['suggest']['simple_phrase'][0]['options'];
 //     $suggestedTerms = [];
 //     foreach ($suggestions as $suggestion) {
 //         $suggestedTerms[] = $suggestion['text'];
 //     }
-    
+
 //     return [
 //         'results' => $results,
 //         'suggestions' => $suggestedTerms,
@@ -299,13 +299,13 @@ public static function search($query)
         ->setHosts(['localhost:9200'])
         ->setBasicAuthentication('Lilas', '123456789')
         ->build();
-        
+
     $params = [
         'index' => Cases::$index,
         'body' => [
             'suggest' => [
                 'text' => $query,
-                
+
                 'custom_suggest' => [
                     'phrase' => [
                         'field' => 'title',
@@ -355,47 +355,47 @@ public static function search($query)
             'sort' => [
                 ['_score' => 'desc']
             ],
-            // 'highlight' => [
-            //     'pre_tags' => ['<span style="background-color:green;">'],
-            //     'post_tags' => ['</span>'],
-            //     'fields' => [
-            //         'title' => new \stdClass(),
-            //         'facts' => new \stdClass(),
-            //         'claim' => new \stdClass(),
-            //         'decisions.description' => new \stdClass(),
-            //     ]
-            // ]
+            'highlight' => [
+                'pre_tags' => ['<span style="background-color:green;">'],
+                'post_tags' => ['</span>'],
+                'fields' => [
+                    'title' => new \stdClass(),
+                    'facts' => new \stdClass(),
+                    'claim' => new \stdClass(),
+                    'decisions.description' => new \stdClass(),
+                ]
+            ]
         ]
     ];
-    
+
     $response = $client->search($params);
     $hits = $response['hits']['hits'];
     $results = [];
-    
+
     foreach ($hits as $hit) {
         $source = $hit['_source'];
         $score = $hit['_score'];
-        // $highlight = $hit['highlight'];
-    
+        $highlight = $hit['highlight'];
+
         $evaluation = $score;
-    
+
         $results[] = [
             'result' => $source,
             'evaluation' => $evaluation,
-            // 'highlight' => $highlight,
+            'highlight' => $highlight,
         ];
     }
-    
+
     usort($results, function ($a, $b) {
         return $b['evaluation'] <=> $a['evaluation'];
     });
-    
+
     $suggestions = $response['suggest']['custom_suggest'][0]['options'];
     $suggestedTerms = [];
     foreach ($suggestions as $suggestion) {
         $suggestedTerms[] = $suggestion['text'];
     }
-    
+
     return [
         'results' => $results,
         'suggestions' => $suggestedTerms,
@@ -409,7 +409,7 @@ public static function search($query)
     //         ->setHosts(['localhost:9200'])
     //         ->setBasicAuthentication('Lilas', '123456789')
     //         ->build();
-            
+
     //     $params = [
     //         'index' => Cases::$index,
     //         'body' => [
@@ -436,34 +436,34 @@ public static function search($query)
     //             ]
     //         ]
     //     ];
-        
+
     //     $response = $client->search($params);
     //     $hits = $response['hits']['hits'];
     //     $results = [];
-        
+
     //     foreach ($hits as $hit) {
     //         $source = $hit['_source'];
     //         $score = $hit['_score'];
-        
+
     //         // قم بتقييم النتيجة بناءً على الدرجة التوافق (score)
     //         $evaluation = $score;
-        
+
     //         // أضف النتيجة والتقييم إلى القائمة النهائية
     //         $results[] = [
     //             'result' => $source,
     //             'evaluation' => $evaluation,
     //         ];
     //     }
-        
+
     //     // قم بترتيب النتائج بناءً على التقييم (بحسب الدرجة التوافق)
     //     usort($results, function ($a, $b) {
     //         return $b['evaluation'] <=> $a['evaluation']; // ترتيب تنازلي للتقييم
     //     });
-        
+
     //     return $results;
     // }
-    
-    
+
+
     protected $fillable = [
         'title',
         'court_id',

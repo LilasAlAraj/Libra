@@ -38,7 +38,7 @@ class IRCasesController extends Controller
     {
 
         $i = 0;
-        $casesArray = [];
+        $casesArray = ['results' => [],'suggestions' =>[]];
         $query = $requset->toSearch;
 
         $cases = Cases::search($query);
@@ -71,13 +71,14 @@ class IRCasesController extends Controller
         }
 
         foreach ($temp_cases as $tCase) {
-            foreach ($cases as $case) {
+            foreach ($cases['results'] as $case) {
 
                 if ($tCase->id == $case['result']['id']) {
-                    $casesArray[$i++] = $case;
+                    $casesArray['results'][$i++] = $case;
                 }
             }
         }
+        $casesArray['suggestions']=$cases['suggestions'] ;
         return response()->json(['cases' => $casesArray]);
 
     }
