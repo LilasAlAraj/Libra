@@ -256,15 +256,15 @@ function showPage(pageNumber, data) {
             const Case = data.results[i].result;
 
 
-            // console.log(Case.claim)
-            // if (data.results[i].highlight != null && data.results[i].highlight.claim != null) {
+            console.log(Case.claim)
+            if (data.results[i].highlight != null && data.results[i].highlight.claim != null) {
 
-            //     cl = '';
-            //     for (j = 0; j < data.results[i].highlight.claim.length; j++)
-            //         cl += data.results[i].highlight.claim[j]
-            //     console.log(cl)
+                cl = '';
+                for (j = 0; j < data.results[i].highlight.claim.length; j++)
+                    cl += data.results[i].highlight.claim[j]
+                console.log(cl)
 
-            // }
+            }
 
             const CaseCard = document.createElement("div");
             CaseCard.classList.add("row", "card", "mb-3");
