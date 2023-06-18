@@ -11,7 +11,7 @@ function setNumClients() {
     let num_clients = 0;
 
     $.ajax({
-        url: "http://127.0.0.1:8000/users/clients/count",
+        url: "http://127.0.0.1:8000/clients/count",
         type: "get",
 
         success: function (response) {
