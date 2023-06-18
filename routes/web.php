@@ -18,247 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
 
 
-   // return view('test');
+   return view('test');
 });
 
 Auth::routes();
-
-Route::group(['middleware' => 'role'], function () {
-
-/*إعدادات إضافة مستخدم جديد إلى النظام والقيام بعملية الحذف والاضافة والتعديل */
-
-
-//-------إضافة مستخدم ضمن النظام--------//
-
-Route::post('users/register', 'App\Http\Controllers\UserController@store');
-
-//-------عرض صفحة تعديل اعدادت  مستخدم ضمن النظام--------//
-
-Route::post('users/update', 'App\Http\Controllers\UserController@update');
-
-//-------تعديل اعدادت  مستخدم(عميل مكتب) ضمن النظام--------//
-
-Route::get('users/client/{id}/edit/', 'App\Http\Controllers\UserController@editClient');
-
-//-------تعديل اعدادت  مستخدم(فرد مكتب) ضمن النظام--------//
-
-Route::get('users/member/{id}/edit', 'App\Http\Controllers\UserController@editMember');   
-
-//------- عرض  صفحة العملاء ضمن النظام--------//
-
-Route::get('users/clients', 'App\Http\Controllers\UserController@clientsIndex');
-
-//------- عرض  صفحة الأفراد ضمن النظام--------//
-
-Route::get('users/members', 'App\Http\Controllers\UserController@membersIndex');
-
-//-------عرض صفحة لانشاء مستخدم(عميل مكتب) ضمن النظام--------//
-
-Route::get('users/clients/create', 'App\Http\Controllers\UserController@clientsCreate');
-
-//-------عرض صفحة لانشاء مستخدم(فرد مكتب) ضمن النظام--------//
-
-Route::get('users/members/create', 'App\Http\Controllers\UserController@membersCreate');
-
-//------- عرض (عميل مكتب) ضمن النظام--------//
-
-Route::get('users/clients/{id}', 'App\Http\Controllers\UserController@clientIndex');
-
-//------- عرض (فرد مكتب) ضمن النظام--------//
-
-Route::get('users/members/{id}', 'App\Http\Controllers\UserController@memberIndex');
-
-//-------عرض العملاء ضمن النظام------//
-
-Route::get('users/{getclients}', 'App\Http\Controllers\UserController@show');
-
-//-------عرض الأفراد ضمن النظام------//
-
-Route::get('users/{getmembers}', 'App\Http\Controllers\UserController@show');
-
-//-------حذف مستخدم ضمن النظام------//
-
-Route::delete('users/{id}', 'App\Http\Controllers\UserController@destroy');
-
-//-------عرض المحاميين ضمن النظام------//
-
-Route::get('lawyers', 'App\Http\Controllers\UserController@getAllLawyers');
-
-//--------- القيام بعمليات البحث عللى المستخدمين ضمن النظام----------//
-
-Route::get('users/filter', 'App\Http\Controllers\FilterController@usersFilter');
-
-//-----  الداشبورد الخاصة بالسكرتاريا--------//
-
-Route::get('dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria')->name('dashboard.secretaria');
-
-//-----تعديل حالة القضية  --------//
-
-Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update'); 
-
-//-----  عرض الصفحة لإنشاء قضية جديدة--------//
-
-Route::get('cases/create', 'App\Http\Controllers\CasesController@create');
-
-//----- تخزين البيانات الخاصة بقضية معينه ضمن الداتابيز-------//
-
-Route::post('cases/store', 'App\Http\Controllers\CasesController@store');
-
-//----- عرض الصفحة الخاصة بتعديل القضية--------//
-
-Route::get('cases/edit/{id}', 'App\Http\Controllers\CasesController@edit');
-
-//----- تعديل بيانات القضية--------//
-
-Route::put('cases/update/{id}', 'App\Http\Controllers\CasesController@update');
-
-//---------إضافة محكمة-------//
-
-Route::post('court', 'App\Http\Controllers\CourtController@store');
-
-//-----عرض القضايا المخزنة ------//
-
-Route::get('courts', 'App\Http\Controllers\CourtController@index');
-
-//-----حذف قضية ------//
-
-Route::delete('court', 'App\Http\Controllers\CourtController@destroy');
-
-//------إدارة الجلسات الخاصة بالقضية من حيث الاضافة والتعديل والحذف-----//
-
-Route::resource('sessions', 'App\Http\Controllers\SessionController');
-
-//-----عرض صفحة تعديل القراار------//
-
-Route::put('decision/update', 'App\Http\Controllers\DecisionController@update');
-
-//------حذف قرار-----//
-
-Route::delete('decision/', 'App\Http\Controllers\DecisionController@destroy');
-
-//----إضافة قرار-------//
-
-Route::post('decision', 'App\Http\Controllers\DecisionController@store');
-
-//------عرض صفحة تعديل الجلسة-----//
-
-Route::put('session/update', 'App\Http\Controllers\SessionController@update');
-
-//-----حذف جلسة------//
-
-Route::delete('session/', 'App\Http\Controllers\SessionController@destroy');
-
-//-----إضافة جلسة------//
-
-Route::post('session', 'App\Http\Controllers\SessionController@store');
-
-//------عرض صفجة إنشاء مهمة-----//
-
-Route::get('task/create', 'App\Http\Controllers\TaskController@create');
-
-//------إنشاء مهمة-----//
-
-Route::post('task', 'App\Http\Controllers\TaskController@store');
-
-//-----حذف مهمة------//
-
-Route::delete('task/{id}', 'App\Http\Controllers\TaskController@destroy');
-
-//------تعديل حالة المهمة-----//
-
-Route::put('tasks/{id}/status/edit', 'App\Http\Controllers\TaskController@updateStatus');
-
-//-----عرض صفحة تعديل المهمة------//
-
-Route::put('tasks/{id}', 'App\Http\Controllers\TaskController@update');
-
-//-----تعديل المهمة------//
-
-Route::get('tasks/{id}/edit', 'App\Http\Controllers\TaskController@edit');
-  
-});
-
-Route::group(['middleware' => 'admin'], function () {
-
-    //------أرشفة القضية--------//
-
-     Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
-     
-     //------عرض جميع القضايا المؤرشفة-----//
-
-    Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
-
-    //-----إعادة القضايا من حالتها المؤرشفة ليتم عرضها ضمن النظام------//
-
-    Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
- 
-    //------أرشفة القضية--------//
-    Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
-
-    //------تعديل حالة الحساب من قيد الانتظار الى مفعل وبالعكس------//
-
-    Route::post('users/update_status', 'App\Http\Controllers\UserController@update_account_status');
-
-    //------القيام باسترجاع القضايا------//
-
-    Route::get('cases/ir', 'App\Http\Controllers\IRCasesController@index');
-
-    Route::get('cases/ir/search', 'App\Http\Controllers\IRCasesController@search');
-     
-    //------تعديل حالة القضية------//
-
-    Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');
-
-    //-------تعديل تفاصيل القضية من التماس ووقائع-----//
-
-    Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails');
-
-
-    //------رض طلبات العضوية الى النظام------//
-    
-    Route::get('users/requests', 'App\Http\Controllers\UserController@membershipRequest');
-
-    //-----قبول أو رفض طلبات العضوية-------//
-
-    Route::put('users/requests/process', 'App\Http\Controllers\UserController@processMembershipRequest');
-
-    //------إضافة توصية إلى النظام من قبل الادمن------//
-
-    Route::post('recommendation', 'App\Http\Controllers\RecommendationController@store');
- 
-    //-------تعديل التوصية-----//
-    Route::put('recommendation', 'App\Http\Controllers\RecommendationController@update');
-
-    //-------حذف توصية-----//
-    Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
-
-    //-------عرض الداشبورد الخاصة بالمحامي-----//
-
-    Route::get('dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
-
-    //------عرض الداشبورد الخاصة بالادمن------//
-
-    Route::get('dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
-
-   //------عرض الداشبورد الخاصة بالعميل------//
-
-    Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('dashboard.client');
-
-});
-
-Route::group(['middleware' => 'client'], function () {
-
-Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('dashboard.client');
-
-});
-
-Route::group(['middleware' => 'lawyer'], function () {
-
-    //------عرض الداشبورد الخاصة بالادمن------//
-
-Route::get('dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer')->name('dashboard.lawyer');;
-
-});
 
 //------القيام بعمليات البحث الذكي على التوصيات المضافة----//
 Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController@index');
@@ -266,9 +29,9 @@ Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController
 Route::get('recommendations/ir/search', 'App\Http\Controllers\IRRecomendationController@search');
 
 /*
-من أجل القيام بالاحصائيات على عدد القضايا المخزنة ضمن النظام حسب حالتها 
-سواء كانت رابحة او خاسرة او معلقة او جاري العمل عليها 
-وايضا بالنسبة للقضايا المؤرشفة وايضا القيام بعمليات احصائية على مستخدمي النظام  
+من أجل القيام بالاحصائيات على عدد القضايا المخزنة ضمن النظام حسب حالتها
+سواء كانت رابحة او خاسرة او معلقة او جاري العمل عليها
+وايضا بالنسبة للقضايا المؤرشفة وايضا القيام بعمليات احصائية على مستخدمي النظام
  */
 
 Route::get('users/clients/count', 'App\Http\Controllers\UserController@clientCount');
@@ -356,20 +119,20 @@ Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
 
 Route::get('cases/show/{id}', 'App\Http\Controllers\CasesController@show');
 
-Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->name('Status_show'); 
+Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->name('Status_show');
 
 
 //-------عرض صفحةالمهام  ------//
 
 Route::get('tasks', 'App\Http\Controllers\TaskController@index');
 
-//-------عرض مهمة معينة ------//
-
-Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
-
 //-------فلترة المهام حسب عدة مفاهيم-----//
 
 Route::get('tasks/filter', 'App\Http\Controllers\TaskController@filter');
+
+//-------عرض مهمة معينة ------//
+
+Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
 
 //--------عرض جلسات القضيه -------//
 
@@ -377,3 +140,241 @@ Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
 
 
 
+
+Route::group(['middleware' => 'role'], function () {
+
+/*إعدادات إضافة مستخدم جديد إلى النظام والقيام بعملية الحذف والاضافة والتعديل */
+
+
+//-------إضافة مستخدم ضمن النظام--------//
+
+Route::post('users/register', 'App\Http\Controllers\UserController@store');
+
+//-------عرض صفحة تعديل اعدادت  مستخدم ضمن النظام--------//
+
+Route::post('users/update', 'App\Http\Controllers\UserController@update');
+
+//-------تعديل اعدادت  مستخدم(عميل مكتب) ضمن النظام--------//
+
+Route::get('users/client/{id}/edit/', 'App\Http\Controllers\UserController@editClient');
+
+//-------تعديل اعدادت  مستخدم(فرد مكتب) ضمن النظام--------//
+
+Route::get('users/member/{id}/edit', 'App\Http\Controllers\UserController@editMember');
+
+//------- عرض  صفحة العملاء ضمن النظام--------//
+
+Route::get('users/clients', 'App\Http\Controllers\UserController@clientsIndex');
+
+//------- عرض  صفحة الأفراد ضمن النظام--------//
+
+Route::get('users/members', 'App\Http\Controllers\UserController@membersIndex');
+
+//-------عرض صفحة لانشاء مستخدم(عميل مكتب) ضمن النظام--------//
+
+Route::get('users/clients/create', 'App\Http\Controllers\UserController@clientsCreate');
+
+//-------عرض صفحة لانشاء مستخدم(فرد مكتب) ضمن النظام--------//
+
+Route::get('users/members/create', 'App\Http\Controllers\UserController@membersCreate');
+
+//------- عرض (عميل مكتب) ضمن النظام--------//
+
+Route::get('users/clients/{id}', 'App\Http\Controllers\UserController@clientIndex');
+
+//------- عرض (فرد مكتب) ضمن النظام--------//
+
+Route::get('users/members/{id}', 'App\Http\Controllers\UserController@memberIndex');
+
+//-------عرض العملاء ضمن النظام------//
+
+Route::get('users/{getclients}', 'App\Http\Controllers\UserController@show');
+
+//-------عرض الأفراد ضمن النظام------//
+
+Route::get('users/{getmembers}', 'App\Http\Controllers\UserController@show');
+
+//-------حذف مستخدم ضمن النظام------//
+
+Route::delete('users/{id}', 'App\Http\Controllers\UserController@destroy');
+
+//-------عرض المحاميين ضمن النظام------//
+
+Route::get('lawyers', 'App\Http\Controllers\UserController@getAllLawyers');
+
+//--------- القيام بعمليات البحث عللى المستخدمين ضمن النظام----------//
+
+Route::get('users/filter', 'App\Http\Controllers\FilterController@usersFilter');
+
+//-----  الداشبورد الخاصة بالسكرتاريا--------//
+
+Route::get('dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria')->name('dashboard.secretaria');
+
+//-----تعديل حالة القضية  --------//
+
+Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');
+
+//-----  عرض الصفحة لإنشاء قضية جديدة--------//
+
+Route::get('cases/create', 'App\Http\Controllers\CasesController@create');
+
+//----- تخزين البيانات الخاصة بقضية معينه ضمن الداتابيز-------//
+
+Route::post('cases/store', 'App\Http\Controllers\CasesController@store');
+
+//----- عرض الصفحة الخاصة بتعديل القضية--------//
+
+Route::get('cases/edit/{id}', 'App\Http\Controllers\CasesController@edit');
+
+//----- تعديل بيانات القضية--------//
+
+Route::put('cases/update/{id}', 'App\Http\Controllers\CasesController@update');
+
+//---------إضافة محكمة-------//
+
+Route::post('court', 'App\Http\Controllers\CourtController@store');
+
+//-----عرض القضايا المخزنة ------//
+
+Route::get('courts', 'App\Http\Controllers\CourtController@index');
+
+//-----حذف قضية ------//
+
+Route::delete('court', 'App\Http\Controllers\CourtController@destroy');
+
+//------إدارة الجلسات الخاصة بالقضية من حيث الاضافة والتعديل والحذف-----//
+
+Route::resource('sessions', 'App\Http\Controllers\SessionController');
+
+//-----عرض صفحة تعديل القراار------//
+
+Route::put('decision/update', 'App\Http\Controllers\DecisionController@update');
+
+//------حذف قرار-----//
+
+Route::delete('decision/', 'App\Http\Controllers\DecisionController@destroy');
+
+//----إضافة قرار-------//
+
+Route::post('decision', 'App\Http\Controllers\DecisionController@store');
+
+//------عرض صفحة تعديل الجلسة-----//
+
+Route::put('session/update', 'App\Http\Controllers\SessionController@update');
+
+//-----حذف جلسة------//
+
+Route::delete('session/', 'App\Http\Controllers\SessionController@destroy');
+
+//-----إضافة جلسة------//
+
+Route::post('session', 'App\Http\Controllers\SessionController@store');
+
+//------عرض صفجة إنشاء مهمة-----//
+
+Route::get('task/create', 'App\Http\Controllers\TaskController@create');
+
+//------إنشاء مهمة-----//
+
+Route::post('task', 'App\Http\Controllers\TaskController@store');
+
+//-----حذف مهمة------//
+
+Route::delete('task/{id}', 'App\Http\Controllers\TaskController@destroy');
+
+//------تعديل حالة المهمة-----//
+
+Route::put('tasks/{id}/status/edit', 'App\Http\Controllers\TaskController@updateStatus');
+
+//-----عرض صفحة تعديل المهمة------//
+
+Route::put('tasks/{id}', 'App\Http\Controllers\TaskController@update');
+
+//-----تعديل المهمة------//
+
+Route::get('tasks/{id}/edit', 'App\Http\Controllers\TaskController@edit');
+
+});
+
+Route::group(['middleware' => 'admin'], function () {
+
+    //------أرشفة القضية--------//
+
+     Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
+
+     //------عرض جميع القضايا المؤرشفة-----//
+
+    Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
+
+    //-----إعادة القضايا من حالتها المؤرشفة ليتم عرضها ضمن النظام------//
+
+    Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
+
+    //------أرشفة القضية--------//
+    Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
+
+    //------تعديل حالة الحساب من قيد الانتظار الى مفعل وبالعكس------//
+
+    Route::post('users/update_status', 'App\Http\Controllers\UserController@update_account_status');
+
+    //------القيام باسترجاع القضايا------//
+
+    Route::get('cases/ir', 'App\Http\Controllers\IRCasesController@index');
+
+    Route::get('cases/ir/search', 'App\Http\Controllers\IRCasesController@search');
+
+    //------تعديل حالة القضية------//
+
+    Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');
+
+    //-------تعديل تفاصيل القضية من التماس ووقائع-----//
+
+    Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails');
+
+
+    //------رض طلبات العضوية الى النظام------//
+
+    Route::get('users/requests', 'App\Http\Controllers\UserController@membershipRequest');
+
+    //-----قبول أو رفض طلبات العضوية-------//
+
+    Route::put('users/requests/process', 'App\Http\Controllers\UserController@processMembershipRequest');
+
+    //------إضافة توصية إلى النظام من قبل الادمن------//
+
+    Route::post('recommendation', 'App\Http\Controllers\RecommendationController@store');
+
+    //-------تعديل التوصية-----//
+    Route::put('recommendation', 'App\Http\Controllers\RecommendationController@update');
+
+    //-------حذف توصية-----//
+    Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
+
+    //-------عرض الداشبورد الخاصة بالمحامي-----//
+
+    Route::get('dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer');
+
+    //------عرض الداشبورد الخاصة بالادمن------//
+
+    Route::get('dashboard/supervisor', 'App\Http\Controllers\HomeController@indexDashboardSupervisor');
+
+
+
+});
+   //------عرض الداشبورد الخاصة بالعميل------//
+
+Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('dashboard.client');
+
+
+Route::group(['middleware' => 'client'], function () {
+
+
+});
+
+Route::group(['middleware' => 'lawyer'], function () {
+
+    //------عرض الداشبورد الخاصة بالادمن------//
+
+Route::get('dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer')->name('dashboard.lawyer');;
+
+});

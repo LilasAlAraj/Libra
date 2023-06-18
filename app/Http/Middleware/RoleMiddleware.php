@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware    
+class RoleMiddleware
 {
     /**
      * Handle an incoming request.
@@ -27,12 +27,12 @@ class RoleMiddleware
         {
             return redirect()->route('dashboard.lawyer');
         }
-      
+
         elseif (Auth::check() &&  Auth::user()->role_name ==='زبون')
 
         {
             return redirect()->route('dashboard.client');
-    
+
         }
 }
 

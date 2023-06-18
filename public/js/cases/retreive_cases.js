@@ -580,9 +580,13 @@ function HighlightText(text) {
 
     query = document.getElementById("toSearch").value;
 
-    queryWords = query.split(" ");
+    queryWords = []
+    if (query !== '')
+        queryWords = query.split(" ");
 
-    textWords = text.split(" ");
+    textWords = []
+    if (text !== '')
+        textWords = text.split(" ");
 
     for (var i = 0; i < textWords.length; i++) {
         tWord = textWords[i];

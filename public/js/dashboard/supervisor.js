@@ -327,8 +327,8 @@ function fillTasksTable() {
             }
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log('حدث خطأ: ' + textStatus + ' ' + errorThrown);
+        error: function (response) {
+            console.log(response);
         }
     });
 
