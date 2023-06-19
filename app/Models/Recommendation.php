@@ -41,17 +41,17 @@ class Recommendation extends Model
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
                                 'filter' => ['lowercase', 'arabic_normalization', 'arabic_stop', 'arabic_stemmer'
-                                ,'arabic_stopwords', // تعريف "ستوب ووردز" المستخدم للفهرسة العربية
+                               // ,'arabic_stopwords', // تعريف "ستوب ووردز" المستخدم للفهرسة العربية
                             ],
                             ],
                         ],
                         'filter' => [
-                            'arabic_stopwords' => [
-                                'type' => 'stop',
-                                'stopwords_path' => 'arabic_stopwords.txt',
+                            // 'arabic_stopwords' => [
+                            //     'type' => 'stop',
+                            //     'stopwords_path' => 'arabic_stopwords.txt',
 
-                                'ignore_case' => true,
-                            ],
+                            //     'ignore_case' => true,
+                            // ],
                             'arabic_normalization' => [
                                 'type' => 'arabic_normalization',
                             ],
