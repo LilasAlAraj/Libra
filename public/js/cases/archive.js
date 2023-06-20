@@ -57,7 +57,7 @@ function displayAll() {
     document.getElementById('spinner').style.display = 'flex';
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/cases/archive/all',
+        url: IP_PORT+'/cases/archive/all',
         dataType: 'json',
         success: function (response) {
             console.log(response)
@@ -572,7 +572,7 @@ function showPage(pageNumber, data) {
 
 
 function viewCase(caseId) {
-    window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
+    window.location.href = IP_PORT+"/cases/view/" + caseId;
 
 }
 
@@ -591,7 +591,7 @@ function deleteCase(caseId) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive", // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/cases/archive", // اسم ملف php الذي يقوم بالحذف
         method: "Delete",
         data: { case_id: caseId },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -604,7 +604,7 @@ function deleteCase(caseId) {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = "http://127.0.0.1:8000/cases/archive"
+                window.location.href = IP_PORT+"/cases/archive"
             }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
@@ -629,7 +629,7 @@ function cancelArhiveCase(caseId) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive/restore", // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/cases/archive/restore", // اسم ملف php الذي يقوم بالحذف
         method: "post",
         data: { case_id: caseId },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -642,7 +642,7 @@ function cancelArhiveCase(caseId) {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = "http://127.0.0.1:8000/cases/archive"
+                window.location.href = IP_PORT+"/cases/archive"
             }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف

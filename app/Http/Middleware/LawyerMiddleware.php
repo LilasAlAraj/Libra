@@ -16,7 +16,10 @@ class LawyerMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next)
-    {
+    {if(!Auth::check()){
+        return redirect()->route('login');
+
+    }
         if (Auth::check() && Auth::user()->role_name === 'محامي')
         {
             return $next($request);

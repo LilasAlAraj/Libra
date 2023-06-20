@@ -71,7 +71,7 @@ function retreive() {
                 document.getElementById("content").style.display = "none";
                 document.getElementById("spinner").style.display = "flex";
                 $.ajax({
-                    url: "http://127.0.0.1:8000/cases/ir/search",
+                    url: IP_PORT+"/cases/ir/search",
                     type: "get",
                     data: {
                         toSearch: toSearch,
@@ -546,7 +546,7 @@ function ShowMoreDecision(title, text, i) {
 }
 
 function viewCase(caseId) {
-    window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
+    window.location.href = IP_PORT+"/cases/view/" + caseId;
 }
 
 function reverseData() {
@@ -576,32 +576,33 @@ function reverseData() {
 }
 
 function HighlightText(text) {
-    let highlightText = "";
+    // let highlightText = "";
 
-    query = document.getElementById("toSearch").value;
+    // query = document.getElementById("toSearch").value;
 
-    queryWords = []
-    if (query !== '')
-        queryWords = query.split(" ");
+    // queryWords = []
+    // if (query !== '')
+    //     queryWords = query.split(" ");
 
-    textWords = []
-    if (text !== '')
-        textWords = text.split(" ");
+    // textWords = []
+    // if (text !== '')
+    //     textWords = text.split(" ");
 
-    for (var i = 0; i < textWords.length; i++) {
-        tWord = textWords[i];
-        for (var j = 0; j < queryWords.length; j++) {
-            qWord = queryWords[j];
+    // for (var i = 0; i < textWords.length; i++) {
+    //     tWord = textWords[i];
+    //     for (var j = 0; j < queryWords.length; j++) {
+    //         qWord = queryWords[j];
 
-            if (tWord === qWord) {
-                tWord = '<span class="highlight">' + tWord + "</span> ";
-                break;
-            }
-        }
-        highlightText += tWord + " ";
-    }
+    //         if (tWord === qWord) {
+    //             tWord = '<span class="highlight">' + tWord + "</span> ";
+    //             break;
+    //         }
+    //     }
+    //     highlightText += tWord + " ";
+    // }
 
-    return highlightText;
+    // return highlightText;
+    return text;
 }
 function fillYears() {
     const currentDate = new Date();

@@ -23,7 +23,7 @@ function deleteLawyerField() {
 
 function getLawyers(lawyerList, selected) {
     $.ajax({
-        url: "http://127.0.0.1:8000/lawyers",
+        url: IP_PORT+"/lawyers",
         type: "Get",
         success: function (response) {
             const LawyerList = document.getElementById(lawyerList);
@@ -90,7 +90,7 @@ function collectData() {
 
 function getCourts() {
     $.ajax({
-        url: "http://127.0.0.1:8000/court/all",
+        url: IP_PORT+"/court/all",
         type: "Get",
         success: function (response) {
             courts = document.getElementById('court');

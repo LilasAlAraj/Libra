@@ -26,7 +26,7 @@ function setAuth() {
 }
 
 function add_client() {
-    window.location.href = "http://127.0.0.1:8000/users/clients/create";
+    window.location.href = IP_PORT+"/users/clients/create";
 }
 
 let data;
@@ -54,7 +54,7 @@ function displayAll() {
     document.getElementById('content').style.display = 'none';
     document.getElementById('spinner').style.display = 'flex';
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/getclients',
+        url: IP_PORT+'/users/getclients',
         dataType: 'json',
         success: function (response) {
             console.log(response)
@@ -97,7 +97,7 @@ function searchByName() {
                 $('.error').html()
                 var name = $('#name').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/users/filter',
+                    url: IP_PORT+'/users/filter',
                     data: {
                         'name': name,
                         "search_key": 1
@@ -431,7 +431,7 @@ function showPage(pageNumber, data) {
 
 
 function viewClient(clientId) {
-    window.location.href = "http://127.0.0.1:8000/users/clients/" + clientId;
+    window.location.href = IP_PORT+"/users/clients/" + clientId;
 
 
 }
@@ -444,7 +444,7 @@ function deleteClient(clientId) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/' + clientId,
+        url: IP_PORT+'/users/' + clientId,
         type: 'delete',
         success: function (response) {
             console.log(response)
@@ -472,7 +472,7 @@ function editStatus(clientId) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/update_status',
+        url: IP_PORT+'/users/update_status',
         type: 'post',
         data: { 'id': clientId },
         success: function (response) {
@@ -501,7 +501,7 @@ function editStatus(clientId) {
 }
 
 function editClient(clientId) {
-    window.location.href = 'http://127.0.0.1:8000/users/client/' + clientId + '/edit/'
+    window.location.href = IP_PORT+'/users/client/' + clientId + '/edit/'
 
 }
 function reverseData() {

@@ -10,7 +10,7 @@ $(document).ready(function () {
 
 
     $.ajax({
-        url: "http://127.0.0.1:8000/account",
+        url: IP_PORT+"/account",
         type: "get",
         success: function (response) {
 
@@ -87,7 +87,7 @@ function changePassword() {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/account/change_password",
+                    url: IP_PORT+"/account/change_password",
                     type: "POST",
                     data: {
                         "new_password": new_password,

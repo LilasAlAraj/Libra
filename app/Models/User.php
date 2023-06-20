@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -54,10 +55,50 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier() {
+        return $this->getKey();
+    }
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims() {
+        return [];
+    } 
+    
     // public function tasks(): HasMany
     // {
     //     return $this->hasMany(Task::class,'task_id');
     // }
+    public function sendAttachments()
+    {
+        return $this->hasMany(Send_Attachment::class,'user_id');
+    }
 
+    public function lawyer_cases()
+    {
+        return $this->belongsToMany(Cases::class, 'lawyer_of_case', 'case_id', 'user_id');
+    }
+
+    public function client_cases()
+    {
+        return $this->belongsToMany(Cases::class, 'client_of_case', 'case_id', 'user_id');
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'users_of_tasks', 'user_id', 'task_id');
+    }
+
+    public function assignedTasks()
+    {
+        return $this->hasMany(User_Of_Task::class, 'user_id');
+    }
 }

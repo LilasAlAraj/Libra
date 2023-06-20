@@ -36,12 +36,15 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+      
         ],
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            
+  
         ],
     ];
 
@@ -67,9 +70,7 @@ class Kernel extends HttpKernel
         'role'=>\App\Http\Middleware\RoleMiddleware::class,
         'lawyer' => \App\Http\Middleware\LawyerMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,
-        'redirectIfNotLoggedIn' => \App\Http\Middleware\RedirectIfNotLoggedIn::class,
-
-
+        'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
 
     ];
 }

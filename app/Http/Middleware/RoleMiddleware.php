@@ -16,7 +16,10 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if(!Auth::check()){
+            return redirect()->route('login');
 
+        }
         if (Auth::check() &&( Auth::user()->role_name === 'سكرتاريا' || Auth::user()->role_name=='مدير')   )
         {
             return $next($request);

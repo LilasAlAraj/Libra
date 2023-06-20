@@ -25,7 +25,7 @@ function setAuth() {
 }
 
 function add_member() {
-    window.location.href = "http://127.0.0.1:8000/users/members/create";
+    window.location.href = IP_PORT+"/users/members/create";
 }
 
 let data;
@@ -51,7 +51,7 @@ function displayAll() {
     document.getElementById('content').style.display = 'none';
     document.getElementById('spinner').style.display = 'flex';
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/getmembers',
+        url: IP_PORT+'/users/getmembers',
         dataType: 'json',
         success: function (response) {
             $('#table-body').empty();
@@ -92,7 +92,7 @@ function searchByName() {
                 $('.error').html()
                 var name = $('#name').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/users/filter',
+                    url: IP_PORT+'/users/filter',
                     data: {
                         'name': name,
                         "search_key": 2
@@ -436,7 +436,7 @@ function showPage(pageNumber, data) {
 
 
 function viewMember(memberId) {
-    window.location.href = "http://127.0.0.1:8000/users/members/" + memberId;
+    window.location.href = IP_PORT+"/users/members/" + memberId;
 
 }
 function deleteMember(memberId) {
@@ -449,7 +449,7 @@ function deleteMember(memberId) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/' + memberId,
+        url: IP_PORT+'/users/' + memberId,
         type: 'delete',
         success: function (response) {
             console.log(response)
@@ -478,7 +478,7 @@ function editStatus(memberId) {
         }
     });
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/update_status',
+        url: IP_PORT+'/users/update_status',
         type: 'post',
         data: { 'id': memberId },
         success: function (response) {
@@ -507,7 +507,7 @@ function editStatus(memberId) {
 }
 
 function editMember(memberId) {
-    window.location.href = 'http://127.0.0.1:8000/users/member/' + memberId + '/edit/';
+    window.location.href = IP_PORT+'/users/member/' + memberId + '/edit/';
 
 }
 function reverseData() {

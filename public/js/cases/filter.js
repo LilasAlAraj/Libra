@@ -347,7 +347,7 @@ function searchByTitle() {
                 $('.error').html()
                 var title = $('#title').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: { 'title': title, "search_key": 4 },
                     type: 'get',
                     success: function (response) {
@@ -408,7 +408,7 @@ function searchByBaseNumber() {
                 var year = $('#year').val();
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: {
                         'year': year,
                         'number': number,
@@ -474,7 +474,7 @@ function searchByYears() {
                 var to_year = $('#to_year').val();
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: {
                         'to_year': to_year,
                         'from_year': from_year,
@@ -528,7 +528,7 @@ function searchByState() {
                 $('.error').html()
                 var value_status = $('#state').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: {
                         'value_status': value_status,
                         "search_key": 1
@@ -581,7 +581,7 @@ function searchByCourt() {
                 $('.error').html()
                 var court_id = $('#court').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: {
                         'court_id': court_id,
                         "search_key": 5
@@ -636,7 +636,7 @@ function searchByplaintiffName() {
                 $('.error').html()
                 var plaintiff_name = $('#plaintiff_name').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: {
                         'plaintiff_name': plaintiff_name,
                         "search_key": 7
@@ -690,7 +690,7 @@ function searchByplaintiff_lawyer() {
                 document.getElementById('spinner').style.display = 'flex'; $('.error').html()
                 var lawyerName = $('#plaintiff_lawyer').val();
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/cases/filter',
+                    url: IP_PORT+'/cases/filter',
                     data: {
                         'lawyerName': lawyerName,
                         "search_key": 6

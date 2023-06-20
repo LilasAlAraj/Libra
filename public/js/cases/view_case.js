@@ -19,7 +19,7 @@ let data, caseItem, caseID;
 
             // جلب البيانات من ملف JSON
             $.ajax({
-                url: 'http://127.0.0.1:8000/cases/' + caseID,
+                url: IP_PORT+'/cases/' + caseID,
                 dataType: 'json',
                 success: function (response) {
 
@@ -398,7 +398,7 @@ function saveFile(fileUrl) {
 function downloadAttachmentOfCase(attID) {
     console.log('سيتم تنزيل هذا الملف' + attID)
     $.ajax({
-        url: "http://127.0.0.1:8000/case/attachment/download",
+        url: IP_PORT+"/case/attachment/download",
         method: "get",
         data: { 'attachment_id': attID },
         success: function (response) {
@@ -415,7 +415,7 @@ function downloadAttachmentOfCase(attID) {
 
 function viewAttachmentOfCase(attID) {
     $.ajax({
-        url: "http://127.0.0.1:8000/case/attachment/download",
+        url: IP_PORT+"/case/attachment/download",
         method: "get",
         data: { 'attachment_id': attID },
         success: function (response) {
@@ -437,7 +437,7 @@ function deleteAttachmentOfCase() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/case/attachment/delete",
+        url: IP_PORT+"/case/attachment/delete",
         method: "delete",
         data: { 'attachment_id': attID },
         success: function (response) {
@@ -607,7 +607,7 @@ function changeStateCase() {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/status_update/" + statusID, // اسم ملف php الذي يقوم بالحذف
+                    url: IP_PORT+"/status_update/" + statusID, // اسم ملف php الذي يقوم بالحذف
                     method: "POST", // طريقة الإرسال POST
                     data: { 'id': caseID, 'Value_Status': statusID },
                     success: function (response) {
@@ -653,7 +653,7 @@ function cancelArchiveCase() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive/restore",
+        url: IP_PORT+"/cases/archive/restore",
         method: "post",
         data: { case_id: caseID },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -665,7 +665,7 @@ function cancelArchiveCase() {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = "http://127.0.0.1:8000/cases"
+                window.location.href = IP_PORT+"/cases"
             }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
@@ -681,7 +681,7 @@ function archiveCase() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/" + caseID, // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/cases/" + caseID, // اسم ملف php الذي يقوم بالحذف
         method: "Delete", // طريقة الإرسال POST
         data: { id_Archive: 2, case_id: caseID },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -690,7 +690,7 @@ function archiveCase() {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = "http://127.0.0.1:8000/cases"
+                window.location.href = IP_PORT+"/cases"
             }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
@@ -707,7 +707,7 @@ function deleteCase() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/" + caseID, // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/cases/" + caseID, // اسم ملف php الذي يقوم بالحذف
         method: "Delete", // طريقة الإرسال POST
         data: { id_Archive: 1, case_id: caseID },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -715,7 +715,7 @@ function deleteCase() {
             //console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
 
             if (response.status === 'success')
-                window.location.href = "http://127.0.0.1:8000/cases/"
+                window.location.href = IP_PORT+"/cases/"
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف
             console.log(response); // عرض الخطأ في وحدة التحكم بالمتصفح
@@ -726,7 +726,7 @@ function deleteCase() {
 
 
 function editCase() {
-    window.location.href = 'http://127.0.0.1:8000/cases/' + caseID + '/edit'
+    window.location.href = IP_PORT+'/cases/' + caseID + '/edit'
 
 
 }
@@ -779,7 +779,7 @@ function loadAdditionalDetails() {
                 }
             });
             $.ajax({
-                url: "http://127.0.0.1:8000/updateDetails",
+                url: IP_PORT+"/updateDetails",
                 type: "POST",
                 data: {
                     "claim": eltemas,
@@ -885,7 +885,7 @@ function addNewSession() {
                 }
             });
             $.ajax({
-                url: 'http://127.0.0.1:8000/session',
+                url: IP_PORT+'/session',
                 method: 'post',
                 data: formData,
                 processData: false,
@@ -974,7 +974,7 @@ function addNewAttachment() {
                 }
             });
             $.ajax({
-                url: 'http://127.0.0.1:8000/case/attachment',
+                url: IP_PORT+'/case/attachment',
                 method: 'POST',
                 data: formData,
                 processData: false,

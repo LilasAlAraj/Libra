@@ -18,11 +18,11 @@ function setNavAuth(role) {
 function setDashboardNavAuth(role) {
     let location;
     if (role == 1) {
-        location = "http://127.0.0.1:8000/dashboard/supervisor";
+        location = IP_PORT+"/dashboard/supervisor";
     } else if (role == 2) {
-        location = "http://127.0.0.1:8000/dashboard/secretaria";
+        location = IP_PORT+"/dashboard/secretaria";
     } else if (role == 3) {
-        location = "http://127.0.0.1:8000/dashboard/lawyer";
+        location = IP_PORT+"/dashboard/lawyer";
     }
 
     if (role != 4) {
@@ -41,7 +41,7 @@ function setDashboardNavAuth(role) {
 function setSettingsAuth(role) {
     if (role == 2 || role == 1) {
         document.getElementById("courtSettingsNav").innerHTML =
-            '<a href="http://127.0.0.1:8000/courts" class="nav-link d-inline-flex  collapse-items">' +
+            '<a href="'+IP_PORT+'/courts" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers align-text-bottom" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>' +
             "المحاكم" +
             "</a>";
@@ -55,7 +55,7 @@ function setSettingsAuth(role) {
 
     if (role == 1 || role == 2) {
         document.getElementById("recommendationsNav").innerHTML =
-            '<a href="http://127.0.0.1:8000/recommendations" class="nav-link d-inline-flex  collapse-items">' +
+            '<a href="'+IP_PORT+'/recommendations" class="nav-link d-inline-flex  collapse-items">' +
             '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>' +
             " التوصيات" +
             "</a>";
@@ -74,12 +74,12 @@ function setMemberNavAuth(role) {
             '<div class="collapse" id="member-collapse">' +
             '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">' +
             "<li>" +
-            '<a href="http://127.0.0.1:8000/users/members/create" class="nav-link d-inline-flex  collapse-items">' +
+            '<a href="'+IP_PORT+'/users/members/create" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus align-text-bottom" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>' +
             "إضافة فرد جديد" +
             "</a>" +
             "</li>" +
-            '<li><a href="http://127.0.0.1:8000/users/members" class="nav-link d-inline-flex  collapse-items">' +
+            '<li><a href="'+IP_PORT+'/users/members" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check align-text-bottom" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>' +
             "عرض الأفراد" +
             "</a></li>" +
@@ -102,12 +102,12 @@ function setClientNavAuth(role) {
             '<div class="collapse" id="client-collapse">' +
             '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">' +
             "<li>" +
-            '<a href="http://127.0.0.1:8000/users/clients/create" class="nav-link d-inline-flex  collapse-items">' +
+            '<a href="'+IP_PORT+'/users/clients/create" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus align-text-bottom" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>' +
             "إضافة عميل جديد" +
             "</a>" +
             "</li>" +
-            '<li><a href="http://127.0.0.1:8000/users/clients" class="nav-link d-inline-flex  collapse-items">' +
+            '<li><a href="'+IP_PORT+'/users/clients" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check align-text-bottom" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>' +
             "عرض العملاء" +
             "</a></li>" +
@@ -122,7 +122,7 @@ function setTaskNavAuth(role) {
     if (role == 1 || role == 2)
         addNewTask =
             "<li>" +
-            '<a href="http://127.0.0.1:8000/task/create" class="nav-link d-inline-flex  collapse-items">' +
+            '<a href="'+IP_PORT+'/task/create" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle align-text-bottom" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>' +
             "إضافة مهمة جديدة" +
             "</a>" +
@@ -140,7 +140,7 @@ function setTaskNavAuth(role) {
             '<div class="collapse" id="task-collapse">' +
             '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">' +
             addNewTask +
-            '<li><a href="http://127.0.0.1:8000/tasks" class="nav-link d-inline-flex  collapse-items">' +
+            '<li><a href="'+IP_PORT+'/tasks" class="nav-link d-inline-flex  collapse-items">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-watch align-text-bottom" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><polyline points="12 9 12 12 13.5 13.5"></polyline><path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path></svg>' +
             "عرض المهام" +
             "</a></li>" +
@@ -152,20 +152,20 @@ function setTaskNavAuth(role) {
 function setCaseNavAuth(role) {
     if (role == 1) {
         document.getElementById("retreiveCaseNav").innerHTML =
-            '<a href="http://127.0.0.1:8000/cases/ir" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">' +
+            '<a href="'+IP_PORT+'/cases/ir" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-text-bottom" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
             "استرجاع القضايا المشابهة" +
             "</a>";
     }
     if (role == 1 || role == 2) {
         document.getElementById("addNewCaseNav").innerHTML =
-            '<a href="http://127.0.0.1:8000/cases/create" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">' +
+            '<a href="'+IP_PORT+'/cases/create" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus align-text-bottom" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>' +
             "إضافة قضية جديدة";
         ("</a>");
 
         document.getElementById("archiveCaseNav").innerHTML =
-            '<a href="http://127.0.0.1:8000/cases/archive" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">' +
+            '<a href="'+IP_PORT+'/cases/archive" class="nav-link d-inline-flex collapse-items L-Affiliate-Tagged">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive align-text-bottom" aria-hidden="true"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>' +
             " أرشيف القضايا";
         ("</a>");

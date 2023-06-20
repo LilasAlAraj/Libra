@@ -6,7 +6,7 @@
 $(document).ready(function () {
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: "http://127.0.0.1:8000/recommendations/all",
+        url: IP_PORT+"/recommendations/all",
         type: "get",
         success: function (response) {
             console.log(response);
@@ -41,7 +41,7 @@ function search() {
             // جلب البيانات من ملف JSON
             let toSearch = $("#toSearch").val();
             $.ajax({
-                url: "http://127.0.0.1:8000/recommendations/ir/search",
+                url: IP_PORT+"/recommendations/ir/search",
                 type: "get",
                 data: { "toSearch": toSearch },
                 success: function (response) {
@@ -137,29 +137,31 @@ function show_more_recommendation(title, content) {
 }
 
 function HighlightText(text) {
-    let highlightText = "";
+    // let highlightText = "";
 
-    query = document.getElementById("toSearch").value;
-    queryWords = []
-    if (query !== '')
-        queryWords = query.split(" ");
+    // query = document.getElementById("toSearch").value;
+    // queryWords = []
+    // if (query !== '')
+    //     queryWords = query.split(" ");
 
-    textWords = []
-    if (text !== '')
-        textWords = text.split(" ");
+    // textWords = []
+    // if (text !== '')
+    //     textWords = text.split(" ");
 
-    for (var i = 0; i < textWords.length; i++) {
-        tWord = textWords[i];
-        for (var j = 0; j < queryWords.length; j++) {
-            qWord = queryWords[j];
+    // for (var i = 0; i < textWords.length; i++) {
+    //     tWord = textWords[i];
+    //     for (var j = 0; j < queryWords.length; j++) {
+    //         qWord = queryWords[j];
 
-            if (tWord === qWord) {
-                tWord = '<span class="highlight">' + tWord + "</span> ";
-                break;
-            }
-        }
-        highlightText += tWord + " ";
-    }
+    //         if (tWord === qWord) {
+    //             tWord = '<span class="highlight">' + tWord + "</span> ";
+    //             break;
+    //         }
+    //     }
+    //     highlightText += tWord + " ";
+    // }
 
-    return highlightText;
+    // return highlightText;
+    return text;
+
 }

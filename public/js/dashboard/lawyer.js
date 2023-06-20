@@ -18,7 +18,7 @@ function setNumNextTasks() {
             }
         });
         $.ajax({
-            url: "http://127.0.0.1:8000/login",
+            url: IP_PORT+"/login",
             type: "get",
 
             success: function (response) {
@@ -40,7 +40,7 @@ function setTotalNumAssignedCases() {
 
     let num_assigned_cases = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/lawyer",
+        url: IP_PORT+"/cases/lawyer",
         type: "get",
         success: function (response) {
             num_assigned_cases = response.num_assigned_cases;
@@ -57,7 +57,7 @@ function setTotalNumAssignedCases() {
 function setNumNextTasks() {
     let num_next_tasks = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/tasks/all/count",
+        url: IP_PORT+"/tasks/all/count",
         type: "get",
         success: function (response) {
             num_next_tasks = response.num_next_tasks;
@@ -75,7 +75,7 @@ function setNumNextTasks() {
 function fillCasesTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/cases/latest',
+        url: IP_PORT+'/cases/latest',
         type: 'get',
         success: function (response) {
 
@@ -129,7 +129,7 @@ function addCaseRow(table, case_, num) {
     );
     row.addClass('clickable-row')
     row.click(function () {
-        window.location = "http://127.0.0.1:8000/cases/view/" + case_.case.id
+        window.location = IP_PORT+"/cases/view/" + case_.case.id
     });
     row.attr('title', 'اضغط لعرض تفاصيل هذه القضية كاملة');
 
@@ -150,7 +150,7 @@ function nextTasksSearch() {
 
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/tasks/filter',
+                    url: IP_PORT+'/tasks/filter',
                     type: 'get',
                     data: {
                         'search_key': '3',
@@ -202,7 +202,7 @@ function nextTasksSearch() {
 function fillTasksTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/tasks/filter',
+        url: IP_PORT+'/tasks/filter',
         type: 'get',
         data: {
             'search_key': '4'

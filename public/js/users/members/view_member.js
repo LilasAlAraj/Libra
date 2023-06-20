@@ -16,7 +16,7 @@ $(document).ready(function () {
     memberID = memberID[memberID.length - 1];
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/' + memberID,
+        url: IP_PORT+'/users/' + memberID,
         dataType: 'json',
         success: function (response) {
 

@@ -59,7 +59,7 @@ function add_Recommendation() {
 
             // console.log($('meta[name="csrf-token"]').attr('content'));
             $.ajax({
-                url: "http://127.0.0.1:8000/recommendation",
+                url: IP_PORT+"/recommendation",
                 type: "POST",
                 data: {
                     "title": title,
@@ -117,7 +117,7 @@ let data;
 
             // جلب البيانات من ملف JSON
             $.ajax({
-                url: 'http://127.0.0.1:8000/recommendations/all',
+                url: IP_PORT+'/recommendations/all',
                 type: 'get',
                 success: function (response) {
 
@@ -290,7 +290,7 @@ function deleteRecommendation() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/recommendation",
+        url: IP_PORT+"/recommendation",
         method: "delete",
         data: { id: id },
         success: function (response) {
@@ -349,7 +349,7 @@ function editRecommendation(id, title, content) {
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/recommendation",
+                url: IP_PORT+"/recommendation",
                 type: "Put",
                 data: {
                     "title": editTitle,

@@ -57,7 +57,7 @@ function add_court() {
                 }
             });
             $.ajax({
-                url: "http://127.0.0.1:8000/court",
+                url: IP_PORT+"/court",
                 type: "POST",
                 data: {
                     "name": court_name,
@@ -117,7 +117,7 @@ let data;
 
             // جلب البيانات من ملف JSON
             $.ajax({
-                url: 'http://127.0.0.1:8000/court/all',
+                url: IP_PORT+'/court/all',
                 type: 'get',
                 success: function (response) {
 
@@ -218,7 +218,7 @@ function deleteCourt() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/court",
+        url: IP_PORT+"/court",
         method: "delete",
         data: { id: id },
         success: function (response) {

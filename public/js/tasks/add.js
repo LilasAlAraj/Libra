@@ -73,7 +73,7 @@ function addNewTask() {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/task",
+                    url: IP_PORT+"/task",
                     type: "post",
                     data: {
                         "lawyers": task.lawyers,
@@ -91,7 +91,7 @@ function addNewTask() {
                             $('#messageBackdrop').modal('show');
                             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                             document.getElementById('closeModal').onclick = function () {
-                                window.location.href = 'http://127.0.0.1:8000/tasks';
+                                window.location.href = IP_PORT+'/tasks';
                             }
                         }
                     },

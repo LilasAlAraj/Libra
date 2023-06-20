@@ -42,7 +42,7 @@ $(document).ready(function () {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/login",
+                    url: IP_PORT+"/login",
                     type: "POST",
                     data: {
                         "role_name": role_name,
