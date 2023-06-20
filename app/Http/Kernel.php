@@ -70,10 +70,7 @@ class Kernel extends HttpKernel
         'role'=>\App\Http\Middleware\RoleMiddleware::class,
         'lawyer' => \App\Http\Middleware\LawyerMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,
-<<<<<<< HEAD
         'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
-=======
->>>>>>> 369967f0a22557f3ecd2f4d39d92952b7deba6cb
 
     ];
 }
