@@ -16,6 +16,11 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+
+        if(!Auth::check()){
+            return redirect()->route('login');
+
+        }
         if (Auth::check() && Auth::user()->role_name === 'زبون')
         {
             return $next($request);

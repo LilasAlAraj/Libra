@@ -40,24 +40,26 @@ class Recommendation extends Model
                             'my_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'arabic_normalization', 'arabic_stop', 'arabic_stemmer'
-                                ,'arabic_stopwords', // تعريف "ستوب ووردز" المستخدم للفهرسة العربية
+                                'filter' => [
+                                    // 'lowercase',
+                                     'arabic_stop','arabic_normalization',  'arabic_stemmer'
+                               // ,'arabic_stopwords', // تعريف "ستوب ووردز" المستخدم للفهرسة العربية
                             ],
                             ],
                         ],
                         'filter' => [
-                            'arabic_stopwords' => [
-                                'type' => 'stop',
-                                'stopwords_path' => 'arabic_stopwords.txt',
+                            // 'arabic_stopwords' => [
+                            //     'type' => 'stop',
+                            //     'stopwords_path' => 'arabic_stopwords.txt',
 
-                                'ignore_case' => true,
-                            ],
-                            'arabic_normalization' => [
-                                'type' => 'arabic_normalization',
-                            ],
+                            //     'ignore_case' => true,
+                            // ],
+                           
                             'arabic_stop' => [
                                 'type' => 'stop',
                                 'stopwords' => '_arabic_',
+                            ], 'arabic_normalization' => [
+                                'type' => 'arabic_normalization',
                             ],
                             'arabic_stemmer' => [
                                 'type' => 'stemmer',

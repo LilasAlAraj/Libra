@@ -15,19 +15,25 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-
     return view('test');
 });
 
 Auth::routes();
 
-//------عرض الداشبورد الخاصة بالعميل------//
+//------عرض الداشبورد العامة------//
 
 Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('dashboard.client');
 
 
 Route::group(['middleware' => 'admin'], function () {
+    
+    //------ عرض طلبات العضوية الى النظام-----//
 
+    Route::get('users/requests', 'App\Http\Controllers\UserController@membershipRequest');
+
+    //-----قبول أو رفض طلبات العضوية-------//
+
+    Route::put('users/requests/process', 'App\Http\Controllers\UserController@processMembershipRequest');
 
     //------تعديل حالة الحساب من قيد الانتظار الى مفعل وبالعكس------//
 
@@ -38,24 +44,6 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('cases/ir', 'App\Http\Controllers\IRCasesController@index');
 
     Route::get('cases/ir/search', 'App\Http\Controllers\IRCasesController@search');
-
-    //------تعديل حالة القضية------//
-
-    Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');
-
-    //-------تعديل تفاصيل القضية من التماس ووقائع-----//
-
-    Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails');
-
-    //------إضافة توصية إلى النظام من قبل الادمن------//
-
-    Route::post('recommendation', 'App\Http\Controllers\RecommendationController@store');
-
-    //-------تعديل التوصية-----//
-    Route::put('recommendation', 'App\Http\Controllers\RecommendationController@update');
-
-    //-------حذف توصية-----//
-    Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
 
     //-------عرض الداشبورد الخاصة بالمحامي-----//
 
@@ -71,13 +59,25 @@ Route::group(['middleware' => 'role'], function () {
 
     /*إعدادات إضافة مستخدم جديد إلى النظام والقيام بعملية الحذف والاضافة والتعديل */
 
-    //------رض طلبات العضوية الى النظام------//
+    //------إضافة توصية إلى النظام ------//
 
-    Route::get('users/requests', 'App\Http\Controllers\UserController@membershipRequest');
+    Route::post('recommendation', 'App\Http\Controllers\RecommendationController@store');
 
-    //-----قبول أو رفض طلبات العضوية-------//
+    //-------تعديل التوصية-----//
 
-    Route::put('users/requests/process', 'App\Http\Controllers\UserController@processMembershipRequest');
+    Route::put('recommendation', 'App\Http\Controllers\RecommendationController@update');
+
+    //-------حذف توصية-----//
+       
+    Route::delete('recommendation', 'App\Http\Controllers\RecommendationController@destroy');
+
+   //-------تعديل تفاصيل القضية من التماس ووقائع-----//
+
+    Route::post('/updateDetails', 'App\Http\Controllers\CasesController@updateDetails')->name('updateDetails');
+
+    //--------- القيام بعمليات البحث عللى المستخدمين ضمن النظام----------//
+
+    Route::get('users/filter', 'App\Http\Controllers\FilterController@usersFilter');
 
     //-------إضافة مستخدم ضمن النظام--------//
 
@@ -135,10 +135,7 @@ Route::group(['middleware' => 'role'], function () {
 
     Route::get('lawyers', 'App\Http\Controllers\UserController@getAllLawyers');
 
-    //--------- القيام بعمليات البحث عللى المستخدمين ضمن النظام----------//
-
-    Route::get('users/filter', 'App\Http\Controllers\FilterController@usersFilter');
-
+    
     //-----  الداشبورد الخاصة بالسكرتاريا--------//
 
     Route::get('dashboard/secretaria', 'App\Http\Controllers\HomeController@indexDashboardSecretaria')->name('dashboard.secretaria');
@@ -147,20 +144,21 @@ Route::group(['middleware' => 'role'], function () {
 
     Route::post('/status_update/{id}', 'App\Http\Controllers\CasesController@Status_Update')->name('Status_Update');
 
-     //------أرشفة القضية--------//
+    //------أرشفة القضية--------//
 
-     Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
+    Route::get('cases/archive', 'App\Http\Controllers\CaseArchiveController@index');
 
-     //------عرض جميع القضايا المؤرشفة-----//
+    //------عرض جميع القضايا المؤرشفة-----//
 
-     Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
+    Route::get('cases/archive/all', 'App\Http\Controllers\CaseArchiveController@showAll');
 
-     //-----إعادة القضايا من حالتها المؤرشفة ليتم عرضها ضمن النظام------//
+    //-----إعادة القضايا من حالتها المؤرشفة ليتم عرضها ضمن النظام------//
 
-     Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
+    Route::post('cases/archive/restore', 'App\Http\Controllers\CaseArchiveController@restore');
 
-     //------أرشفة القضية--------//
-     Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
+    //------أرشفة القضية--------//
+
+    Route::delete('cases/archive', 'App\Http\Controllers\CaseArchiveController@destroy');
 
     //-----  عرض الصفحة لإنشاء قضية جديدة--------//
 
@@ -252,7 +250,9 @@ Route::group(['middleware' => 'lawyer'], function () {
 
 });
 
+
 //------القيام بعمليات البحث الذكي على التوصيات المضافة----//
+
 Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController@index');
 
 Route::get('recommendations/ir/search', 'App\Http\Controllers\IRRecomendationController@search');
@@ -283,7 +283,7 @@ Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_task
 
 Route::get('cases/count', 'App\Http\Controllers\CasesController@getCountCases');
 
-//-----من أجل حساب الاحصائيات الخاصة بكل داشبورد لكل يوزر ضمن النظام----//
+//-----من أجل عرض التوصيات والمحاكم ضمن النظام----//
 
 Route::get('court/all', 'App\Http\Controllers\CourtController@show');
 
@@ -301,7 +301,7 @@ Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
 
 Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');
 
-//------عرض القارا الخاصة بهذه القضية من قبل جميع المستخدمين--------//
+//------عرض القرار الخاصة بهذه القضية من قبل جميع المستخدمين--------//
 
 Route::get('decision/{id}', 'App\Http\Controllers\DecisionController@show');
 
@@ -314,6 +314,7 @@ Route::get('case/attachment/download', 'App\Http\Controllers\CaseAttachmentContr
 Route::delete('case/attachment/delete', 'App\Http\Controllers\CaseAttachmentController@destroy');
 
 //-------من أجل الفيام بارسال المرفق  الخاص بجلسة ما ضمن القضية وحذفه ومشاهدته لدى حميع مستخدمي النظام-------//
+
 Route::post('session/attachment', 'App\Http\Controllers\SessionAttachmentController@store');
 
 Route::get('session/attachment/download', 'App\Http\Controllers\SessionAttachmentController@get_file');

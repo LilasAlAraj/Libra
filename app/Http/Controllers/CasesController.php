@@ -12,6 +12,7 @@ use App\Models\Enemy_Lawyers_of_Cases;
 use App\Models\Lawyer_of_Cases;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
 
 class CasesController extends Controller
@@ -231,12 +232,17 @@ class CasesController extends Controller
 
     public function show($id)
     {
+        Paginator::useBootstrap();
+
         $casesArray = [];
         $i = 0;
 
         if ($id == 'all') {
 
             $cases = Cases::get();
+            // $casesQuery = Cases::query();
+
+            // $cases = $casesQuery->paginate(10);
 
             foreach ($cases as $case) {
                 $baseNumbers = $case->baseNumbers;

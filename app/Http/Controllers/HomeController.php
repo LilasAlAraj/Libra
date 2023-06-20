@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Recommendation;
+
 
 class HomeController extends Controller
 {
@@ -26,6 +28,9 @@ class HomeController extends Controller
 
     public function indexDashboardClient()
     {
+        // Recommendation::destroyIndex();
+        // Recommendation::createIndex();
+    //    Recommendation::indexAll();
         return view('dashboard.client');
     }
     public function indexDashboardLawyer()

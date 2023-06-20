@@ -88,6 +88,8 @@ class UserController extends Controller
 
                 'role_name' => 'required|string',
 
+                'date_of_birth' => 'required|date|after_or_equal:1960-01-01|before_or_equal:2000-12-31',
+
                 'password' =>
 
                 [
@@ -129,6 +131,12 @@ class UserController extends Controller
                 'password.string' => 'يجب أن تكون كلمة المرور سلسلة نصية',
 
                 'password.min' => 'يجب أن تحتوي كلمة المرور على الأقل على 8 أحرف',
+
+                'date_of_birth.date' => 'يجب أن يكون تاريخ الميلاد قيمة تاريخية صحيحة',
+
+                'date_of_birth.after_or_equal' => 'يجب أن يكون تاريخ الميلاد بعد عام 1960',
+                
+                'date_of_birth.before_or_equal' => 'يجب أن يكون تاريخ الميلاد قبل عام 2000',
 
                 // 'password.regex' => 'كلمة المرور يجب أن تحتوي على حرف كبير وحرف صغير ورقم على الأقل',
 
@@ -224,6 +232,8 @@ class UserController extends Controller
 
                 'phone' => 'required|numeric|unique:users',
 
+                
+
             ],
 
             [
@@ -246,9 +256,13 @@ class UserController extends Controller
 
                 'phone.unique' => 'رقم الهاتف مسجل مسبقاً',
 
+                
+
             ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails())
+         {
+
             return response()->json(['status' => 'failed', 'message' => $validator->errors()]);
         }
         $input = $request->all();
