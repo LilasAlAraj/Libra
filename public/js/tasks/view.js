@@ -9,7 +9,7 @@
 /********************* */
 
 function add_task() {
-    window.location.href = "http://127.0.0.1:8000/task/create";
+    window.location.href = IP_PORT+"/task/create";
 }
 
 
@@ -46,7 +46,7 @@ function displayAll() {
     document.getElementById('spinner').style.display = 'flex';
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/tasks/all',
+        url: IP_PORT+'/tasks/all',
         type: 'get',
         success: function (response) {
 
@@ -85,7 +85,7 @@ function nextTasksSearch() {
                 } else {
 
                     $.ajax({
-                        url: 'http://127.0.0.1:8000/tasks/filter',
+                        url: IP_PORT+'/tasks/filter',
                         type: 'get',
                         data: {
                             'search_key': '1',
@@ -137,7 +137,7 @@ function specificSearch() {
                     document.getElementById('content').style.display = 'none';
                     document.getElementById('spinner').style.display = 'flex';
                     $.ajax({
-                        url: 'http://127.0.0.1:8000/tasks/filter',
+                        url: IP_PORT+'/tasks/filter',
                         type: 'get',
                         data: {
                             'search_key': '2',
@@ -171,7 +171,7 @@ function nextTasks() {
     document.getElementById('spinner').style.display = 'flex';
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/tasks/next',
+        url: IP_PORT+'/tasks/next',
         type: 'get',
         success: function (response) {
 
@@ -496,7 +496,7 @@ function showPage(pageNumber, data) {
             edit_btn.setAttribute("data-bs-toggle", "modal")
             edit_btn.setAttribute("data-bs-target", "#editRecommendationModal")
             edit_btn.onclick = function () {
-                window.location.href = 'http://127.0.0.1:8000/tasks/' + task.id + '/edit'
+                window.location.href = IP_PORT+'/tasks/' + task.id + '/edit'
             }
 
             const editOpLi = document.createElement('li');
@@ -593,7 +593,7 @@ function changeStatus(task) {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/tasks/" + task.id + "/status/edit", // اسم ملف php الذي يقوم بالحذف
+                    url: IP_PORT+"/tasks/" + task.id + "/status/edit", // اسم ملف php الذي يقوم بالحذف
                     method: "put", // طريقة الإرسال POST
                     data: { 'Value_Status': statusID },
                     success: function (response) {
@@ -649,7 +649,7 @@ function deleteRecommendation(id) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/task/" + id,
+        url: IP_PORT+"/task/" + id,
         method: "delete",
         success: function (response) {
             console.log(response);
@@ -661,7 +661,7 @@ function deleteRecommendation(id) {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = 'http://127.0.0.1:8000/tasks';
+                window.location.href = IP_PORT+'/tasks';
             }
         },
         error: function (response) { // الدالة التي تنفذ في حالة وجود خطأ أثناء الحذف

@@ -8,7 +8,7 @@
 
 function getLawyers() {
     $.ajax({
-        url: "http://127.0.0.1:8000/lawyers",
+        url: IP_PORT+"/lawyers",
         type: "Get",
         success: function (response) {
             const LawyerList = document.getElementById('plaintiff_lawyer');
@@ -34,7 +34,7 @@ function getLawyers() {
 }
 function getCourts() {
     $.ajax({
-        url: "http://127.0.0.1:8000/court/all",
+        url: IP_PORT+"/court/all",
         type: "Get",
         success: function (response) {
             courts = document.getElementById('court');
@@ -75,7 +75,7 @@ function setAuth() {
 }
 
 function add_cases() {
-    window.location.href = "http://127.0.0.1:8000/cases/create";
+    window.location.href = IP_PORT+"/cases/create";
 }
 
 let currentData;
@@ -104,7 +104,7 @@ function displayAll() {
     document.getElementById('content').style.display = 'none';
     document.getElementById('spinner').style.display = 'flex';
     $.ajax({
-        url: 'http://127.0.0.1:8000/cases/all',
+        url: IP_PORT+'/cases/all',
         type: 'get',
         success: function (response) {
             $('#table-body').empty();
@@ -473,7 +473,7 @@ function showPage(pageNumber, data) {
 
 
 function viewCase(caseId) {
-    window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
+    window.location.href = IP_PORT+"/cases/view/" + caseId;
 
 }
 
@@ -485,7 +485,7 @@ function deleteCase(caseId) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
         method: "Delete", // طريقة الإرسال POST
         data: { id_Archive: 1, case_id: caseId },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -495,7 +495,7 @@ function deleteCase(caseId) {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = 'http://127.0.0.1:8000/cases';
+                window.location.href = IP_PORT+'/cases';
             }
 
         },
@@ -514,7 +514,7 @@ function ArhiveCase(caseId) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/cases/" + caseId, // اسم ملف php الذي يقوم بالحذف
         method: "Delete", // طريقة الإرسال POST
         data: { id_Archive: 2, case_id: caseId },
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -524,7 +524,7 @@ function ArhiveCase(caseId) {
             $('#messageBackdrop').modal('show');
             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
             document.getElementById('closeModal').onclick = function () {
-                window.location.href = 'http://127.0.0.1:8000/cases';
+                window.location.href = IP_PORT+'/cases';
             }
 
         },
@@ -536,7 +536,7 @@ function ArhiveCase(caseId) {
 
 }
 function editCase(caseId) {
-    window.location.href = 'http://127.0.0.1:8000/cases/' + caseId + '/edit'
+    window.location.href = IP_PORT+'/cases/' + caseId + '/edit'
 
 }
 

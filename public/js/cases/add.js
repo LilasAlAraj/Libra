@@ -83,7 +83,7 @@ function add() {
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/cases",
+                url: IP_PORT+"/cases",
                 type: "POST",
                 data: {
                     'court_id': case_.court_id,
@@ -105,7 +105,7 @@ function add() {
                         $('#messageBackdrop').modal('show');
                         $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                         document.getElementById('closeModal').onclick = function () {
-                            window.location.href = 'http://127.0.0.1:8000/cases';
+                            window.location.href = IP_PORT+'/cases';
                         }
                     } else {
 

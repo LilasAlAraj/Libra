@@ -11,7 +11,7 @@ function setNumClients() {
     let num_clients = 0;
 
     $.ajax({
-        url: "http://127.0.0.1:8000/clients/count",
+        url: IP_PORT+"/clients/count",
         type: "get",
 
         success: function (response) {
@@ -38,7 +38,7 @@ function setNumUnarchivedCases() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/unarchive/count",
+        url: IP_PORT+"/cases/unarchive/count",
         type: "get",
 
         success: function (response) {
@@ -56,7 +56,7 @@ function setNumUnarchivedCases() {
 function setNumArchivedCases() {
     let num_arc_cases = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive/count",
+        url: IP_PORT+"/cases/archive/count",
         type: "get",
         success: function (response) {
             num_arc_cases = response.num_arc_cases;
@@ -74,7 +74,7 @@ function setTotalNumAssignedCases() {
 
     let num_cases = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/total/count",
+        url: IP_PORT+"/cases/total/count",
         type: "get",
 
         success: function (response) {
@@ -141,7 +141,7 @@ function set_Cases_Chart() {
 
 
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/statistics",
+        url: IP_PORT+"/cases/statistics",
         type: "get",
 
         success: function (response) {
@@ -167,7 +167,7 @@ function set_Cases_Chart() {
 function fillCasesTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/cases/latest',
+        url: IP_PORT+'/cases/latest',
         type: 'get',
         success: function (response) {
             console.log(response);
@@ -221,7 +221,7 @@ function addCaseRow(table, case_, num) {
     );
     row.addClass('clickable-row')
     row.click(function () {
-        window.location = "http://127.0.0.1:8000/cases/view/" + case_.case.id
+        window.location = IP_PORT+"/cases/view/" + case_.case.id
     });
     row.attr('title', 'اضغط لعرض تفاصيل هذه القضية كاملة');
 
@@ -244,7 +244,7 @@ function nextTasksSearch() {
 
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/tasks/filter',
+                    url: IP_PORT+'/tasks/filter',
                     type: 'get',
                     data: {
                         'search_key': '3',
@@ -296,7 +296,7 @@ function nextTasksSearch() {
 function fillTasksTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/tasks/filter',
+        url: IP_PORT+'/tasks/filter',
         type: 'get',
         data: {
             'search_key': '4'
@@ -388,7 +388,7 @@ function addTaskRow(data, table, num) {
 function fillMembershipRequestTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/requests',
+        url: IP_PORT+'/users/requests',
         type: 'get',
 
         success: function (response) {
@@ -483,7 +483,7 @@ function processRequest(id, operation) {
     });
 
     $.ajax({
-        url: "http://127.0.0.1:8000/users/requests/process",
+        url: IP_PORT+"/users/requests/process",
         type: "put",
         data: {
             'userId': id,

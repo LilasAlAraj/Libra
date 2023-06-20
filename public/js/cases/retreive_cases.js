@@ -71,7 +71,7 @@ function retreive() {
                 document.getElementById("content").style.display = "none";
                 document.getElementById("spinner").style.display = "flex";
                 $.ajax({
-                    url: "http://127.0.0.1:8000/cases/ir/search",
+                    url: IP_PORT+"/cases/ir/search",
                     type: "get",
                     data: {
                         toSearch: toSearch,
@@ -546,7 +546,7 @@ function ShowMoreDecision(title, text, i) {
 }
 
 function viewCase(caseId) {
-    window.location.href = "http://127.0.0.1:8000/cases/view/" + caseId;
+    window.location.href = IP_PORT+"/cases/view/" + caseId;
 }
 
 function reverseData() {

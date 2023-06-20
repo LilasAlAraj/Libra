@@ -49,7 +49,7 @@ function viewSession(id) {
 
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/session/' + id,
+        url: IP_PORT+'/session/' + id,
 
         type: 'get',
         success: function (response) {
@@ -160,7 +160,7 @@ function saveFile(fileUrl) {
 function downloadAttachmentOfSession(attID) {
 
     $.ajax({
-        url: "http://127.0.0.1:8000/session/attachment/download", // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/session/attachment/download", // اسم ملف php الذي يقوم بالحذف
         method: "get", // طريقة الإرسال POST
         data: { 'attachment_id': attID },
         success: function (response) {
@@ -176,7 +176,7 @@ function downloadAttachmentOfSession(attID) {
 
 function viewAttachmentOfSession(attID) {
     $.ajax({
-        url: "http://127.0.0.1:8000/session/attachment/download",
+        url: IP_PORT+"/session/attachment/download",
         method: "get",
         data: { 'attachment_id': attID },
         success: function (response) {
@@ -197,7 +197,7 @@ function deleteAttachmentOfSession(attID) {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/session/attachment/delete", // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/session/attachment/delete", // اسم ملف php الذي يقوم بالحذف
         method: "delete", // طريقة الإرسال POST
         data: { 'attachment_id': attID },
         success: function (response) {
@@ -259,7 +259,7 @@ function addNewSessionAttachment() {
                 }
             });
             $.ajax({
-                url: 'http://127.0.0.1:8000/session/attachment',
+                url: IP_PORT+'/session/attachment',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -313,7 +313,7 @@ function deleteSession() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/session", // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/session", // اسم ملف php الذي يقوم بالحذف
         method: "delete", // طريقة الإرسال POST
         data: { id: id }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -400,7 +400,7 @@ function confirmEditSession() {
                 }
             });
             $.ajax({
-                url: "http://127.0.0.1:8000/session/update",
+                url: IP_PORT+"/session/update",
                 type: "put",
                 data: {
                     //    "_token": "{{ csrf_token() }}",

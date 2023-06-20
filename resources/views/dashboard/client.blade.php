@@ -50,7 +50,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="http://127.0.0.1:8000">
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href=IP_PORT+"">
                 <div class="imgcontainer">
 
                     <img src="../../Img/Logo.jpg" alt="Avatar" class="avatar">
@@ -86,7 +86,7 @@
                     <div class="position-sticky pt-3  sidebar-sticky ">
                         <ul class=" nav nav-pills flex-column mb-auto ">
                             <li class="mb-1 nav-item" id="homeNav">
-                                <a href="http://127.0.0.1:8000/home" class="nav-link d-inline-flex  collapse-items">
+                                <a href=IP_PORT+"/home" class="nav-link d-inline-flex  collapse-items">
                                     <span data-feather="home" class="align-text-bottom"></span>
                                     الصفحة الرئيسية
                                 </a>
@@ -111,7 +111,7 @@
 
                                         </li>
                                         <li id="viewCaseNav">
-                                            <a href="http://127.0.0.1:8000/cases"
+                                            <a href=IP_PORT+"/cases"
                                                 class="nav-link d-inline-flex  collapse-items">
                                                 <span data-feather="file-text" class="align-text-bottom"></span>
                                                 عرض القضايا
@@ -154,7 +154,7 @@
                                         <li id="role_permessionSettingsNav">
                                         </li>
 
-                                        <li><a href="http://127.0.0.1:8000/account/setting"
+                                        <li><a href=IP_PORT+"/account/setting"
                                                 class="nav-link d-inline-flex  collapse-items">
                                                 <span data-feather="tool" class="align-text-bottom"></span>
                                                 إعدادات حسابي
@@ -297,7 +297,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
 
-    <script src="../../js/users/auth.js"></script>
+        <script src="../../js/IP_PORT.js"></script><script src="../../js/users/auth.js"></script>
+
     <script src="../../js/navs.js"></script>
     <script src="../../js/dashboard/client.js"></script>
 

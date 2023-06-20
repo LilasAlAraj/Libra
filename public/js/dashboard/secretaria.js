@@ -11,7 +11,7 @@ function setNumClients() {
     let num_clients = 0;
 
     $.ajax({
-        url: "http://127.0.0.1:8000/clients/count",
+        url: IP_PORT+"/clients/count",
         type: "get",
 
         success: function (response) {
@@ -39,7 +39,7 @@ function setNumUnarchivedCases() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/unarchive/count",
+        url: IP_PORT+"/cases/unarchive/count",
         type: "get",
 
         success: function (response) {
@@ -58,7 +58,7 @@ function setNumUnarchivedCases() {
 function setNumArchivedCases() {
     let num_arc_cases = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/archive/count",
+        url: IP_PORT+"/cases/archive/count",
         type: "get",
         success: function (response) {
             num_arc_cases = response.num_arc_cases;
@@ -74,7 +74,7 @@ function setNumArchivedCases() {
 function setNumNextTasks() {
     let num_next_tasks = 0;
     $.ajax({
-        url: "http://127.0.0.1:8000/tasks/all/count",
+        url: IP_PORT+"/tasks/all/count",
         type: "get",
         success: function (response) {
             num_next_tasks = response.num_next_tasks;
@@ -138,7 +138,7 @@ function set_Cases_Chart() {
 
 
     $.ajax({
-        url: "http://127.0.0.1:8000/cases/statistics",
+        url: IP_PORT+"/cases/statistics",
         type: "get",
 
         success: function (response) {
@@ -163,7 +163,7 @@ function set_Cases_Chart() {
 function fillCasesTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/cases/latest',
+        url: IP_PORT+'/cases/latest',
         type: 'get',
         success: function (response) {
             console.log(response);
@@ -217,7 +217,7 @@ function addCaseRow(table, case_, num) {
     );
     row.addClass('clickable-row')
     row.click(function () {
-        window.location = "http://127.0.0.1:8000/cases/view/" + case_.case.id
+        window.location = IP_PORT+"/cases/view/" + case_.case.id
     });
     row.attr('title', 'اضغط لعرض تفاصيل هذه القضية كاملة');
 
@@ -239,7 +239,7 @@ function nextTasksSearch() {
 
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/tasks/filter',
+                    url: IP_PORT+'/tasks/filter',
                     type: 'get',
                     data: {
                         'search_key': '3',
@@ -293,7 +293,7 @@ function nextTasksSearch() {
 function fillTasksTable() {
     let data;
     $.ajax({
-        url: 'http://127.0.0.1:8000/tasks/filter',
+        url: IP_PORT+'/tasks/filter',
         type: 'get',
         data: {
             'search_key': '4'

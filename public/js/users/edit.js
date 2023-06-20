@@ -32,7 +32,7 @@ function setUserData() {
     userID = window.location.href.split('/');
     userID = userID[userID.length - 3];
     $.ajax({
-        url: 'http://127.0.0.1:8000/users/' + userID,
+        url: IP_PORT+'/users/' + userID,
         type: 'get',
         success: function (response) {
 
@@ -148,7 +148,7 @@ $(document).ready(function () {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/users/update",
+                    url: IP_PORT+"/users/update",
                     type: "POST",
                     data: {
                         "first_name": first_name,
@@ -170,11 +170,11 @@ $(document).ready(function () {
                             $('#messageBackdrop').modal('show');
                             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                             document.getElementById('closeModal').onclick = function () {
-                                window.location.href = 'http://127.0.0.1:8000/cases';
+                                window.location.href = IP_PORT+'/cases';
                                 if (role_name === 'زبون')
-                                    window.location.href = 'http://127.0.0.1:8000/users/clients'
+                                    window.location.href = IP_PORT+'/users/clients'
                                 else
-                                    window.location.href = 'http://127.0.0.1:8000/users/members'
+                                    window.location.href = IP_PORT+'/users/members'
                             }
                         } else {
                             messages = '';

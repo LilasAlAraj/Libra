@@ -127,7 +127,7 @@ $(document).ready(function () {
                         }
                     });
                     $.ajax({
-                        url: 'http://127.0.0.1:8000/users/register',
+                        url: IP_PORT+'/users/register',
                         type: "POST",
                         data: {
                             "first_name": first_name,
@@ -150,11 +150,11 @@ $(document).ready(function () {
                                 $('#messageBackdrop').modal('show');
                                 $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                                 document.getElementById('closeModal').onclick = function () {
-                                    window.location.href = 'http://127.0.0.1:8000/cases';
+                                    window.location.href = IP_PORT+'/cases';
                                     if (role === 'زبون')
-                                        window.location.href = 'http://127.0.0.1:8000/users/clients'
+                                        window.location.href = IP_PORT+'/users/clients'
                                     else
-                                        window.location.href = 'http://127.0.0.1:8000/users/members'
+                                        window.location.href = IP_PORT+'/users/members'
                                 }
 
                             } else {

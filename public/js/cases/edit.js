@@ -20,7 +20,7 @@ $(document).ready(function () {
     caseID = caseID[caseID.length - 2];
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/cases/' + caseID,
+        url: IP_PORT+'/cases/' + caseID,
         type: 'get',
         success: function (response) {
             console.log(response)
@@ -169,7 +169,7 @@ function edit() {
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/cases/" + caseID,
+                url: IP_PORT+"/cases/" + caseID,
                 type: "put",
                 data: {
                     'case_id': caseID,
@@ -193,7 +193,7 @@ function edit() {
                         $('#messageBackdrop').modal('show');
                         $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                         document.getElementById('closeModal').onclick = function () {
-                            window.location.href = 'http://127.0.0.1:8000/cases/view/' + caseID;
+                            window.location.href = IP_PORT+'/cases/view/' + caseID;
                         }
                     } else {
 

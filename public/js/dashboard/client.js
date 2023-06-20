@@ -6,7 +6,7 @@
 $(document).ready(function () {
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: "http://127.0.0.1:8000/recommendations/all",
+        url: IP_PORT+"/recommendations/all",
         type: "get",
         success: function (response) {
             console.log(response);
@@ -41,7 +41,7 @@ function search() {
             // جلب البيانات من ملف JSON
             let toSearch = $("#toSearch").val();
             $.ajax({
-                url: "http://127.0.0.1:8000/recommendations/ir/search",
+                url: IP_PORT+"/recommendations/ir/search",
                 type: "get",
                 data: { "toSearch": toSearch },
                 success: function (response) {

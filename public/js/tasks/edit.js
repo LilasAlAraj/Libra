@@ -15,7 +15,7 @@ $(document).ready(function () {
     taskID = taskID[taskID.length - 2];
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/tasks/' + taskID,
+        url: IP_PORT+'/tasks/' + taskID,
         type: 'get',
         success: function (response) {
             console.log(response)
@@ -107,7 +107,7 @@ function editTask() {
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8000/tasks/" + taskID,
+                    url: IP_PORT+"/tasks/" + taskID,
                     type: "put",
                     data: {
                         "lawyers": task.lawyers,
@@ -124,7 +124,7 @@ function editTask() {
                             $('#messageBackdrop').modal('show');
                             $('#messageBackdrop').css('background', 'rgba(0,0,0,.3)');
                             document.getElementById('closeModal').onclick = function () {
-                                window.location.href = 'http://127.0.0.1:8000/tasks';
+                                window.location.href = IP_PORT+'/tasks';
                             }
                         }
                     },

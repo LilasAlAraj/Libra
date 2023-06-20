@@ -41,7 +41,7 @@ function viewDecision(id) {
     console.log(id)
     // جلب البيانات من ملف JSON
     $.ajax({
-        url: 'http://127.0.0.1:8000/decision/' + id,
+        url: IP_PORT+'/decision/' + id,
         type: 'get',
         success: function (response) {
             decision = response;
@@ -75,7 +75,7 @@ function deleteDecision() {
         }
     });
     $.ajax({
-        url: "http://127.0.0.1:8000/decision", // اسم ملف php الذي يقوم بالحذف
+        url: IP_PORT+"/decision", // اسم ملف php الذي يقوم بالحذف
         method: "delete", // طريقة الإرسال POST
         data: { id: id }, // بيانات الطلب، في هذا المثال نحن نرسل معرف العنصر الذي نريد حذفه
         success: function (response) { // الدالة التي تنفذ بنجاح عندما يتم الحذف
@@ -161,7 +161,7 @@ function confirmEditDecision() {
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8000/decision/update",
+                url: IP_PORT+"/decision/update",
                 type: "Put",
                 data: {
                     "number": editDecisionNumber,
@@ -358,7 +358,7 @@ function addNewDecision() {
             });
 
             $.ajax({
-                url: 'http://127.0.0.1:8000/decision',
+                url: IP_PORT+'/decision',
                 method: 'POST',
                 data: decision,
                 success: function (response) {
