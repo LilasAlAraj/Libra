@@ -45,16 +45,17 @@ class Cases extends Model
                             'my_analyzer' => [
                                 'type' => 'custom',
                                 'tokenizer' => 'standard',
-                                'filter' => ['lowercase', 'arabic_normalization', 'arabic_stop', 'arabic_stemmer'],
+                                'filter' => ['lowercase', 'arabic_stop', 'arabic_normalization', 'arabic_stemmer'],
                             ],
                         ],
                         'filter' => [
-                            'arabic_normalization' => [
-                                'type' => 'arabic_normalization',
-                            ],
+                            
                             'arabic_stop' => [
                                 'type' => 'stop',
                                 'stopwords' => '_arabic_',
+                            ],
+                            'arabic_normalization' => [
+                                'type' => 'arabic_normalization',
                             ],
                             'arabic_stemmer' => [
                                 'type' => 'stemmer',

@@ -137,29 +137,31 @@ function show_more_recommendation(title, content) {
 }
 
 function HighlightText(text) {
-    let highlightText = "";
+    // let highlightText = "";
 
-    query = document.getElementById("toSearch").value;
-    queryWords = []
-    if (query !== '')
-        queryWords = query.split(" ");
+    // query = document.getElementById("toSearch").value;
+    // queryWords = []
+    // if (query !== '')
+    //     queryWords = query.split(" ");
 
-    textWords = []
-    if (text !== '')
-        textWords = text.split(" ");
+    // textWords = []
+    // if (text !== '')
+    //     textWords = text.split(" ");
 
-    for (var i = 0; i < textWords.length; i++) {
-        tWord = textWords[i];
-        for (var j = 0; j < queryWords.length; j++) {
-            qWord = queryWords[j];
+    // for (var i = 0; i < textWords.length; i++) {
+    //     tWord = textWords[i];
+    //     for (var j = 0; j < queryWords.length; j++) {
+    //         qWord = queryWords[j];
 
-            if (tWord === qWord) {
-                tWord = '<span class="highlight">' + tWord + "</span> ";
-                break;
-            }
-        }
-        highlightText += tWord + " ";
-    }
+    //         if (tWord === qWord) {
+    //             tWord = '<span class="highlight">' + tWord + "</span> ";
+    //             break;
+    //         }
+    //     }
+    //     highlightText += tWord + " ";
+    // }
 
-    return highlightText;
+    // return highlightText;
+    return text;
+
 }

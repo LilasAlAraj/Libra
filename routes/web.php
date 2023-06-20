@@ -250,7 +250,6 @@ Route::group(['middleware' => 'lawyer'], function () {
 
 });
 
-Route::group(['middleware' => 'login'], function () {
 
 //------القيام بعمليات البحث الذكي على التوصيات المضافة----//
 
@@ -361,4 +360,3 @@ Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
 //--------عرض جلسات القضيه -------//
 
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
-});
