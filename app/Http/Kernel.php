@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'lawyer' => \App\Http\Middleware\LawyerMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,
         'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
+        'redirectIfNotLoggedIn' => \App\Http\Middleware\JwtMiddleware::class,
 
     ];
 }
