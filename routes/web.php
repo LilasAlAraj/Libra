@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-
     return view('test');
 });
 
@@ -251,6 +250,8 @@ Route::group(['middleware' => 'lawyer'], function () {
 
 });
 
+Route::group(['middleware' => 'login'], function () {
+
 //------القيام بعمليات البحث الذكي على التوصيات المضافة----//
 
 Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController@index');
@@ -360,3 +361,4 @@ Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
 //--------عرض جلسات القضيه -------//
 
 Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
+});

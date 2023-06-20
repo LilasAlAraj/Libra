@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
-class LawyerMiddleware
+class LoginMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,22 +20,7 @@ class LawyerMiddleware
         return redirect()->route('login');
 
     }
-        if (Auth::check() && Auth::user()->role_name === 'محامي')
-        {
-            return $next($request);
-        }
-
-       elseif (Auth::check() && Auth::user()->role_name==='زبون')
-
-        {
-            return redirect()->route('dashboard.client');
-        }
-        
-        elseif (Auth::check() &&  Auth::user()->role_name ==='سكرتاريا')
-
-        {
-            return redirect()->route('dashboard.secretaria');
-        }
+       
     
       
     }
