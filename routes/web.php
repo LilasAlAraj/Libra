@@ -22,8 +22,124 @@ Route::get('/', function () {
 Auth::routes();
 
 //------عرض الداشبورد العامة------//
+Route::group(['middleware' => 'redirectIfNotLoggedIn'], function () 
+{
+    Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('dashboard.client');
 
-Route::get('home', 'App\Http\Controllers\HomeController@indexDashboardClient')->name('dashboard.client');
+/*
+من أجل القيام بالاحصائيات على عدد القضايا المخزنة ضمن النظام حسب حالتها
+سواء كانت رابحة او خاسرة او معلقة او جاري العمل عليها
+وايضا بالنسبة للقضايا المؤرشفة وايضا القيام بعمليات احصائية على مستخدمي النظام
+ */
+
+Route::get('clients/count', 'App\Http\Controllers\UserController@clientCount');
+
+Route::get('cases/unarchive/count', 'App\Http\Controllers\CasesController@unArchiveCasesCount');
+
+Route::get('cases/archive/count', 'App\Http\Controllers\CaseArchiveController@archivedCasesCount');
+
+Route::get('cases/total/count', 'App\Http\Controllers\CasesController@totalCasesCount');
+
+Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesStatistics');
+
+Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
+
+Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
+
+Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_tasks');
+
+//-----من أجل إعادة عدد القضايا التي تخص كل فرد ضمن المكتب او الخاصة بالعميل ----//
+
+Route::get('cases/count', 'App\Http\Controllers\CasesController@getCountCases');
+
+//-----من أجل عرض التوصيات والمحاكم ضمن النظام----//
+
+Route::get('court/all', 'App\Http\Controllers\CourtController@show');
+
+Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
+
+Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
+
+Route::get('recommendation/{id}', 'App\Http\Controllers\RecommendationController@show');
+
+//------القيام بعمليات البحث الذكي على التوصيات المضافة----//
+
+Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController@index');
+
+Route::get('recommendations/ir/search', 'App\Http\Controllers\IRRecomendationController@search');
+
+//------ من أجل معرفة نوع الحساب الذي قام بتسجيل الدخول به إلى النظام------//
+
+Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
+
+//------من أجل القيام بالبحث ضمن القضايا حسب عدة مفاتيح------//
+
+Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');
+
+//------عرض القرار الخاصة بهذه القضية من قبل جميع المستخدمين--------//
+
+Route::get('decision/{id}', 'App\Http\Controllers\DecisionController@show');
+
+//-------من أجل الفيام بارسال  المرفق الخاص بقضية  ما  وحذفه ومشاهدته لدى حميع مستخدمي النظام-------//
+
+Route::post('case/attachment', 'App\Http\Controllers\CaseAttachmentController@store');
+
+Route::get('case/attachment/download', 'App\Http\Controllers\CaseAttachmentController@get_file');
+
+Route::delete('case/attachment/delete', 'App\Http\Controllers\CaseAttachmentController@destroy');
+
+//-------من أجل الفيام بارسال المرفق  الخاص بجلسة ما ضمن القضية وحذفه ومشاهدته لدى حميع مستخدمي النظام-------//
+
+Route::post('session/attachment', 'App\Http\Controllers\SessionAttachmentController@store');
+
+Route::get('session/attachment/download', 'App\Http\Controllers\SessionAttachmentController@get_file');
+
+Route::delete('session/attachment/delete', 'App\Http\Controllers\SessionAttachmentController@destroy');
+
+//------عرض الجلسة الخاصة بهذه القضيةلجميع المستخدمين ضمن النظام-------//
+
+Route::get('session/{id}', 'App\Http\Controllers\SessionController@show');
+
+//-------عرض معلومات الحساب وتعديل كلمة المرور--------//
+
+Route::get('clients/{name}', 'App\Http\Controllers\UserController@getAllClientWithName');
+
+Route::get('account/setting', 'App\Http\Controllers\SettingAccountController@index');
+
+Route::post('account/change_password', 'App\Http\Controllers\SettingAccountController@update');
+
+Route::get('account', 'App\Http\Controllers\SettingAccountController@show');
+
+//------عرض القضايا الخاصة بكل يوزر ضمن النظام- مع عر حالة القضية------//
+
+Route::resource('cases', 'App\Http\Controllers\CasesController');
+
+Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
+
+Route::get('cases/show/{id}', 'App\Http\Controllers\CasesController@show');
+
+Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->name('Status_show');
+
+//-------عرض صفحةالمهام  ------//
+
+Route::get('tasks', 'App\Http\Controllers\TaskController@index');
+
+//-------فلترة المهام حسب عدة مفاهيم-----//
+
+Route::get('tasks/filter', 'App\Http\Controllers\TaskController@filter');
+
+//-------عرض مهمة معينة ------//
+
+Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
+
+//--------عرض جلسات القضيه -------//
+
+Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');
+
+});
+
+
+
 
 
 Route::group(['middleware' => 'admin'], function () {
@@ -250,113 +366,3 @@ Route::group(['middleware' => 'lawyer'], function () {
     Route::get('dashboard/lawyer', 'App\Http\Controllers\HomeController@indexDashboardLawyer')->name('dashboard.lawyer');;
 
 });
-
-//------القيام بعمليات البحث الذكي على التوصيات المضافة----//
-
-Route::get('recommendations/ir', 'App\Http\Controllers\IRRecomendationController@index');
-
-Route::get('recommendations/ir/search', 'App\Http\Controllers\IRRecomendationController@search');
-
-/*
-من أجل القيام بالاحصائيات على عدد القضايا المخزنة ضمن النظام حسب حالتها
-سواء كانت رابحة او خاسرة او معلقة او جاري العمل عليها
-وايضا بالنسبة للقضايا المؤرشفة وايضا القيام بعمليات احصائية على مستخدمي النظام
- */
-
-Route::get('clients/count', 'App\Http\Controllers\UserController@clientCount');
-
-Route::get('cases/unarchive/count', 'App\Http\Controllers\CasesController@unArchiveCasesCount');
-
-Route::get('cases/archive/count', 'App\Http\Controllers\CaseArchiveController@archivedCasesCount');
-
-Route::get('cases/total/count', 'App\Http\Controllers\CasesController@totalCasesCount');
-
-Route::get('cases/statistics', 'App\Http\Controllers\CasesController@getCasesStatistics');
-
-Route::get('cases/latest', 'App\Http\Controllers\CasesController@latestCases');
-
-Route::get('cases/lawyer', 'App\Http\Controllers\CasesController@totalCasesCountAssignedForLawyer');
-
-Route::get('tasks/all/count', 'App\Http\Controllers\TaskController@num_next_tasks');
-
-//-----من أجل إعادة عدد القضايا التي تخص كل فرد ضمن المكتب او الخاصة بالعميل ----//
-
-Route::get('cases/count', 'App\Http\Controllers\CasesController@getCountCases');
-
-//-----من أجل عرض التوصيات والمحاكم ضمن النظام----//
-
-Route::get('court/all', 'App\Http\Controllers\CourtController@show');
-
-Route::get('recommendations', 'App\Http\Controllers\RecommendationController@index');
-
-Route::get('recommendations/all', 'App\Http\Controllers\RecommendationController@all');
-
-Route::get('recommendation/{id}', 'App\Http\Controllers\RecommendationController@show');
-
-//------ من أجل معرفة نوع الحساب الذي قام بتسجيل الدخول به إلى النظام------//
-
-Route::get('user/role', 'App\Http\Controllers\UserController@roleName');
-
-//------من أجل القيام بالبحث ضمن القضايا حسب عدة مفاتيح------//
-
-Route::get('cases/filter', 'App\Http\Controllers\FilterController@casesFilter');
-
-//------عرض القرار الخاصة بهذه القضية من قبل جميع المستخدمين--------//
-
-Route::get('decision/{id}', 'App\Http\Controllers\DecisionController@show');
-
-//-------من أجل الفيام بارسال  المرفق الخاص بقضية  ما  وحذفه ومشاهدته لدى حميع مستخدمي النظام-------//
-
-Route::post('case/attachment', 'App\Http\Controllers\CaseAttachmentController@store');
-
-Route::get('case/attachment/download', 'App\Http\Controllers\CaseAttachmentController@get_file');
-
-Route::delete('case/attachment/delete', 'App\Http\Controllers\CaseAttachmentController@destroy');
-
-//-------من أجل الفيام بارسال المرفق  الخاص بجلسة ما ضمن القضية وحذفه ومشاهدته لدى حميع مستخدمي النظام-------//
-
-Route::post('session/attachment', 'App\Http\Controllers\SessionAttachmentController@store');
-
-Route::get('session/attachment/download', 'App\Http\Controllers\SessionAttachmentController@get_file');
-
-Route::delete('session/attachment/delete', 'App\Http\Controllers\SessionAttachmentController@destroy');
-
-//------عرض الجلسة الخاصة بهذه القضيةلجميع المستخدمين ضمن النظام-------//
-
-Route::get('session/{id}', 'App\Http\Controllers\SessionController@show');
-
-//-------عرض معلومات الحساب وتعديل كلمة المرور--------//
-
-Route::get('clients/{name}', 'App\Http\Controllers\UserController@getAllClientWithName');
-
-Route::get('account/setting', 'App\Http\Controllers\SettingAccountController@index');
-
-Route::post('account/change_password', 'App\Http\Controllers\SettingAccountController@update');
-
-Route::get('account', 'App\Http\Controllers\SettingAccountController@show');
-
-//------عرض القضايا الخاصة بكل يوزر ضمن النظام- مع عر حالة القضية------//
-
-Route::resource('cases', 'App\Http\Controllers\CasesController');
-
-Route::get('cases/view/{id}', 'App\Http\Controllers\CasesController@view_case');
-
-Route::get('cases/show/{id}', 'App\Http\Controllers\CasesController@show');
-
-Route::get('/status_show/{id}', 'App\Http\Controllers\CasesController@show')->name('Status_show');
-
-//-------عرض صفحةالمهام  ------//
-
-Route::get('tasks', 'App\Http\Controllers\TaskController@index');
-
-//-------فلترة المهام حسب عدة مفاهيم-----//
-
-Route::get('tasks/filter', 'App\Http\Controllers\TaskController@filter');
-
-//-------عرض مهمة معينة ------//
-
-Route::get('tasks/{id}', 'App\Http\Controllers\TaskController@show');
-
-//--------عرض جلسات القضيه -------//
-
-Route::get('/sessionsOfCase', 'App\Http\Controllers\CasesController@index');

@@ -12,9 +12,9 @@ class IRRecomendationController extends Controller
     {
         Recommendation::createIndex();
 
-        // $this->destroyIndex();
-     $this->createIndex();
-        // $this->indexAll();
+    //  $this->destroyIndex();
+    //  $this->createIndex();
+    //      $this->indexAll();
         // return view('Recomendation.retreive_Recomendation');
     }
 

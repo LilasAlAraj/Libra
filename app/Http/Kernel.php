@@ -67,6 +67,8 @@ class Kernel extends HttpKernel
         'role'=>\App\Http\Middleware\RoleMiddleware::class,
         'lawyer' => \App\Http\Middleware\LawyerMiddleware::class,
         'client' => \App\Http\Middleware\ClientMiddleware::class,
+        'redirectIfNotLoggedIn' => \App\Http\Middleware\RedirectIfNotLoggedIn::class,
+
 
 
     ];
